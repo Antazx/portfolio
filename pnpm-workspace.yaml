@@ -1,0 +1,7 @@
+packages:
+  - studio
+  - web
+
+allowBuilds:
+  esbuild: true
+  sharp: true

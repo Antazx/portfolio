@@ -1,0 +1,37 @@
+---
+import {PortableText} from 'astro-portabletext';
+import '../../styles/global.css';
+import {postQuery, postSlugsQuery, sanityClient} from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const posts = await sanityClient.fetch(postSlugsQuery);
+
+  return posts.map((post) => ({
+    params: {slug: post.slug},
+  }));
+}
+
+const {slug} = Astro.params;
+const post = await sanityClient.fetch(postQuery, {slug});
+
+if (!post) {
+  throw new Error(`Post not found: ${slug}`);
+}
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{post.title} | Portfolio</title>
+	</head>
+	<body>
+		<main>
+			<a href="/">Back to portfolio</a>
+			<article>
+				<h1>{post.title}</h1>
+				{post.body && <PortableText value={post.body} />}
+			</article>
+		</main>
+	</body>
+</html>
