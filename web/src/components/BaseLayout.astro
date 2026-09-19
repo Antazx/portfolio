@@ -6,11 +6,14 @@ interface Props {
   locale: Locale
   title: string
   description: string
+  languageLinks?: Partial<Record<Locale, string>>
 }
 
-const {locale, title, description} = Astro.props
+const {locale, title, description, languageLinks = {}} = Astro.props
 const copy = siteCopy[locale]
 const homeHref = localizedPath(locale)
+const spanishHref = languageLinks.es ?? localizedPath('es')
+const englishHref = languageLinks.en ?? localizedPath('en')
 ---
 
 <!doctype html>
@@ -34,12 +37,13 @@ const homeHref = localizedPath(locale)
             <a href={`${homeHref}#experiencia`}>{copy.experienceLabel}</a>
             <a href={`${homeHref}#estudios`}>{copy.educationLabel}</a>
             <a href={`${homeHref}#proyecto`}>{copy.projectsLabel}</a>
+            <a href={localizedPath(locale, 'blog')}>{copy.blogLabel}</a>
             <a href={`${homeHref}#contacto`}>{copy.contactLabel}</a>
           </nav>
           <div class="utility-group">
             <nav class="language-switch" aria-label={copy.languageLabel}>
-              <a href={localizedPath('es')} lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
-              <a href={localizedPath('en')} lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+              <a href={spanishHref} lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+              <a href={englishHref} lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
             </nav>
             <button
               class="theme-toggle"

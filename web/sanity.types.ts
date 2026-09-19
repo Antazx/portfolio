@@ -21,26 +21,52 @@ export type Post = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  title?: string;
   slug?: Slug;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
+  publishedAt?: string;
+  spanish?: {
+    title?: string;
+    excerpt?: string;
+    body?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
       _key: string;
     }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
+  };
+  english?: {
+    title?: string;
+    excerpt?: string;
+    body?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
       _key: string;
     }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
+  };
 };
 
 export type Slug = {
@@ -178,27 +204,32 @@ export type AllSanitySchemaTypes =
 
 // Source: ../web/src/lib/sanity.ts
 // Variable: postSlugsQuery
-// Query: *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+// Query: *[    _type == "post" &&    !(_id in path("drafts.**")) &&    defined(publishedAt) &&    publishedAt <= now() &&    defined(slug.current) &&    (      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)    )  ]{ "slug": slug.current }
 export type PostSlugsQueryResult = Array<{
   slug: string | null;
 }>;
 
 // Source: ../web/src/lib/sanity.ts
 // Variable: postsQuery
-// Query: *[_type == "post" && defined(slug.current)] | order(_createdAt desc){ _id, title, slug }
+// Query: *[    _type == "post" &&    !(_id in path("drafts.**")) &&    defined(publishedAt) &&    publishedAt <= now() &&    defined(slug.current) &&    (      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)    )  ] | order(publishedAt desc){    _id,    "slug": slug.current,    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),    publishedAt,    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0  }
 export type PostsQueryResult = Array<{
   _id: string;
+  slug: string | null;
   title: string | null;
-  slug: Slug | null;
+  excerpt: string | null;
+  publishedAt: string | null;
+  hasSpanish: boolean | false | null;
+  hasEnglish: boolean | false | null;
 }>;
 
 // Source: ../web/src/lib/sanity.ts
 // Variable: postQuery
-// Query: *[_type == "post" && slug.current == $slug][0]{ _id, title, slug, body }
+// Query: *[    _type == "post" &&    !(_id in path("drafts.**")) &&    defined(publishedAt) &&    publishedAt <= now() &&    slug.current == $slug &&    (      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)    )  ][0]{    _id,    "slug": slug.current,    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body),    publishedAt,    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0  }
 export type PostQueryResult = {
   _id: string;
+  slug: string | null;
   title: string | null;
-  slug: Slug | null;
+  excerpt: string | null;
   body: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -217,14 +248,17 @@ export type PostQueryResult = {
     _type: "block";
     _key: string;
   }> | null;
+  publishedAt: string | null;
+  hasSpanish: boolean | false | null;
+  hasEnglish: boolean | false | null;
 } | null;
 
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '*[_type == "post" && defined(slug.current)]{ "slug": slug.current }': PostSlugsQueryResult;
-    '*[_type == "post" && defined(slug.current)] | order(_createdAt desc){ _id, title, slug }': PostsQueryResult;
-    '*[_type == "post" && slug.current == $slug][0]{ _id, title, slug, body }': PostQueryResult;
+    '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ]{ "slug": slug.current }': PostSlugsQueryResult;
+    '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ] | order(publishedAt desc){\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostsQueryResult;
+    '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    slug.current == $slug &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ][0]{\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body),\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostQueryResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

@@ -1,0 +1,64 @@
+---
+import {PortableText} from 'astro-portabletext'
+import BaseLayout from '../../../components/BaseLayout.astro'
+import {locales, localizedPath, type Locale} from '../../../lib/locales'
+import {postQuery, postSlugsQuery, sanityClient} from '../../../lib/sanity'
+
+export async function getStaticPaths() {
+  const paths = await Promise.all(
+    locales.map(async (locale) => {
+      const posts = await sanityClient.fetch(postSlugsQuery, {locale})
+      return posts.map((post) => ({params: {lang: locale, slug: post.slug}, props: {locale}}))
+    }),
+  )
+
+  return paths.flat()
+}
+
+const locale = Astro.props.locale as Locale
+const {slug} = Astro.params
+const post = await sanityClient.fetch(postQuery, {locale, slug})
+
+if (!post) {
+  throw new Error(`Publication not found: ${locale}/${slug}`)
+}
+
+const copy = {
+  es: {
+    description: 'Publicación del blog de Guillermo Anta Alonso.',
+    back: 'Volver al blog',
+    language: 'Idioma de la publicación',
+  },
+  en: {
+    description: 'Blog publication by Guillermo Anta Alonso.',
+    back: 'Back to blog',
+    language: 'Publication language',
+  },
+}[locale]
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${post.title} — Guillermo Anta Alonso`}
+  description={copy.description}
+  languageLinks={{
+    es: post.hasSpanish ? `/es/blog/${post.slug}/` : localizedPath('es'),
+    en: post.hasEnglish ? `/en/blog/${post.slug}/` : localizedPath('en'),
+  }}
+>
+  <article class="shell post-detail">
+    <header class="post-header">
+      <a class="back-link" href={localizedPath(locale, 'blog')}>← {copy.back}</a>
+      <p class="experience-date">{post.publishedAt && new Date(post.publishedAt).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', {dateStyle: 'long'})}</p>
+      <h1>{post.title}</h1>
+      <p class="post-excerpt">{post.excerpt}</p>
+      <nav class="post-language" aria-label={copy.language}>
+        {post.hasSpanish && <a href={`/es/blog/${post.slug}/`} lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>}
+        {post.hasEnglish && <a href={`/en/blog/${post.slug}/`} lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>}
+      </nav>
+    </header>
+    <div class="portable-text">
+      {post.body && <PortableText value={post.body} />}
+    </div>
+  </article>
+</BaseLayout>
