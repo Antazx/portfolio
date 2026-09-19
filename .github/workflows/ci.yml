@@ -28,3 +28,5 @@ jobs:
       - run: git diff --exit-code -- web/sanity.types.ts
       - run: pnpm build
       - run: pnpm build:studio
+      - run: pnpm --filter portfolio-web exec playwright install --with-deps chromium
+      - run: pnpm audit:a11y

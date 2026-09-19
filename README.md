@@ -10,6 +10,7 @@ pnpm dev
 pnpm dev:studio
 pnpm build
 pnpm build:studio
+pnpm audit:a11y
 pnpm preview
 ```
 
