@@ -2,6 +2,7 @@
 import BaseLayout from '../../../components/BaseLayout.astro'
 import {locales, type Locale} from '../../../lib/locales'
 import {postsQuery, sanityClient} from '../../../lib/sanity'
+import {absoluteUrl} from '../../../lib/seo'
 
 export async function getStaticPaths() {
   return Promise.all(
@@ -38,6 +39,26 @@ const copy = {
     read: 'Read publication',
   },
 }[locale]
+const blogPath = `/${locale}/blog/`
+const blogUrl = absoluteUrl(blogPath)
+const structuredData = blogUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: copy.title,
+    description: copy.description,
+    url: blogUrl,
+    inLanguage: locale,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Portfolio', item: absoluteUrl(`/${locale}/`) },
+      { '@type': 'ListItem', position: 2, name: copy.archive, item: blogUrl },
+    ],
+  },
+] : []
 ---
 
 <BaseLayout
@@ -45,6 +66,9 @@ const copy = {
   title={copy.title}
   description={copy.description}
   languageLinks={{es: '/es/blog/', en: '/en/blog/'}}
+  alternatePaths={{es: '/es/blog/', en: '/en/blog/'}}
+  canonicalPath={blogPath}
+  structuredData={structuredData}
 >
   <section class="shell blog-hero" aria-labelledby="blog-title">
     <div>

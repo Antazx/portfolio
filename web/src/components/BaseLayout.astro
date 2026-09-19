@@ -1,19 +1,51 @@
 ---
 import '../styles/global.css'
 import {localizedPath, siteCopy, type Locale} from '../lib/locales'
+import {absoluteUrl, localeTag, serializeJsonLd, siteOrigin} from '../lib/seo'
 
 interface Props {
   locale: Locale
   title: string
   description: string
   languageLinks?: Partial<Record<Locale, string>>
+  alternatePaths?: Partial<Record<Locale, string>>
+  canonicalPath?: string
+  ogType?: 'website' | 'article'
+  structuredData?: Array<Record<string, unknown>>
 }
 
-const {locale, title, description, languageLinks = {}} = Astro.props
+const {locale, title, description, languageLinks = {}, alternatePaths, canonicalPath, ogType = 'website', structuredData = []} = Astro.props
 const copy = siteCopy[locale]
 const homeHref = localizedPath(locale)
 const spanishHref = languageLinks.es ?? localizedPath('es')
 const englishHref = languageLinks.en ?? localizedPath('en')
+const canonicalUrl = absoluteUrl(canonicalPath ?? homeHref)
+const alternateLinks = [
+  {locale: 'es' as const, path: alternatePaths?.es ?? localizedPath('es')},
+  {locale: 'en' as const, path: alternatePaths?.en ?? localizedPath('en')},
+]
+  .map(({locale: alternateLocale, path}) => ({locale: alternateLocale, url: absoluteUrl(path)}))
+  .filter((alternate): alternate is {locale: Locale; url: string} => Boolean(alternate.url))
+const siteSchemas = siteOrigin && canonicalUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${siteOrigin}/#person`,
+    name: 'Guillermo Anta Alonso',
+    jobTitle: 'Senior Backend Engineer / Tech Lead',
+    url: siteOrigin,
+    sameAs: ['https://www.linkedin.com/in/guillermoanta/'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${siteOrigin}/#website`,
+    name: 'Guillermo Anta Alonso',
+    url: siteOrigin,
+    inLanguage: locale,
+  },
+] : []
+const schemas = [...siteSchemas, ...structuredData]
 ---
 
 <!doctype html>
@@ -23,6 +55,19 @@ const englishHref = languageLinks.en ?? localizedPath('en')
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {alternateLinks.map((alternate) => <link rel="alternate" hreflang={alternate.locale} href={alternate.url} />)}
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Guillermo Anta Alonso" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={localeTag(locale)} />
+    <meta property="og:locale:alternate" content={locale === 'es' ? 'en_US' : 'es_ES'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {schemas.map((schema) => <script type="application/ld+json" set:html={serializeJsonLd(schema)} />)}
     <title>{title}</title>
   </head>
   <body>
