@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Portfolio de Guillermo Anta Alonso, Senior Backend Engineer y Tech Lead.">
+    <title>Guillermo Anta Alonso — Senior Backend Engineer / Tech Lead</title>
+    <style>
+      /* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio.
+         Put this @layer first; product CSS outside the layer always wins. */
+      @layer od-layout {
+        :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+        .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+        .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+        .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+        .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+        .od-fill    { flex: 1 1 0; min-width: 0; }
+        .od-fixed   { flex: none; }
+        .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+        .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+        :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+        .od-tile { display: grid; grid-template-rows: auto 1fr; }
+        :where(.od-tile) > :where(*) { display: block; }
+        .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+        .od-media-cover { object-fit: cover; }
+        .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+        .od-clamp-2 { -webkit-line-clamp: 2; }
+        .od-clamp-3 { -webkit-line-clamp: 3; }
+        .od-lines-2 { min-height: calc(2 * 1.4em); }
+        .od-nowrap  { white-space: nowrap; }
+        .od-keep    { word-break: keep-all; overflow-wrap: anywhere; }
+        .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+        .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+        .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+        .od-rail::-webkit-scrollbar { display: none; }
+        :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+        :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+        .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+        .od-touch  { min-width: 44px; min-height: 44px; }
+      }
+      /* /OD-LAYOUT-PRIMITIVES v1 */
+
+      :root {
+        color-scheme: dark;
+        --bg: #111111;
+        --surface: #111111;
+        --surface-strong: #ffffff;
+        --text: #ffffff;
+        --muted: #d9dee7;
+        --border: #6b7280;
+        --accent-base: #2856c7;
+        --accent: color-mix(in srgb, var(--accent-base) 65%, #ffffff);
+        --accent-contrast: #111111;
+        --focus: #ffffff;
+        --max-width: 1200px;
+        --radius: 8px;
+        --space-1: 8px;
+        --space-2: 16px;
+        --space-3: 24px;
+        --space-4: 32px;
+        --space-5: 48px;
+        --space-6: 64px;
+        --space-7: 96px;
+        --ease: cubic-bezier(.2,.8,.2,1);
+      }
+
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f7f8fa;
+        --surface: #ffffff;
+        --surface-strong: #111111;
+        --text: #111111;
+        --muted: #6b7280;
+        --border: #d9dee7;
+        --accent-base: #2856c7;
+        --accent: #2856c7;
+        --accent-contrast: #ffffff;
+        --focus: #2856c7;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Avenir, "Avenir Next", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        text-rendering: optimizeLegibility;
+      }
+      body, button, input, textarea { font: inherit; }
+      a { color: inherit; }
+      a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 4px;
+      }
+      ::selection { background: var(--accent); color: var(--accent-contrast); }
+      .skip-link {
+        position: fixed;
+        inset: var(--space-2) auto auto var(--space-2);
+        z-index: 20;
+        transform: translateY(-150%);
+        padding: var(--space-1) var(--space-2);
+        background: var(--accent);
+        color: var(--accent-contrast);
+        border-radius: var(--radius);
+        text-decoration: none;
+      }
+      .skip-link:focus { transform: translateY(0); }
+      .shell { width: min(100% - 32px, var(--max-width)); margin-inline: auto; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+      }
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2);
+        min-height: 72px;
+        padding-block: var(--space-1);
+      }
+      .wordmark {
+        color: var(--text);
+        font-family: "Avenir Next", Avenir, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        line-height: 1.2;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .wordmark span { color: var(--accent); }
+      .nav-group, .nav-links, .utility-group {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-1);
+      }
+      .nav-links a, .utility-button, .language-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        line-height: 1.2;
+        text-decoration: none;
+        transition: color 150ms var(--ease), border-color 150ms var(--ease), background-color 150ms var(--ease);
+      }
+      .nav-links a:hover, .utility-button:hover, .language-button:hover { color: var(--text); border-color: var(--border); }
+      .language-switch {
+        display: inline-flex;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+      .language-button {
+        border: 0;
+        border-radius: 0;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+      .language-button[aria-pressed="true"] { background: var(--accent); color: var(--accent-contrast); }
+      .utility-button { border-color: var(--border); }
+      .theme-toggle { width: 44px; padding: 8px; }
+      .theme-icon {
+        display: none;
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+      }
+      :root[data-theme="dark"] .theme-icon-sun,
+      :root[data-theme="light"] .theme-icon-moon { display: block; }
+
+      main { overflow: clip; }
+      section { scroll-margin-top: 96px; }
+      .hero {
+        display: grid;
+        gap: var(--space-6);
+        min-height: calc(100svh - 72px);
+        align-items: center;
+        padding-block: var(--space-7);
+      }
+      .eyebrow {
+        margin: 0 0 var(--space-2);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3, p { margin-top: 0; }
+      h1, h2, h3 {
+        font-family: "Avenir Next", Avenir, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        letter-spacing: -0.055em;
+      }
+      h1 {
+        max-width: 9ch;
+        margin-bottom: var(--space-3);
+        font-size: clamp(3.5rem, 10vw, 7rem);
+        line-height: 0.98;
+      }
+      .hero-role {
+        max-width: 28ch;
+        margin-bottom: var(--space-3);
+        color: var(--muted);
+        font-size: clamp(1.25rem, 3vw, 2rem);
+        line-height: 1.25;
+      }
+      .hero-copy {
+        max-width: 67ch;
+        margin-bottom: var(--space-4);
+        color: var(--muted);
+      }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 10px 18px;
+        border: 1px solid var(--accent);
+        border-radius: var(--radius);
+        background: var(--accent);
+        color: var(--accent-contrast);
+        cursor: pointer;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 150ms var(--ease), background-color 150ms var(--ease), color 150ms var(--ease);
+      }
+      .button:hover { transform: translateY(-2px); }
+      .button.secondary {
+        border-color: var(--border);
+        background: transparent;
+        color: var(--text);
+      }
+      .button.secondary:hover { background: var(--surface); }
+      .hero-meta {
+        display: grid;
+        gap: var(--space-2);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding-block: var(--space-3);
+      }
+      .meta-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+      .meta-label { color: var(--muted); font-size: 0.875rem; }
+      .meta-value { text-align: right; }
+      .email-link { color: var(--text); text-decoration-color: var(--accent); text-underline-offset: 4px; }
+
+      .section {
+        border-top: 1px solid var(--border);
+        padding-block: var(--space-7);
+      }
+      .section-heading {
+        display: grid;
+        gap: var(--space-2);
+        margin-bottom: var(--space-5);
+      }
+      .section-heading h2 {
+        max-width: 12ch;
+        margin-bottom: 0;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        line-height: 1;
+      }
+      .section-intro { max-width: 58ch; margin-bottom: 0; color: var(--muted); }
+      .experience-list { display: grid; }
+      .experience-item {
+        display: grid;
+        gap: var(--space-2);
+        border-top: 1px solid var(--border);
+        padding-block: var(--space-4);
+      }
+      .experience-item:first-child { border-top: 0; padding-top: 0; }
+      .experience-date { color: var(--accent); font-size: 0.875rem; font-weight: 700; }
+      .experience-item h3 { margin-bottom: var(--space-1); font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.15; }
+      .experience-company { margin-bottom: var(--space-2); color: var(--muted); }
+      .experience-item ul { margin: 0; padding-left: 1.2rem; }
+      .experience-item li + li { margin-top: var(--space-1); }
+      .experience-item li::marker { color: var(--accent); }
+
+      .project-list { display: grid; }
+      .project-item .project-copy { max-width: 60ch; color: var(--muted); }
+      .project-item ul { margin: 0; padding-left: 1.2rem; }
+      .project-item li + li { margin-top: var(--space-1); }
+      .project-item li::marker { color: var(--accent); }
+      .project-item .button { margin-top: var(--space-2); }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-2);
+      }
+      .skill-group {
+        border-top: 1px solid var(--border);
+        padding-top: var(--space-2);
+      }
+      .skill-group h3 { margin-bottom: var(--space-1); font-size: 1rem; }
+      .skill-group p { margin-bottom: 0; color: var(--muted); }
+
+      .contact-layout {
+        display: grid;
+        gap: 0;
+      }
+      .contact-layout > div:first-child {
+        display: grid;
+        gap: var(--space-2);
+        margin-bottom: var(--space-5);
+      }
+      .contact-title { margin-bottom: var(--space-2); font-size: clamp(2.75rem, 7vw, 6rem); line-height: 0.98; }
+      .contact-copy { max-width: 50ch; margin-bottom: 0; color: var(--muted); }
+      .contact-email {
+        display: inline-block;
+        margin-top: var(--space-2);
+        color: var(--text);
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        text-decoration-color: var(--accent);
+        text-underline-offset: 5px;
+      }
+      .contact-links { display: grid; align-content: start; gap: var(--space-1); }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding-block: var(--space-3);
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+      .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); }
+      .footer-inner p { margin: 0; }
+
+      @media (min-width: 768px) {
+        .shell { width: min(100% - 64px, var(--max-width)); }
+        .topbar-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+        .nav-group { display: contents; }
+        .nav-links { grid-column: 2; grid-row: 1; }
+        .utility-group { grid-column: 3; grid-row: 1; justify-self: end; }
+        .hero { grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); }
+        .experience-item { grid-template-columns: minmax(130px, .25fr) minmax(0, 1fr); gap: var(--space-5); }
+        .experience-item:first-child { padding-top: 0; }
+        .section-heading { grid-template-columns: .6fr 1fr; align-items: end; }
+        .section-heading h2 { grid-row: span 2; }
+        .contact-layout > div:first-child { grid-template-columns: .6fr 1fr; align-items: start; }
+        .contact-layout > div:first-child .contact-copy { grid-column: 2; grid-row: 1 / span 2; }
+      }
+      @media (min-width: 1024px) {
+        .topbar-inner { min-height: 80px; }
+        .hero { padding-block: 120px; }
+      }
+      @media (min-width: 1440px) {
+        .shell { width: min(100% - 96px, var(--max-width)); }
+      }
+      @media (max-width: 560px) {
+        .topbar-inner { align-items: flex-start; flex-direction: column; padding-block: var(--space-2); }
+        .nav-group { width: 100%; justify-content: space-between; }
+        .nav-links { order: 2; width: 100%; justify-content: space-between; }
+        .nav-links a { padding-inline: 8px; }
+        .utility-group { order: 1; }
+        .hero { min-height: auto; padding-block: var(--space-6); }
+        .hero-actions .button { width: 100%; }
+        .skills-grid { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 375px) {
+        .shell { width: min(100% - 24px, var(--max-width)); }
+        .nav-links a { font-size: 0.8rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+        .button:hover { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido" data-es="Saltar al contenido" data-en="Skip to content">Saltar al contenido</a>
+
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="wordmark" href="#inicio" aria-label="Guillermo Anta Alonso">GAA<span>.</span></a>
+        <div class="nav-group">
+          <nav class="nav-links" aria-label="Primary">
+            <a href="#experiencia" data-es="Experiencia" data-en="Experience">Experiencia</a>
+            <a href="#estudios" data-es="Estudios" data-en="Education">Estudios</a>
+            <a href="#proyecto" data-es="Proyectos" data-en="Projects">Proyectos</a>
+            <a href="blog.html" data-es="Blog" data-en="Blog">Blog</a>
+            <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
+          </nav>
+          <div class="utility-group">
+            <div class="language-switch" aria-label="Language">
+              <button class="language-button" type="button" data-language="es" aria-pressed="true">ES</button>
+              <button class="language-button" type="button" data-language="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="utility-button theme-toggle" type="button" id="theme-toggle" aria-label="Cambiar a tema claro" title="Cambiar a tema claro">
+              <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+              </svg>
+              <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.5 14.1A8.5 8.5 0 0 1 9.9 3.5 8.5 8.5 0 1 0 20.5 14.1Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="shell hero" id="inicio" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow" data-es="Ingeniería de software · Valladolid, España" data-en="Software engineering · Valladolid, Spain">Ingeniería de software · Valladolid, España</p>
+          <h1 id="hero-title">Guillermo Anta Alonso</h1>
+          <p class="hero-role" data-es="Senior Backend Engineer / Tech Lead" data-en="Senior Backend Engineer / Tech Lead">Senior Backend Engineer / Tech Lead</p>
+          <p class="hero-copy" data-es="Ingeniero de software con más de 7 años de experiencia en backend, arquitecturas cloud y entrega de extremo a extremo. Trabajo principalmente con TypeScript, Node.js, Java y Spring." data-en="Software engineer with more than 7 years of experience in backend systems, cloud architectures and end-to-end delivery. I work mainly with TypeScript, Node.js, Java and Spring.">Ingeniero de software con más de 7 años de experiencia en backend, arquitecturas cloud y entrega de extremo a extremo. Trabajo principalmente con TypeScript, Node.js, Java y Spring.</p>
+          <div class="hero-actions">
+            <a class="button" href="#experiencia" data-es="Ver experiencia" data-en="View experience">Ver experiencia</a>
+            <a class="button secondary" href="#contacto" data-es="Hablemos" data-en="Let's talk">Hablemos</a>
+            <a class="button secondary" href="GuillermoAntaAlonso-es-202608.pdf" download="Guillermo-Anta-Alonso-CV.pdf" data-es="Descargar CV" data-en="Download CV">Descargar CV</a>
+          </div>
+        </div>
+        <aside class="hero-meta" aria-label="Resumen profesional">
+          <div class="meta-row"><span class="meta-label" data-es="Especialidad" data-en="Focus">Especialidad</span><strong class="meta-value" data-es="Backend · Cloud · Tech Lead" data-en="Backend · Cloud · Tech Lead">Backend · Cloud · Tech Lead</strong></div>
+          <div class="meta-row"><span class="meta-label" data-es="Experiencia" data-en="Experience">Experiencia</span><strong class="meta-value" data-es="7+ años" data-en="7+ years">7+ años</strong></div>
+          <div class="meta-row"><span class="meta-label" data-es="Idiomas" data-en="Languages">Idiomas</span><strong class="meta-value" data-es="Español · Inglés B2/C1" data-en="Spanish · English B2/C1">Español · Inglés B2/C1</strong></div>
+          <div class="meta-row"><span class="meta-label" data-es="Contacto" data-en="Contact">Contacto</span><a class="meta-value email-link" href="mailto:guillermoantataz@gmail.com">Email</a></div>
+        </aside>
+      </section>
+
+      <section class="section" id="experiencia" aria-labelledby="experience-title">
+        <div class="shell">
+          <div class="section-heading">
+            <h2 id="experience-title" data-es="Experiencia laboral" data-en="Work experience">Experiencia laboral</h2>
+            <p class="section-intro" data-es="Arquitecturas distribuidas, equipos backend y productos que tienen que funcionar en producción." data-en="Distributed architectures, backend teams and products that have to work in production.">Arquitecturas distribuidas, equipos backend y productos que tienen que funcionar en producción.</p>
+          </div>
+          <div class="experience-list">
+            <article class="experience-item">
+              <div class="experience-date" data-es="Ago 2026 — Actualidad" data-en="Aug 2026 — Present">Ago 2026 — Actualidad</div>
+              <div>
+                <h3>rebAI, S.L <span class="experience-company">— Technical Lead / Software Architect — AI-Assisted &amp; Agentic Software Engineering</span></h3>
+                <ul>
+                  <li data-es="Liderazgo técnico en la reingeniería y modernización de plataformas legacy." data-en="Technical leadership in the re-engineering and modernization of legacy platforms.">Liderazgo técnico en la reingeniería y modernización de plataformas legacy.</li>
+                  <li data-es="Diseño de flujos de ingeniería de software asistida por IA y workflows agentic con orquestación multiagente." data-en="Designed AI-assisted software engineering and agentic workflows with multi-agent orchestration.">Diseño de flujos de ingeniería de software asistida por IA y workflows agentic con orquestación multiagente.</li>
+                  <li data-es="Aplicación de análisis de código basado en LLM, inteligencia de codebase, revisión automática y testing asistido por IA." data-en="Applied LLM-based code analysis, codebase intelligence, automated code review and AI-assisted testing.">Aplicación de análisis de código basado en LLM, inteligencia de codebase, revisión automática y testing asistido por IA.</li>
+                  <li data-es="Diseño de prompts e instrucciones, sistemas human-in-the-loop y guardrails para preservar el control humano y la calidad de ingeniería." data-en="Designed prompts and instructions, human-in-the-loop systems and guardrails to preserve human control and engineering quality.">Diseño de prompts e instrucciones, sistemas human-in-the-loop y guardrails para preservar el control humano y la calidad de ingeniería.</li>
+                  <li data-es="Definición de evaluaciones y quality gates para detectar regresiones y sostener entregas fiables." data-en="Defined evaluations and quality gates to detect regressions and support reliable delivery.">Definición de evaluaciones y quality gates para detectar regresiones y sostener entregas fiables.</li>
+                </ul>
+              </div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date">Sep 2025 – Ago 2026</div>
+              <div>
+                <h3>The Phone House Spain, S.L. <span class="experience-company">— Senior Backend Engineer</span></h3>
+                <ul>
+                  <li data-es="Diseño y desarrollo de una nueva arquitectura basada en microservicios Java." data-en="Designed and developed a new architecture based on Java microservices.">Diseño y desarrollo de una nueva arquitectura basada en microservicios Java.</li>
+                  <li data-es="Diseño y desarrollo de una aplicación interna de gestión de tickets." data-en="Designed and developed an internal ticket management application.">Diseño y desarrollo de una aplicación interna de gestión de tickets.</li>
+                  <li data-es="Tecnologías: Spring, Java, PostgreSQL/MariaDB, AWS, Terraform y Docker." data-en="Technologies: Spring, Java, PostgreSQL/MariaDB, AWS, Terraform and Docker.">Tecnologías: Spring, Java, PostgreSQL/MariaDB, AWS, Terraform y Docker.</li>
+                  <li data-es="Logro: reemplazo de una herramienta externa de ticketing, ahorrando más de 100 licencias al año." data-en="Achievement: replaced an external ticketing tool, saving more than 100 licenses per year.">Logro: reemplazo de una herramienta externa de ticketing, ahorrando más de 100 licencias al año.</li>
+                </ul>
+              </div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date">Sep 2021 – Sep 2025</div>
+              <div>
+                <h3>The Telecom Boutique, S.L. <span class="experience-company">— Senior Backend Engineer / Tech Lead</span></h3>
+                <ul>
+                  <li data-es="Dirección de un equipo de 5 desarrolladores." data-en="Led a team of 5 developers.">Dirección de un equipo de 5 desarrolladores.</li>
+                  <li data-es="Lideré la migración de más de 2.500 lambdas JavaScript a una arquitectura hexagonal basada en microservicios TypeScript." data-en="Led the migration of more than 2,500 JavaScript lambdas to a TypeScript microservices architecture based on hexagonal principles.">Lideré la migración de más de 2.500 lambdas JavaScript a una arquitectura hexagonal basada en microservicios TypeScript.</li>
+                  <li data-es="Implementación de buenas prácticas, CI/CD, testing y mejora de flujos de despliegue." data-en="Implemented engineering practices, CI/CD pipelines, testing and improved deployment workflows.">Implementación de buenas prácticas, CI/CD, testing y mejora de flujos de despliegue.</li>
+                  <li data-es="Diseño técnico, gestión de backlog, revisiones de código y coordinación con infraestructura, proveedores y clientes." data-en="Technical design, backlog management, code reviews and coordination with infrastructure, vendors and client technical teams.">Diseño técnico, gestión de backlog, revisiones de código y coordinación con infraestructura, proveedores y clientes.</li>
+                  <li data-es="Resultados: reducción de costes AWS de 40.000 €/mes a menos de 10.000 €/mes; servicio de generación documental de más de 60.000 documentos diarios." data-en="Results: reduced AWS costs from €40,000/month to less than €10,000/month; built a document generation service processing more than 60,000 documents per day.">Resultados: reducción de costes AWS de 40.000 €/mes a menos de 10.000 €/mes; servicio de generación documental de más de 60.000 documentos diarios.</li>
+                </ul>
+              </div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date">Ago 2020 – Sep 2021</div>
+              <div>
+                <h3>Esker Ibérica, S.L. <span class="experience-company">— Software Engineer</span></h3>
+                <ul>
+                  <li data-es="Desarrollo de herramientas de automatización documental usando motores OCR y redes neuronales." data-en="Developed document automation tools using OCR engines and neural networks.">Desarrollo de herramientas de automatización documental usando motores OCR y redes neuronales.</li>
+                  <li data-es="Desarrollo backend con JavaScript en Azure y colaboración continua con equipos internacionales." data-en="Backend development with JavaScript on Azure and continuous collaboration with international teams.">Desarrollo backend con JavaScript en Azure y colaboración continua con equipos internacionales.</li>
+                </ul>
+              </div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date">Oct 2019 – Jul 2020</div>
+              <div>
+                <h3>HP Printing and Computing Solutions S.L.U. <span class="experience-company">— Full Stack Developer</span></h3>
+                <ul>
+                  <li data-es="Único desarrollador de una aplicación en tiempo real para gestionar equipos conectados en red." data-en="Sole developer of a real-time application for managing network-connected equipment.">Único desarrollador de una aplicación en tiempo real para gestionar equipos conectados en red.</li>
+                  <li data-es="Responsable del ciclo completo: requisitos, desarrollo, despliegue y mantenimiento." data-en="Owned the full lifecycle: requirements, development, deployment and maintenance.">Responsable del ciclo completo: requisitos, desarrollo, despliegue y mantenimiento.</li>
+                  <li data-es="Tecnologías: Vue, JavaScript, Node.js, Express, Socket.io y MongoDB." data-en="Technologies: Vue, JavaScript, Node.js, Express, Socket.io and MongoDB.">Tecnologías: Vue, JavaScript, Node.js, Express, Socket.io y MongoDB.</li>
+                </ul>
+              </div>
+            </article>
+            <article class="experience-item">
+              <div class="experience-date">Abr 2018 – Sep 2019</div>
+              <div>
+                <h3>Silver Storm Solutions, S.L. <span class="experience-company">— Software Engineer</span></h3>
+                <ul>
+                  <li data-es="Desarrollo de un CRM cloud con Angular, JavaScript y MariaDB." data-en="Developed a cloud CRM with Angular, JavaScript and MariaDB.">Desarrollo de un CRM cloud con Angular, JavaScript y MariaDB.</li>
+                  <li data-es="Implementación de integraciones con Jira, SharePoint y plataformas similares." data-en="Implemented integrations with Jira, SharePoint and similar platforms.">Implementación de integraciones con Jira, SharePoint y plataformas similares.</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="estudios" aria-labelledby="education-title">
+        <div class="shell">
+          <div class="section-heading">
+            <h2 id="education-title" data-es="Estudios" data-en="Education">Estudios</h2>
+            <p class="section-intro" data-es="Formación académica que sustenta mi trabajo en ingeniería de software." data-en="Academic background supporting my work in software engineering.">Formación académica que sustenta mi trabajo en ingeniería de software.</p>
+          </div>
+          <div class="experience-list">
+            <article class="experience-item">
+              <div class="experience-date" data-es="Titulación" data-en="Degree">Titulación</div>
+              <div>
+                <h3 data-es="Graduado en Ingeniería Informática" data-en="Graduate in Computer Engineering">Graduado en Ingeniería Informática</h3>
+                <p class="experience-company" data-es="Especializado en Ingeniería de software." data-en="Specialized in Software Engineering.">Especializado en Ingeniería de software.</p>
+                <p class="section-intro" data-es="Universidad de Valladolid (España)." data-en="University of Valladolid (Spain).">Universidad de Valladolid (España).</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="proyecto" aria-labelledby="projects-title">
+        <div class="shell">
+          <div class="section-heading">
+            <h2 id="projects-title" data-es="Proyectos" data-en="Projects">Proyectos</h2>
+            <p class="section-intro" data-es="Productos propios y decisiones técnicas explicadas con contexto." data-en="Personal projects and the technical decisions behind them.">Productos propios y decisiones técnicas explicadas con contexto.</p>
+          </div>
+          <div class="project-list">
+            <article class="experience-item project-item">
+              <div class="experience-date" data-es="Proyecto personal" data-en="Personal project">Proyecto personal</div>
+              <div>
+                <h3>Nupzi <span class="experience-company" data-es="— Fundador" data-en="— Founder">— Fundador</span></h3>
+                <p class="project-copy" data-es="Plataforma para crear y gestionar páginas web de boda personalizables. Un producto propio para resolver invitaciones, confirmaciones, recordatorios y galerías desde un mismo lugar." data-en="A platform for creating and managing customizable wedding websites. A product built to handle invitations, RSVPs, reminders and galleries in one place.">Plataforma para crear y gestionar páginas web de boda personalizables. Un producto propio para resolver invitaciones, confirmaciones, recordatorios y galerías desde un mismo lugar.</p>
+                <ul>
+                  <li data-es="Astro + Fastify + MongoDB" data-en="Astro + Fastify + MongoDB">Astro + Fastify + MongoDB</li>
+                  <li data-es="Invitación digital y formulario de confirmación" data-en="Digital invitation and RSVP form">Invitación digital y formulario de confirmación</li>
+                  <li data-es="Recordatorios y galerías de imágenes" data-en="Reminders and image galleries">Recordatorios y galerías de imágenes</li>
+                </ul>
+                <a class="button secondary" href="https://www.nupzi.com" target="_blank" rel="noreferrer" data-es="Visitar nupzi.com" data-en="Visit nupzi.com">Visitar nupzi.com</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contacto" aria-labelledby="contact-title">
+        <div class="shell contact-layout">
+          <div>
+      <h2 class="contact-title" id="contact-title" data-es="¿Hablamos?" data-en="Let's talk">¿Hablamos?</h2>
+      <p class="experience-date" data-es="Contacto" data-en="Contact">Contacto</p>
+      <p class="contact-copy" data-es="Cuéntame qué estás construyendo, qué problema quieres resolver o qué equipo necesita refuerzo backend." data-en="Tell me what you are building, what problem you want to solve or where your backend team needs support.">Cuéntame qué estás construyendo, qué problema quieres resolver o qué equipo necesita refuerzo backend.</p>
+          </div>
+          <div class="contact-links" aria-label="Contact links">
+            <a class="contact-email" href="mailto:guillermoantataz@gmail.com">guillermoantataz@gmail.com</a>
+            <a class="contact-email" href="https://www.linkedin.com/in/guillermoanta/" target="_blank" rel="noreferrer" data-es="LinkedIn" data-en="LinkedIn" aria-label="LinkedIn de Guillermo Anta Alonso">LinkedIn</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-inner">
+        <p>Guillermo Anta Alonso</p>
+        <p data-es="Senior Backend Engineer / Tech Lead" data-en="Senior Backend Engineer / Tech Lead">Senior Backend Engineer / Tech Lead</p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const languageButtons = document.querySelectorAll("[data-language]");
+        const translatable = document.querySelectorAll("[data-es][data-en]");
+        const themeToggle = document.getElementById("theme-toggle");
+        let language = "es";
+
+        function applyLanguage(nextLanguage) {
+          language = nextLanguage;
+          root.lang = language;
+          translatable.forEach(function (element) {
+            element.textContent = element.getAttribute("data-" + language);
+          });
+          languageButtons.forEach(function (button) {
+            button.setAttribute("aria-pressed", String(button.getAttribute("data-language") === language));
+          });
+          const targetTheme = root.dataset.theme === "dark" ? "light" : "dark";
+          const themeLabel = language === "es"
+            ? (targetTheme === "light" ? "Cambiar a tema claro" : "Cambiar a tema oscuro")
+            : (targetTheme === "light" ? "Switch to light theme" : "Switch to dark theme");
+          themeToggle.setAttribute("aria-label", themeLabel);
+          themeToggle.setAttribute("title", themeLabel);
+        }
+
+        languageButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            applyLanguage(button.getAttribute("data-language"));
+          });
+        });
+
+        themeToggle.addEventListener("click", function () {
+          root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+          applyLanguage(language);
+        });
+
+        applyLanguage("es");
+      }());
+    </script>
+  </body>
+</html>

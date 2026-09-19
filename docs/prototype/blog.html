@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blog personal de Guillermo Anta Alonso sobre ingeniería de software, arquitectura y trabajo con IA.">
+    <title>Blog — Guillermo Anta Alonso</title>
+    <style>
+      /* OD-LAYOUT-PRIMITIVES v1 — structure only: display, flex/grid, overflow, wrapping, ratio.
+         Put this @layer first; product CSS outside the layer always wins. */
+      @layer od-layout {
+        :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile) > :where(*) { min-width: 0; }
+        .od-stack   { display: flex; flex-direction: column; gap: var(--od-gap, 8px); }
+        .od-row     { display: flex; align-items: center; gap: var(--od-gap, 8px); }
+        .od-row-top { display: flex; align-items: flex-start; gap: var(--od-gap, 8px); }
+        .od-cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--od-gap, 8px); }
+        .od-fill    { flex: 1 1 0; min-width: 0; }
+        .od-fixed   { flex: none; }
+        .od-grid    { display: grid; gap: var(--od-gap, 12px); grid-template-columns: repeat(var(--od-cols, 3), minmax(0, 1fr)); }
+        .od-stat, .od-field, .od-cell { display: grid; gap: var(--od-gap, 2px); }
+        :where(.od-stat,.od-field,.od-cell) > :where(*) { display: block; }
+        .od-tile { display: grid; grid-template-rows: auto 1fr; }
+        :where(.od-tile) > :where(*) { display: block; }
+        .od-media { display: block; width: 100%; height: auto; aspect-ratio: var(--od-ratio, auto); }
+        .od-media-cover { object-fit: cover; }
+        .od-truncate { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .od-clamp-2, .od-clamp-3 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+        .od-clamp-2 { -webkit-line-clamp: 2; }
+        .od-clamp-3 { -webkit-line-clamp: 3; }
+        .od-lines-2 { min-height: calc(2 * 1.4em); }
+        .od-nowrap  { white-space: nowrap; }
+        .od-keep    { word-break: keep-all; overflow-wrap: anywhere; }
+        .od-screen { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+        .od-scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+        .od-rail { display: flex; gap: var(--od-gap, 8px); overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; padding-inline: var(--od-rail-pad, 16px); scroll-padding-inline: var(--od-rail-pad, 16px); }
+        .od-rail::-webkit-scrollbar { display: none; }
+        :where(.od-rail) > :where(*) { flex: none; scroll-snap-align: start; }
+        :where(.od-rail) > :where(:last-child) { margin-inline-end: var(--od-rail-pad, 16px); }
+        .od-spacer { flex: none; visibility: hidden; pointer-events: none; }
+        .od-touch  { min-width: 44px; min-height: 44px; }
+      }
+      /* /OD-LAYOUT-PRIMITIVES v1 */
+
+      :root {
+        color-scheme: dark;
+        --bg: #111111;
+        --surface: #111111;
+        --text: #ffffff;
+        --muted: #d9dee7;
+        --border: #6b7280;
+        --accent-base: #2856c7;
+        --accent: color-mix(in srgb, var(--accent-base) 65%, #ffffff);
+        --accent-contrast: #111111;
+        --focus: #ffffff;
+        --max-width: 1200px;
+        --radius: 8px;
+        --space-1: 8px;
+        --space-2: 16px;
+        --space-3: 24px;
+        --space-4: 32px;
+        --space-5: 48px;
+        --space-6: 64px;
+        --space-7: 96px;
+        --ease: cubic-bezier(.2,.8,.2,1);
+      }
+
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --bg: #f7f8fa;
+        --surface: #ffffff;
+        --text: #111111;
+        --muted: #6b7280;
+        --border: #d9dee7;
+        --accent-base: #2856c7;
+        --accent: #2856c7;
+        --accent-contrast: #ffffff;
+        --focus: #2856c7;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Avenir, "Avenir Next", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        text-rendering: optimizeLegibility;
+      }
+      body, button { font: inherit; }
+      a { color: inherit; }
+      a:focus-visible, button:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 4px;
+      }
+      ::selection { background: var(--accent); color: var(--accent-contrast); }
+      .skip-link {
+        position: fixed;
+        inset: var(--space-2) auto auto var(--space-2);
+        z-index: 20;
+        transform: translateY(-150%);
+        padding: var(--space-1) var(--space-2);
+        border-radius: var(--radius);
+        background: var(--accent);
+        color: var(--accent-contrast);
+        text-decoration: none;
+      }
+      .skip-link:focus { transform: translateY(0); }
+      .shell { width: min(100% - 32px, var(--max-width)); margin-inline: auto; }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+      }
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-2);
+        min-height: 72px;
+        padding-block: var(--space-1);
+      }
+      .wordmark {
+        color: var(--text);
+        font-family: "Avenir Next", Avenir, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        line-height: 1.2;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .wordmark span { color: var(--accent); }
+      .nav-group, .nav-links, .utility-group {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-1);
+      }
+      .nav-links a, .utility-button, .language-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        line-height: 1.2;
+        text-decoration: none;
+        transition: color 150ms var(--ease), border-color 150ms var(--ease), background-color 150ms var(--ease);
+      }
+      .nav-links a:hover, .utility-button:hover, .language-button:hover { color: var(--text); border-color: var(--border); }
+      .nav-links a[aria-current="page"] { color: var(--accent); }
+      .language-switch {
+        display: inline-flex;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .language-button { border: 0; border-radius: 0; }
+      .language-button[aria-pressed="true"] { background: var(--accent); color: var(--accent-contrast); }
+      .utility-button { border-color: var(--border); }
+      .theme-icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+      :root[data-theme="dark"] .theme-icon-moon,
+      :root[data-theme="light"] .theme-icon-sun { display: none; }
+
+      main { overflow: clip; }
+      .blog-hero {
+        display: grid;
+        align-items: end;
+        gap: var(--space-5);
+        min-height: calc(72svh - 72px);
+        padding-block: var(--space-7);
+      }
+      .eyebrow {
+        margin: 0 0 var(--space-2);
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      h1, h2 {
+        margin-top: 0;
+        font-family: "Avenir Next", Avenir, system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+        letter-spacing: -0.055em;
+      }
+      h1 {
+        max-width: 10ch;
+        margin-bottom: var(--space-3);
+        font-size: clamp(3.5rem, 10vw, 7rem);
+        line-height: 0.98;
+      }
+      .hero-copy {
+        max-width: 62ch;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1.1rem, 2vw, 1.35rem);
+      }
+      .blog-content {
+        display: grid;
+        gap: var(--space-6);
+        border-top: 1px solid var(--border);
+        padding-block: var(--space-6) var(--space-7);
+      }
+      .empty-state {
+        display: grid;
+        gap: var(--space-2);
+        max-width: 58ch;
+        border-top: 1px solid var(--border);
+        padding-top: var(--space-3);
+      }
+      .empty-state h2 {
+        margin-bottom: 0;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        line-height: 1;
+      }
+      .empty-state p:not(.eyebrow) { margin: 0; color: var(--muted); }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        min-height: 48px;
+        margin-top: var(--space-2);
+        padding: 10px 18px;
+        border: 1px solid var(--accent);
+        border-radius: var(--radius);
+        background: var(--accent);
+        color: var(--accent-contrast);
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 150ms var(--ease), background-color 150ms var(--ease);
+      }
+      .button:hover { transform: translateY(-2px); }
+      footer {
+        border-top: 1px solid var(--border);
+        padding-block: var(--space-3);
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+      .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); }
+      .footer-inner p { margin: 0; }
+
+      @media (min-width: 768px) {
+        .shell { width: min(100% - 64px, var(--max-width)); }
+        .topbar-inner {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        }
+        .wordmark { grid-column: 1; justify-self: start; }
+        .nav-group { display: contents; }
+        .nav-links { grid-column: 2; justify-content: center; }
+        .utility-group { grid-column: 3; justify-self: end; }
+        .blog-hero { grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); }
+        .blog-content { grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); }
+      }
+      @media (min-width: 1024px) {
+        .topbar-inner { min-height: 80px; }
+        .blog-hero { min-height: calc(72svh - 80px); }
+      }
+      @media (min-width: 1440px) {
+        .shell { width: min(100% - 96px, var(--max-width)); }
+      }
+      @media (max-width: 560px) {
+        .topbar-inner { align-items: flex-start; flex-direction: column; padding-block: var(--space-2); }
+        .nav-group { width: 100%; justify-content: space-between; }
+        .nav-links { order: 2; width: 100%; justify-content: space-between; }
+        .nav-links a { padding-inline: 8px; }
+        .utility-group { order: 1; }
+        .blog-hero { min-height: auto; padding-block: var(--space-6); }
+      }
+      @media (max-width: 375px) {
+        .shell { width: min(100% - 24px, var(--max-width)); }
+        .nav-links a { font-size: 0.8rem; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+        .button:hover { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido" data-es="Saltar al contenido" data-en="Skip to content">Saltar al contenido</a>
+
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="wordmark" href="index.html#inicio" aria-label="Guillermo Anta Alonso">GAA<span>.</span></a>
+        <div class="nav-group">
+          <nav class="nav-links" aria-label="Primary">
+            <a href="index.html#experiencia" data-es="Experiencia" data-en="Experience">Experiencia</a>
+            <a href="index.html#estudios" data-es="Estudios" data-en="Education">Estudios</a>
+            <a href="index.html#proyecto" data-es="Proyectos" data-en="Projects">Proyectos</a>
+            <a href="blog.html" aria-current="page" data-es="Blog" data-en="Blog">Blog</a>
+            <a href="index.html#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
+          </nav>
+          <div class="utility-group">
+            <div class="language-switch" aria-label="Language">
+              <button class="language-button" type="button" data-language="es" aria-pressed="true">ES</button>
+              <button class="language-button" type="button" data-language="en" aria-pressed="false">EN</button>
+            </div>
+            <button class="utility-button" type="button" id="theme-toggle" aria-label="Cambiar a tema claro" title="Cambiar a tema claro">
+              <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+              </svg>
+              <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.5 14.1A8.5 8.5 0 0 1 9.9 3.5 8.5 8.5 0 1 0 20.5 14.1Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <section class="shell blog-hero" aria-labelledby="blog-title">
+        <div>
+          <p class="eyebrow" data-es="Blog personal" data-en="Personal blog">Blog personal</p>
+          <h1 id="blog-title" data-es="Notas sobre construir software" data-en="Notes on building software">Notas sobre construir software</h1>
+        </div>
+        <p class="hero-copy" data-es="Un espacio para compartir decisiones técnicas, arquitectura, ingeniería asistida por IA y aprendizajes de trabajo real." data-en="A space to share technical decisions, architecture, AI-assisted engineering and lessons from real work.">Un espacio para compartir decisiones técnicas, arquitectura, ingeniería asistida por IA y aprendizajes de trabajo real.</p>
+      </section>
+
+      <section class="shell blog-content" aria-labelledby="archive-title">
+        <div class="empty-state">
+          <p class="eyebrow" data-es="Archivo" data-en="Archive">Archivo</p>
+          <h2 id="archive-title" data-es="Todavía no hay artículos publicados." data-en="No articles published yet.">Todavía no hay artículos publicados.</h2>
+          <p data-es="Aquí aparecerán los próximos artículos sobre ingeniería de software, arquitectura y trabajo con IA." data-en="Future articles on software engineering, architecture and AI-assisted work will appear here.">Aquí aparecerán los próximos artículos sobre ingeniería de software, arquitectura y trabajo con IA.</p>
+          <a class="button" href="index.html#inicio" data-es="Volver al portfolio" data-en="Back to portfolio">Volver al portfolio</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-inner">
+        <p>Guillermo Anta Alonso</p>
+        <p data-es="Blog personal" data-en="Personal blog">Blog personal</p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        const root = document.documentElement;
+        const languageButtons = document.querySelectorAll("[data-language]");
+        const translatable = document.querySelectorAll("[data-es][data-en]");
+        const themeToggle = document.getElementById("theme-toggle");
+        let language = "es";
+
+        function applyLanguage(nextLanguage) {
+          language = nextLanguage;
+          root.lang = language;
+          translatable.forEach(function (element) {
+            element.textContent = element.getAttribute("data-" + language);
+          });
+          languageButtons.forEach(function (button) {
+            button.setAttribute("aria-pressed", String(button.getAttribute("data-language") === language));
+          });
+          const targetTheme = root.dataset.theme === "dark" ? "light" : "dark";
+          const themeLabel = language === "es"
+            ? (targetTheme === "light" ? "Cambiar a tema claro" : "Cambiar a tema oscuro")
+            : (targetTheme === "light" ? "Switch to light theme" : "Switch to dark theme");
+          themeToggle.setAttribute("aria-label", themeLabel);
+          themeToggle.setAttribute("title", themeLabel);
+        }
+
+        languageButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            applyLanguage(button.getAttribute("data-language"));
+          });
+        });
+
+        themeToggle.addEventListener("click", function () {
+          root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+          applyLanguage(language);
+        });
+
+        applyLanguage("es");
+      }());
+    </script>
+  </body>
+</html>
