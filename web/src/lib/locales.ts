@@ -1,0 +1,57 @@
+export const locales = ['es', 'en'] as const
+
+export type Locale = (typeof locales)[number]
+
+type SiteCopy = {
+  navigationLabel: string
+  languageLabel: string
+  skipToContent: string
+  homeLabel: string
+  experienceLabel: string
+  educationLabel: string
+  projectsLabel: string
+  contactLabel: string
+  theme: {
+    toLight: string
+    toDark: string
+  }
+  footerRole: string
+}
+
+export const siteCopy: Record<Locale, SiteCopy> = {
+  es: {
+    navigationLabel: 'Navegación principal',
+    languageLabel: 'Idioma',
+    skipToContent: 'Saltar al contenido',
+    homeLabel: 'Inicio',
+    experienceLabel: 'Experiencia',
+    educationLabel: 'Estudios',
+    projectsLabel: 'Proyectos',
+    contactLabel: 'Contacto',
+    theme: {
+      toLight: 'Cambiar a tema claro',
+      toDark: 'Cambiar a tema oscuro',
+    },
+    footerRole: 'Senior Backend Engineer / Tech Lead',
+  },
+  en: {
+    navigationLabel: 'Main navigation',
+    languageLabel: 'Language',
+    skipToContent: 'Skip to content',
+    homeLabel: 'Home',
+    experienceLabel: 'Experience',
+    educationLabel: 'Education',
+    projectsLabel: 'Projects',
+    contactLabel: 'Contact',
+    theme: {
+      toLight: 'Switch to light theme',
+      toDark: 'Switch to dark theme',
+    },
+    footerRole: 'Senior Backend Engineer / Tech Lead',
+  },
+}
+
+export function localizedPath(locale: Locale, path = '') {
+  const suffix = path ? `/${path.replace(/^\/+|\/+$/g, '')}` : ''
+  return `/${locale}${suffix}/`
+}

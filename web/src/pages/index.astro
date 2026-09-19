@@ -1,34 +1,5 @@
 ---
-import '../styles/global.css';
-import {postsQuery, sanityClient} from '../lib/sanity';
+export const prerender = true
 
-const posts = await sanityClient.fetch(postsQuery);
+return Astro.redirect('/es/')
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Portfolio</title>
-	</head>
-	<body>
-		<main>
-			<h1>Portfolio</h1>
-			<h2>Blog</h2>
-			{posts.length > 0 ? (
-				<ul>
-					{posts.map((post) => (
-						<li>
-							<a href={`/blog/${post.slug.current}`}>{post.title}</a>
-						</li>
-					))}
-				</ul>
-			) : (
-				<p>No published posts yet.</p>
-			)}
-		</main>
-	</body>
-</html>

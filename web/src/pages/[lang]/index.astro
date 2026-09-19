@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro'
+import {locales, type Locale} from '../../lib/locales'
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({params: {lang: locale}, props: {locale}}))
+}
+
+const locale = Astro.props.locale as Locale
+const content = {
+  es: {
+    title: 'Guillermo Anta Alonso — Senior Backend Engineer / Tech Lead',
+    description: 'Portfolio de Guillermo Anta Alonso, Senior Backend Engineer y Tech Lead.',
+    eyebrow: 'Ingeniería de software · Valladolid, España',
+    role: 'Senior Backend Engineer / Tech Lead',
+    intro:
+      'Ingeniero de software con más de 7 años de experiencia en backend, arquitecturas cloud y entrega de extremo a extremo. Trabajo principalmente con TypeScript, Node.js, Java y Spring.',
+    primaryAction: 'Ver experiencia',
+    secondaryAction: 'Hablemos',
+  },
+  en: {
+    title: 'Guillermo Anta Alonso — Senior Backend Engineer / Tech Lead',
+    description: 'Portfolio of Guillermo Anta Alonso, Senior Backend Engineer and Tech Lead.',
+    eyebrow: 'Software engineering · Valladolid, Spain',
+    role: 'Senior Backend Engineer / Tech Lead',
+    intro:
+      'Software engineer with more than 7 years of experience in backend systems, cloud architectures and end-to-end delivery. I work mainly with TypeScript, Node.js, Java and Spring.',
+    primaryAction: 'View experience',
+    secondaryAction: "Let's talk",
+  },
+}[locale]
+---
+
+<BaseLayout locale={locale} title={content.title} description={content.description}>
+  <section class="shell hero" id="inicio" aria-labelledby="hero-title">
+    <div class="hero-copy-block">
+      <p class="eyebrow">{content.eyebrow}</p>
+      <h1 id="hero-title">Guillermo Anta Alonso</h1>
+      <p class="hero-role">{content.role}</p>
+      <p class="hero-copy">{content.intro}</p>
+      <div class="hero-actions">
+        <a class="button" href="#experiencia">{content.primaryAction}</a>
+        <a class="button secondary" href="#contacto">{content.secondaryAction}</a>
+      </div>
+    </div>
+    <aside class="hero-meta" aria-label={locale === 'es' ? 'Resumen profesional' : 'Professional summary'}>
+      <div class="meta-row"><span>Backend · Cloud</span><strong>Tech Lead</strong></div>
+      <div class="meta-row"><span>{locale === 'es' ? 'Experiencia' : 'Experience'}</span><strong>{locale === 'es' ? '7+ años' : '7+ years'}</strong></div>
+      <div class="meta-row"><span>{locale === 'es' ? 'Idiomas' : 'Languages'}</span><strong>{locale === 'es' ? 'Español · Inglés B2/C1' : 'Spanish · English B2/C1'}</strong></div>
+      <div class="meta-row"><span>{locale === 'es' ? 'Contacto' : 'Contact'}</span><a href="mailto:guillermoantataz@gmail.com">Email</a></div>
+    </aside>
+  </section>
+</BaseLayout>
