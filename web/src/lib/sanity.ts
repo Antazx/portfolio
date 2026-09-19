@@ -2,15 +2,62 @@ import {sanityClient} from 'sanity:client'
 import {defineQuery} from 'groq'
 
 export const postSlugsQuery = defineQuery(
-  `*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`
+  `*[
+    _type == "post" &&
+    !(_id in path("drafts.**")) &&
+    defined(publishedAt) &&
+    publishedAt <= now() &&
+    defined(slug.current) &&
+    (
+      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||
+      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)
+    )
+  ]{ "slug": slug.current }`
 )
 
 export const postsQuery = defineQuery(
-  `*[_type == "post" && defined(slug.current)] | order(_createdAt desc){ _id, title, slug }`
+  `*[
+    _type == "post" &&
+    !(_id in path("drafts.**")) &&
+    defined(publishedAt) &&
+    publishedAt <= now() &&
+    defined(slug.current) &&
+    (
+      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||
+      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)
+    )
+  ] | order(publishedAt desc){
+    _id,
+    "slug": slug.current,
+    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),
+    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),
+    publishedAt,
+    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,
+    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0
+  }`
 )
 
 export const postQuery = defineQuery(
-  `*[_type == "post" && slug.current == $slug][0]{ _id, title, slug, body }`
+  `*[
+    _type == "post" &&
+    !(_id in path("drafts.**")) &&
+    defined(publishedAt) &&
+    publishedAt <= now() &&
+    slug.current == $slug &&
+    (
+      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||
+      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)
+    )
+  ][0]{
+    _id,
+    "slug": slug.current,
+    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),
+    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),
+    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body),
+    publishedAt,
+    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,
+    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0
+  }`
 )
 
 export {sanityClient}

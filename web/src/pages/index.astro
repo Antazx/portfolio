@@ -1,5 +1,17 @@
 ---
 export const prerender = true
-
-return Astro.redirect('/es/')
 ---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=/es/" />
+    <link rel="canonical" href="/es/" />
+    <meta name="robots" content="noindex" />
+    <title>Guillermo Anta Alonso</title>
+  </head>
+  <body>
+    <p><a href="/es/">Ir al portfolio</a></p>
+  </body>
+</html>
