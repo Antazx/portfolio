@@ -9,6 +9,7 @@
     "build": "pnpm --filter portfolio-web build",
     "build:studio": "pnpm --filter portfolio-studio build",
     "audit:a11y": "pnpm --filter portfolio-web audit:a11y",
+    "verify:production": "pnpm --filter portfolio-web verify:production",
     "preview": "pnpm --filter portfolio-web preview",
     "typegen": "pnpm --filter portfolio-studio typegen"
   }
