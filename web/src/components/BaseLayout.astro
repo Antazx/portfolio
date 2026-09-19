@@ -1,0 +1,92 @@
+---
+import '../styles/global.css'
+import {localizedPath, siteCopy, type Locale} from '../lib/locales'
+
+interface Props {
+  locale: Locale
+  title: string
+  description: string
+}
+
+const {locale, title, description} = Astro.props
+const copy = siteCopy[locale]
+const homeHref = localizedPath(locale)
+---
+
+<!doctype html>
+<html lang={locale} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">{copy.skipToContent}</a>
+
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="wordmark" href={homeHref} aria-label="Guillermo Anta Alonso">GAA<span>.</span></a>
+        <div class="header-controls">
+          <nav class="nav-links" aria-label={copy.navigationLabel}>
+            <a href={`${homeHref}#inicio`}>{copy.homeLabel}</a>
+            <a href={`${homeHref}#experiencia`}>{copy.experienceLabel}</a>
+            <a href={`${homeHref}#estudios`}>{copy.educationLabel}</a>
+            <a href={`${homeHref}#proyecto`}>{copy.projectsLabel}</a>
+            <a href={`${homeHref}#contacto`}>{copy.contactLabel}</a>
+          </nav>
+          <div class="utility-group">
+            <nav class="language-switch" aria-label={copy.languageLabel}>
+              <a href={localizedPath('es')} lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+              <a href={localizedPath('en')} lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+            </nav>
+            <button
+              class="theme-toggle"
+              type="button"
+              data-theme-toggle
+              data-to-light={copy.theme.toLight}
+              data-to-dark={copy.theme.toDark}
+              aria-label={copy.theme.toLight}
+              title={copy.theme.toLight}
+            >
+              <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+              </svg>
+              <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M20.5 14.1A8.5 8.5 0 0 1 9.9 3.5 8.5 8.5 0 1 0 20.5 14.1Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <span>Guillermo Anta Alonso</span>
+        <span>{copy.footerRole}</span>
+      </div>
+    </footer>
+
+    <script is:inline>
+      const root = document.documentElement
+      const themeToggle = document.querySelector('[data-theme-toggle]')
+
+      themeToggle?.addEventListener('click', () => {
+        const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark'
+        root.dataset.theme = nextTheme
+        const label = nextTheme === 'dark' ? themeToggle.dataset.toLight : themeToggle.dataset.toDark
+        if (label) {
+          themeToggle.setAttribute('aria-label', label)
+          themeToggle.setAttribute('title', label)
+        }
+      })
+    </script>
+  </body>
+</html>
