@@ -1,5 +1,8 @@
 ---
+import {absoluteUrl} from '../lib/seo'
+
 export const prerender = true
+const canonicalUrl = absoluteUrl('/es/') ?? '/es/'
 ---
 
 <!doctype html>
@@ -7,7 +10,8 @@ export const prerender = true
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="refresh" content="0;url=/es/" />
-    <link rel="canonical" href="/es/" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="description" content="Portfolio bilingüe de Guillermo Anta Alonso." />
     <meta name="robots" content="noindex" />
     <title>Guillermo Anta Alonso</title>
   </head>

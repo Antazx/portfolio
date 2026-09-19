@@ -3,6 +3,7 @@ import {PortableText} from 'astro-portabletext'
 import BaseLayout from '../../../components/BaseLayout.astro'
 import {locales, localizedPath, type Locale} from '../../../lib/locales'
 import {postQuery, postSlugsQuery, sanityClient} from '../../../lib/sanity'
+import {absoluteUrl, siteOrigin} from '../../../lib/seo'
 
 export async function getStaticPaths() {
   const paths = await Promise.all(
@@ -35,6 +36,32 @@ const copy = {
     language: 'Publication language',
   },
 }[locale]
+const postPath = `/${locale}/blog/${post.slug}/`
+const postUrl = absoluteUrl(postPath)
+const structuredData = postUrl && siteOrigin ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    url: postUrl,
+    mainEntityOfPage: postUrl,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    inLanguage: locale,
+    author: {'@id': `${siteOrigin}/#person`},
+    isPartOf: {'@id': `${siteOrigin}/#website`},
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Portfolio', item: absoluteUrl(`/${locale}/`) },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: absoluteUrl(`/${locale}/blog/`) },
+      { '@type': 'ListItem', position: 3, name: post.title, item: postUrl },
+    ],
+  },
+] : []
 ---
 
 <BaseLayout
@@ -45,6 +72,13 @@ const copy = {
     es: post.hasSpanish ? `/es/blog/${post.slug}/` : localizedPath('es'),
     en: post.hasEnglish ? `/en/blog/${post.slug}/` : localizedPath('en'),
   }}
+  alternatePaths={{
+    es: post.hasSpanish ? `/es/blog/${post.slug}/` : undefined,
+    en: post.hasEnglish ? `/en/blog/${post.slug}/` : undefined,
+  }}
+  canonicalPath={postPath}
+  ogType="article"
+  structuredData={structuredData}
 >
   <article class="shell post-detail">
     <header class="post-header">
