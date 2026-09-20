@@ -222,6 +222,8 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .portable-text h2, .portable-text h3 { margin-top: var(--space-5); margin-bottom: var(--space-2); }
 .portable-text p { color: var(--muted); }
 .portable-text a { color: var(--text); text-decoration-color: var(--accent); text-underline-offset: 4px; }
+.portable-text ul { list-style-type: disc; }
+.portable-text ol { list-style-type: decimal; }
 .portable-text ul, .portable-text ol { padding-left: 1.25rem; }
 .site-footer { border-top: 1px solid var(--border); padding-block: var(--space-3); color: var(--muted); font-size: .875rem; }
 .footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); }
@@ -231,7 +233,6 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
   .shell { width: min(100% - 64px, var(--max-width)); }
   .hero { grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); }
   .experience-item { grid-template-columns: minmax(150px, .25fr) minmax(0, 1fr); }
-  .contact-layout { grid-template-columns: minmax(0, 1fr) minmax(280px, .85fr); }
   .blog-hero { grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); }
 }
 @media (min-width: 1024px) { .topbar-inner { min-height: 80px; } }

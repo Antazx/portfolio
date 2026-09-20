@@ -69,6 +69,8 @@ test('approved branding assets are used by localized layouts', async ({page}) =>
 })
 
 test('localized project and contact details keep the public rhythm', async ({page}) => {
+  await page.setViewportSize({width: 1280, height: 800})
+
   for (const route of ['/es/', '/en/']) {
     await page.goto(route)
 
@@ -83,7 +85,17 @@ test('localized project and contact details keep the public rhythm', async ({pag
     await expect(projectLink).toHaveAttribute('rel', 'noreferrer')
     await expect(project.locator('.project-copy')).toHaveCSS('margin-bottom', '24px')
     await expect(page.locator('#contacto .contact-copy-block')).toHaveCSS('gap', '16px')
+    const contactColumns = await page.locator('#contacto .contact-layout').evaluate((element) => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length)
+    expect(contactColumns).toBe(1)
   }
+})
+
+test('portable text lists keep their markers', async ({page}) => {
+  await page.goto('/es/blog/home-server/')
+
+  const list = page.locator('.portable-text ul').first()
+  await expect(list.locator('li').first()).toBeVisible()
+  await expect(list).toHaveCSS('list-style-type', 'disc')
 })
 
 test('discovery endpoints expose the public contract', async ({request}) => {
