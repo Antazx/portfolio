@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "audit:a11y": "pnpm build && playwright test",
+    "verify:production": "node ../scripts/verify-production.mjs && PLAYWRIGHT_BASE_URL=$PUBLIC_SITE_URL playwright test",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -26,6 +28,8 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "vite": "^8.3.0"
   }
 }

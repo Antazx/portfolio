@@ -29,7 +29,7 @@ pnpm preview       # serve the production build locally
 git diff --check   # whitespace check before review
 ```
 
-There is no linter, formatter, or test runner yet. Add one only with its configuration and script; update this file and `README.md` at the same time.
+There is no linter or formatter. The accessibility audit uses Playwright and axe-core: run `pnpm audit:a11y` after a build. Add another runner only with its configuration and script; update this file and `README.md` at the same time.
 
 ## Integration Rules
 

@@ -7,7 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 import netlify from '@astrojs/netlify';
 import sanity from '@sanity/astro';
 
-const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = loadEnv(
+const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET, PUBLIC_SITE_URL } = loadEnv(
   process.env.NODE_ENV ?? 'development',
   process.cwd(),
   ''
@@ -15,6 +15,8 @@ const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = loadEnv(
 
 // https://astro.build/config
 export default defineConfig({
+  site: PUBLIC_SITE_URL || undefined,
+
   vite: {
     plugins: [tailwindcss()]
   },

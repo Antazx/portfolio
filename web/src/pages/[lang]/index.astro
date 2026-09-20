@@ -1,34 +1,14 @@
 ---
 import BaseLayout from '../../components/BaseLayout.astro'
 import {locales, type Locale} from '../../lib/locales'
+import {portfolio} from '../../lib/portfolio'
 
 export function getStaticPaths() {
   return locales.map((locale) => ({params: {lang: locale}, props: {locale}}))
 }
 
 const locale = Astro.props.locale as Locale
-const content = {
-  es: {
-    title: 'Guillermo Anta Alonso — Senior Backend Engineer / Tech Lead',
-    description: 'Portfolio de Guillermo Anta Alonso, Senior Backend Engineer y Tech Lead.',
-    eyebrow: 'Ingeniería de software · Valladolid, España',
-    role: 'Senior Backend Engineer / Tech Lead',
-    intro:
-      'Ingeniero de software con más de 7 años de experiencia en backend, arquitecturas cloud y entrega de extremo a extremo. Trabajo principalmente con TypeScript, Node.js, Java y Spring.',
-    primaryAction: 'Ver experiencia',
-    secondaryAction: 'Hablemos',
-  },
-  en: {
-    title: 'Guillermo Anta Alonso — Senior Backend Engineer / Tech Lead',
-    description: 'Portfolio of Guillermo Anta Alonso, Senior Backend Engineer and Tech Lead.',
-    eyebrow: 'Software engineering · Valladolid, Spain',
-    role: 'Senior Backend Engineer / Tech Lead',
-    intro:
-      'Software engineer with more than 7 years of experience in backend systems, cloud architectures and end-to-end delivery. I work mainly with TypeScript, Node.js, Java and Spring.',
-    primaryAction: 'View experience',
-    secondaryAction: "Let's talk",
-  },
-}[locale]
+const content = portfolio[locale]
 ---
 
 <BaseLayout locale={locale} title={content.title} description={content.description}>
@@ -44,10 +24,91 @@ const content = {
       </div>
     </div>
     <aside class="hero-meta" aria-label={locale === 'es' ? 'Resumen profesional' : 'Professional summary'}>
-      <div class="meta-row"><span>Backend · Cloud</span><strong>Tech Lead</strong></div>
-      <div class="meta-row"><span>{locale === 'es' ? 'Experiencia' : 'Experience'}</span><strong>{locale === 'es' ? '7+ años' : '7+ years'}</strong></div>
-      <div class="meta-row"><span>{locale === 'es' ? 'Idiomas' : 'Languages'}</span><strong>{locale === 'es' ? 'Español · Inglés B2/C1' : 'Spanish · English B2/C1'}</strong></div>
-      <div class="meta-row"><span>{locale === 'es' ? 'Contacto' : 'Contact'}</span><a href="mailto:guillermoantataz@gmail.com">Email</a></div>
+      {content.summary.map((item, index) => (
+        <div class="meta-row">
+          <span>{item.label}</span>
+          {index === content.summary.length - 1 ? <a href="mailto:guillermoantataz@gmail.com">{item.value}</a> : <strong>{item.value}</strong>}
+        </div>
+      ))}
     </aside>
+  </section>
+
+  <section class="section" id="experiencia" aria-labelledby="experience-title">
+    <div class="shell">
+      <div class="section-heading">
+        <h2 id="experience-title">{content.experience.title}</h2>
+        <p class="section-intro">{content.experience.intro}</p>
+      </div>
+      <div class="experience-list">
+        {content.experience.items.map((item) => (
+          <article class="experience-item">
+            <div class="experience-date">{item.period}</div>
+            <div>
+              <h3>{item.company} <span class="experience-company">— {item.role}</span></h3>
+              <ul>
+                {item.bullets.map((bullet) => <li>{bullet}</li>)}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="estudios" aria-labelledby="education-title">
+    <div class="shell">
+      <div class="section-heading">
+        <h2 id="education-title">{content.education.title}</h2>
+        <p class="section-intro">{content.education.intro}</p>
+      </div>
+      <div class="experience-list">
+        <article class="experience-item">
+          <div class="experience-date">{content.education.label}</div>
+          <div>
+            <h3>{content.education.degree}</h3>
+            <p class="experience-company">{content.education.specialization}</p>
+            <p class="section-intro">{content.education.institution}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="proyecto" aria-labelledby="projects-title">
+    <div class="shell">
+      <div class="section-heading">
+        <h2 id="projects-title">{content.projects.title}</h2>
+        <p class="section-intro">{content.projects.intro}</p>
+      </div>
+      <div class="project-list">
+        {content.projects.items.map((project) => (
+          <article class="experience-item project-item">
+            <div class="experience-date">{project.label}</div>
+            <div>
+              <h3>{project.name} <span class="experience-company">— {project.role}</span></h3>
+              <p class="project-copy">{project.description}</p>
+              <ul>
+                {project.bullets.map((bullet) => <li>{bullet}</li>)}
+              </ul>
+              <a class="button secondary" href={project.link} target="_blank" rel="noreferrer">{project.linkLabel}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contacto" aria-labelledby="contact-title">
+    <div class="shell contact-layout">
+      <div>
+        <h2 class="contact-title" id="contact-title">{content.contact.title}</h2>
+        <p class="experience-date">{content.contact.label}</p>
+        <p class="contact-copy">{content.contact.intro}</p>
+      </div>
+      <div class="contact-links" aria-label={content.contact.label}>
+        <a class="contact-email" href={`mailto:${content.contact.emailLabel}`}>{content.contact.emailLabel}</a>
+        <a class="contact-email" href="https://www.linkedin.com/in/guillermoanta/" target="_blank" rel="noreferrer" aria-label={content.contact.linkedinAriaLabel}>{content.contact.linkedinLabel}</a>
+      </div>
+    </div>
   </section>
 </BaseLayout>

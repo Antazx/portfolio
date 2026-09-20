@@ -3,6 +3,12 @@
   publish = "web/dist"
 
 [build.environment]
-  NODE_VERSION = "22.13.0"
+  NODE_VERSION = "22.14.0"
   PUBLIC_SANITY_PROJECT_ID = "zj8qwjc2"
   PUBLIC_SANITY_DATASET = "production"
+
+[[redirects]]
+  from = "/"
+  to = "/es/"
+  status = 301
+  force = true

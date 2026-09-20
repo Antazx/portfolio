@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../../components/BaseLayout.astro'
+import {locales, type Locale} from '../../../lib/locales'
+import {postsQuery, sanityClient} from '../../../lib/sanity'
+import {absoluteUrl} from '../../../lib/seo'
+
+export async function getStaticPaths() {
+  return Promise.all(
+    locales.map(async (locale) => ({
+      params: {lang: locale},
+      props: {locale, posts: await sanityClient.fetch(postsQuery, {locale})},
+    })),
+  )
+}
+
+const locale = Astro.props.locale as Locale
+const posts = Astro.props.posts as Awaited<ReturnType<typeof sanityClient.fetch<typeof postsQuery>>>
+const copy = {
+  es: {
+    title: 'Blog — Guillermo Anta Alonso',
+    description: 'Blog personal de Guillermo Anta Alonso sobre ingeniería de software, arquitectura y trabajo con IA.',
+    eyebrow: 'Blog personal',
+    heading: 'Notas sobre construir software',
+    intro: 'Un espacio para compartir decisiones técnicas, arquitectura, ingeniería asistida por IA y aprendizajes de trabajo real.',
+    archive: 'Archivo',
+    emptyHeading: 'Todavía no hay artículos publicados.',
+    emptyText: 'Aquí aparecerán los próximos artículos sobre ingeniería de software, arquitectura y trabajo con IA.',
+    read: 'Leer publicación',
+  },
+  en: {
+    title: 'Blog — Guillermo Anta Alonso',
+    description: 'Personal blog by Guillermo Anta Alonso about software engineering, architecture and AI-assisted work.',
+    eyebrow: 'Personal blog',
+    heading: 'Notes on building software',
+    intro: 'A space to share technical decisions, architecture, AI-assisted engineering and lessons from real work.',
+    archive: 'Archive',
+    emptyHeading: 'No articles published yet.',
+    emptyText: 'Future articles on software engineering, architecture and AI-assisted work will appear here.',
+    read: 'Read publication',
+  },
+}[locale]
+const blogPath = `/${locale}/blog/`
+const blogUrl = absoluteUrl(blogPath)
+const structuredData = blogUrl ? [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: copy.title,
+    description: copy.description,
+    url: blogUrl,
+    inLanguage: locale,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Portfolio', item: absoluteUrl(`/${locale}/`) },
+      { '@type': 'ListItem', position: 2, name: copy.archive, item: blogUrl },
+    ],
+  },
+] : []
+---
+
+<BaseLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  languageLinks={{es: '/es/blog/', en: '/en/blog/'}}
+  alternatePaths={{es: '/es/blog/', en: '/en/blog/'}}
+  canonicalPath={blogPath}
+  structuredData={structuredData}
+>
+  <section class="shell blog-hero" aria-labelledby="blog-title">
+    <div>
+      <p class="eyebrow">{copy.eyebrow}</p>
+      <h1 id="blog-title">{copy.heading}</h1>
+    </div>
+    <p class="hero-copy">{copy.intro}</p>
+  </section>
+
+  <section class="shell blog-content" aria-labelledby="archive-title">
+    {posts.length > 0 ? (
+      <>
+        <div class="section-heading">
+          <p class="eyebrow">{copy.archive}</p>
+          <h2 id="archive-title">{copy.archive}</h2>
+        </div>
+        <div class="post-grid">
+          {posts.map((post) => (
+            <article class="post-card">
+              <p class="experience-date">{post.publishedAt && new Date(post.publishedAt).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', {dateStyle: 'medium'})}</p>
+              <h3>{post.title}</h3>
+              <p>{post.excerpt}</p>
+              <a class="button secondary" href={`/${locale}/blog/${post.slug}/`}>{copy.read}</a>
+            </article>
+          ))}
+        </div>
+      </>
+    ) : (
+      <div class="empty-state">
+        <p class="eyebrow">{copy.archive}</p>
+        <h2 id="archive-title">{copy.emptyHeading}</h2>
+        <p>{copy.emptyText}</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>

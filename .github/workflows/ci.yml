@@ -21,10 +21,12 @@ jobs:
           version: 11.10.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.13.0
+          node-version: 22.14.0
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm typegen
       - run: git diff --exit-code -- web/sanity.types.ts
       - run: pnpm build
       - run: pnpm build:studio
+      - run: pnpm --filter portfolio-web exec playwright install --with-deps chromium
+      - run: pnpm audit:a11y

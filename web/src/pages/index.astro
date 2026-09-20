@@ -1,5 +1,21 @@
 ---
-export const prerender = true
+import {absoluteUrl} from '../lib/seo'
 
-return Astro.redirect('/es/')
+export const prerender = true
+const canonicalUrl = absoluteUrl('/es/') ?? '/es/'
 ---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=/es/" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="description" content="Portfolio bilingüe de Guillermo Anta Alonso." />
+    <meta name="robots" content="noindex" />
+    <title>Guillermo Anta Alonso</title>
+  </head>
+  <body>
+    <p><a href="/es/">Ir al portfolio</a></p>
+  </body>
+</html>
