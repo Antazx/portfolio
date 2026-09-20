@@ -158,7 +158,7 @@ export const portfolio = {
           description:
             'Plataforma para crear y gestionar páginas web de boda personalizables. Un producto propio para resolver invitaciones, confirmaciones, recordatorios y galerías desde un mismo lugar.',
           bullets: [
-            'Astro + Fastify + MongoDB',
+            'Tecnologías: Astro · React · TypeScript · Tailwind CSS · Fastify · MongoDB · Stripe · AWS · Docker · Terraform · Playwright',
             'Invitación digital y formulario de confirmación',
             'Recordatorios y galerías de imágenes',
           ],
@@ -279,7 +279,7 @@ export const portfolio = {
           description:
             'A platform for creating and managing customizable wedding websites. A product built to handle invitations, RSVPs, reminders and galleries in one place.',
           bullets: [
-            'Astro + Fastify + MongoDB',
+            'Technologies: Astro · React · TypeScript · Tailwind CSS · Fastify · MongoDB · Stripe · AWS · Docker · Terraform · Playwright',
             'Digital invitation and RSVP form',
             'Reminders and image galleries',
           ],
