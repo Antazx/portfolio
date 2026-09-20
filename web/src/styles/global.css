@@ -83,15 +83,14 @@ a:focus-visible, button:focus-visible {
   padding-block: var(--space-1);
 }
 .wordmark {
-  color: var(--text);
-  font-size: .9rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  line-height: 1.2;
+  display: block;
+  width: clamp(140px, 20vw, 180px);
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: #111111;
   text-decoration: none;
-  white-space: nowrap;
 }
-.wordmark span { color: var(--accent); }
+.wordmark-image { display: block; width: 100%; height: auto; }
 .header-controls, .nav-links, .utility-group, .language-switch {
   display: flex;
   align-items: center;

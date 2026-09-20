@@ -55,6 +55,19 @@ test('navigation and content remain available with JavaScript disabled', async (
   await context.close()
 })
 
+test('approved branding assets are used by localized layouts', async ({page}) => {
+  await page.setViewportSize({width: 375, height: 800})
+
+  for (const route of await publicPaths(page)) {
+    await page.goto(route)
+
+    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/gaa-favicon-final.png')
+    await expect(page.locator('.wordmark')).toHaveAttribute('aria-label', 'Guillermo Anta Alonso')
+    await expect(page.locator('.wordmark-image')).toHaveAttribute('src', '/gaa-header-final.png')
+    await expect(page.locator('.wordmark-image')).toHaveAttribute('alt', '')
+  }
+})
+
 test('localized project and contact details keep the public rhythm', async ({page}) => {
   for (const route of ['/es/', '/en/']) {
     await page.goto(route)
