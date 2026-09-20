@@ -229,7 +229,7 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .portable-text { max-width: 72ch; padding-block: var(--space-5); }
 .portable-text h2, .portable-text h3 { margin-top: var(--space-5); margin-bottom: var(--space-2); }
 .portable-text p { color: var(--muted); }
-.portable-text a { color: var(--text); text-decoration-color: var(--accent); text-underline-offset: 4px; }
+.portable-text a { color: var(--text); text-decoration-color: var(--accent); text-decoration-line: underline; text-underline-offset: 4px; }
 .portable-text ul { list-style-type: disc; }
 .portable-text ol { list-style-type: decimal; }
 .portable-text ul, .portable-text ol { padding-left: 1.25rem; }
