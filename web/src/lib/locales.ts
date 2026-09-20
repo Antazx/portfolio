@@ -12,6 +12,7 @@ type SiteCopy = {
   projectsLabel: string
   blogLabel: string
   contactLabel: string
+  cvLabel: string
   theme: {
     toLight: string
     toDark: string
@@ -35,6 +36,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     projectsLabel: 'Proyectos',
     blogLabel: 'Blog',
     contactLabel: 'Contacto',
+    cvLabel: 'CV',
     theme: {
       toLight: 'Cambiar a tema claro',
       toDark: 'Cambiar a tema oscuro',
@@ -56,6 +58,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     projectsLabel: 'Projects',
     blogLabel: 'Blog',
     contactLabel: 'Contact',
+    cvLabel: 'CV',
     theme: {
       toLight: 'Switch to light theme',
       toDark: 'Switch to dark theme',

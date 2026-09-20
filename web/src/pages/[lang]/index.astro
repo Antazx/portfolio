@@ -1,6 +1,7 @@
 ---
 import {Image} from 'astro:assets'
 import BaseLayout from '../../components/BaseLayout.astro'
+import {cvAsset} from '../../lib/cv'
 import {locales, type Locale} from '../../lib/locales'
 import {portfolio} from '../../lib/portfolio'
 
@@ -10,6 +11,7 @@ export function getStaticPaths() {
 
 const locale = Astro.props.locale as Locale
 const content = portfolio[locale]
+const cv = cvAsset(locale)
 ---
 
 <BaseLayout locale={locale} title={content.title} description={content.description}>
@@ -22,6 +24,7 @@ const content = portfolio[locale]
       <div class="hero-actions">
         <a class="button" href="#experiencia">{content.primaryAction}</a>
         <a class="button secondary" href="#contacto">{content.secondaryAction}</a>
+        <a class="button secondary" href={cv.href} download={cv.filename}>{content.downloadCvLabel}</a>
       </div>
     </div>
     <aside class="hero-meta" aria-label={locale === 'es' ? 'Resumen profesional' : 'Professional summary'}>

@@ -1,6 +1,7 @@
 ---
 import {Image} from 'astro:assets'
 import '../styles/global.css'
+import {cvAsset} from '../lib/cv'
 import {localizedPath, siteCopy, type Locale} from '../lib/locales'
 import {absoluteUrl, localeTag, serializeJsonLd, siteOrigin} from '../lib/seo'
 
@@ -17,6 +18,7 @@ interface Props {
 
 const {locale, title, description, languageLinks = {}, alternatePaths, canonicalPath, ogType = 'website', structuredData = []} = Astro.props
 const copy = siteCopy[locale]
+const cv = cvAsset(locale)
 const homeHref = localizedPath(locale)
 const spanishHref = languageLinks.es ?? localizedPath('es')
 const englishHref = languageLinks.en ?? localizedPath('en')
@@ -92,10 +94,10 @@ const schemas = [...siteSchemas, ...structuredData]
           <nav class="nav-links" aria-label={copy.navigationLabel}>
             <a href={`${homeHref}#inicio`}>{copy.homeLabel}</a>
             <a href={`${homeHref}#experiencia`}>{copy.experienceLabel}</a>
-            <a href={`${homeHref}#estudios`}>{copy.educationLabel}</a>
             <a href={`${homeHref}#proyecto`}>{copy.projectsLabel}</a>
             <a href={localizedPath(locale, 'blog')}>{copy.blogLabel}</a>
             <a href={`${homeHref}#contacto`}>{copy.contactLabel}</a>
+            <a href={cv.href} download={cv.filename}>{copy.cvLabel}</a>
           </nav>
           <div class="utility-group">
             <nav class="language-switch" aria-label={copy.languageLabel}>

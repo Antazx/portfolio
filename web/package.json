@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/verify-cv-assets.mjs && astro build",
     "audit:a11y": "pnpm build && playwright test",
     "verify:production": "node ../scripts/verify-production.mjs && PLAYWRIGHT_BASE_URL=$PUBLIC_SITE_URL playwright test",
     "preview": "astro preview",
