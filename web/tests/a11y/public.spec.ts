@@ -56,6 +56,58 @@ test('keyboard focus, themes, reduced motion, and responsive layout work', async
   }
 })
 
+test('theme preference persists across public navigation and reloads', async ({page}) => {
+  await page.goto('/es/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
+  await page.locator('[data-theme-toggle]').click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  const homeServerLink = page.locator('#proyecto .project-item').filter({hasText: 'Home Server'}).locator('a.project-link')
+  await homeServerLink.click()
+  await expect(page).toHaveURL('/es/blog/home-server/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await expect(page.locator('[data-theme-toggle]')).toHaveAttribute('aria-label', 'Cambiar a tema oscuro')
+
+  await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  await page.locator('.back-link').click()
+  await expect(page).toHaveURL('/es/blog/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  const homeServerPostLink = page.locator('.post-card').filter({hasText: 'Home Server'}).locator('a')
+  await homeServerPostLink.click()
+  await expect(page).toHaveURL('/es/blog/home-server/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  await page.locator('.post-language a[lang="en"]').click()
+  await expect(page).toHaveURL('/en/blog/home-server/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await expect(page.locator('[data-theme-toggle]')).toHaveAttribute('aria-label', 'Switch to dark theme')
+
+  await page.locator('.wordmark').click()
+  await expect(page).toHaveURL('/en/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  await page.locator('.nav-links a[href="/en/blog/"]').click()
+  await expect(page).toHaveURL('/en/blog/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  await page.goto('/en/blog/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  await page.locator('.wordmark').click()
+  await expect(page).toHaveURL('/en/')
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+
+  await page.locator('[data-theme-toggle]').click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await expect(page.locator('[data-theme-toggle]')).toHaveAttribute('aria-label', 'Switch to light theme')
+  await page.reload()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+})
+
 test('navigation and content remain available with JavaScript disabled', async ({browser}) => {
   const context = await browser.newContext({javaScriptEnabled: false})
   const page = await context.newPage()

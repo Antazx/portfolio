@@ -53,6 +53,14 @@ const schemas = [...siteSchemas, ...structuredData]
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <script is:inline>
+      try {
+        const storedTheme = localStorage.getItem('portfolio-theme')
+        if (storedTheme === 'light' || storedTheme === 'dark') {
+          document.documentElement.dataset.theme = storedTheme
+        }
+      } catch {}
+    </script>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/png" href="/gaa-favicon-final.png" />
@@ -143,15 +151,24 @@ const schemas = [...siteSchemas, ...structuredData]
     <script is:inline>
       const root = document.documentElement
       const themeToggle = document.querySelector('[data-theme-toggle]')
-
-      themeToggle?.addEventListener('click', () => {
-        const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark'
-        root.dataset.theme = nextTheme
-        const label = nextTheme === 'dark' ? themeToggle.dataset.toLight : themeToggle.dataset.toDark
+      const updateThemeControl = () => {
+        if (!themeToggle) return
+        const label = root.dataset.theme === 'dark' ? themeToggle.dataset.toLight : themeToggle.dataset.toDark
         if (label) {
           themeToggle.setAttribute('aria-label', label)
           themeToggle.setAttribute('title', label)
         }
+      }
+
+      updateThemeControl()
+
+      themeToggle?.addEventListener('click', () => {
+        const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark'
+        root.dataset.theme = nextTheme
+        try {
+          localStorage.setItem('portfolio-theme', nextTheme)
+        } catch {}
+        updateThemeControl()
       })
     </script>
   </body>
