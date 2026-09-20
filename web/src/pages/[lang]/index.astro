@@ -93,8 +93,13 @@ const content = portfolio[locale]
               <ul>
                 {project.bullets.map((bullet) => <li>{bullet}</li>)}
               </ul>
-              <a class="button secondary project-link" href={project.link} target="_blank" rel="noreferrer">
-                <img class="project-link-icon" src="/favicon-ring.png" alt="" aria-hidden="true" width="20" height="20" />
+              <a
+                class="button secondary project-link"
+                href={project.link}
+                target={project.link.startsWith('http') ? '_blank' : undefined}
+                rel={project.link.startsWith('http') ? 'noreferrer' : undefined}
+              >
+                {project.link.startsWith('http') && <img class="project-link-icon" src="/favicon-ring.png" alt="" aria-hidden="true" width="20" height="20" />}
                 {project.linkLabel}
               </a>
             </div>

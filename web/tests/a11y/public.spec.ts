@@ -39,6 +39,20 @@ test('keyboard focus, themes, reduced motion, and responsive layout work', async
     await page.setViewportSize({width, height: 800})
     await page.goto('/es/')
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+
+    if (width === 375) {
+      const headerRows = await page.evaluate(() => {
+        const logo = document.querySelector('.wordmark')?.getBoundingClientRect()
+        const utility = document.querySelector('.utility-group')?.getBoundingClientRect()
+        const nav = document.querySelector('.nav-links')?.getBoundingClientRect()
+        return {
+          logoAndControlsShareRow: Boolean(logo && utility && logo.bottom > utility.top && utility.bottom > logo.top),
+          navIsSecondRow: Boolean(logo && utility && nav && nav.top >= Math.max(logo.bottom, utility.bottom)),
+        }
+      })
+
+      expect(headerRows).toEqual({logoAndControlsShareRow: true, navIsSecondRow: true})
+    }
   }
 })
 
@@ -74,16 +88,24 @@ test('localized project and contact details keep the public rhythm', async ({pag
   for (const route of ['/es/', '/en/']) {
     await page.goto(route)
 
-    const project = page.locator('#proyecto .project-item')
-    const projectLink = project.locator('a.project-link')
+    const nupziProject = page.locator('#proyecto .project-item').filter({hasText: 'Nupzi'})
+    const nupziLink = nupziProject.locator('a.project-link')
 
-    await expect(project.locator('.project-status')).toHaveText('Beta')
-    await expect(project.locator('img.project-link-icon')).toHaveAttribute('src', '/favicon-ring.png')
-    await expect(project.locator('img.project-link-icon')).toHaveAttribute('alt', '')
-    await expect(projectLink).toHaveText(route === '/es/' ? 'Visitar nupzi.com' : 'Visit nupzi.com')
-    await expect(projectLink).toHaveAttribute('target', '_blank')
-    await expect(projectLink).toHaveAttribute('rel', 'noreferrer')
-    await expect(project.locator('.project-copy')).toHaveCSS('margin-bottom', '24px')
+    await expect(nupziProject.locator('.project-status')).toHaveText('Beta')
+    await expect(nupziProject.locator('img.project-link-icon')).toHaveAttribute('src', '/favicon-ring.png')
+    await expect(nupziProject.locator('img.project-link-icon')).toHaveAttribute('alt', '')
+    await expect(nupziLink).toHaveText(route === '/es/' ? 'Visitar nupzi.com' : 'Visit nupzi.com')
+    await expect(nupziLink).toHaveAttribute('target', '_blank')
+    await expect(nupziLink).toHaveAttribute('rel', 'noreferrer')
+    await expect(nupziProject.locator('.project-copy')).toHaveCSS('margin-bottom', '24px')
+
+    const homeServerProject = page.locator('#proyecto .project-item').filter({hasText: 'Home Server'})
+    const homeServerLink = homeServerProject.locator('a.project-link')
+
+    await expect(homeServerLink).toHaveText(route === '/es/' ? 'Leer artículo' : 'Read article')
+    await expect(homeServerLink).toHaveAttribute('href', route === '/es/' ? '/es/blog/home-server/' : '/en/blog/home-server/')
+    await expect(homeServerLink).not.toHaveAttribute('target')
+    await expect(homeServerProject.locator('img.project-link-icon')).toHaveCount(0)
     await expect(page.locator('#contacto .contact-copy-block')).toHaveCSS('gap', '16px')
     const contactColumns = await page.locator('#contacto .contact-layout').evaluate((element) => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length)
     expect(contactColumns).toBe(1)

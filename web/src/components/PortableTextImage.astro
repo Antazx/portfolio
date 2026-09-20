@@ -1,0 +1,54 @@
+---
+import {createImageUrlBuilder} from '@sanity/image-url'
+import {sanityClient} from 'sanity:client'
+import type {PostQueryResult} from '../../sanity.types'
+
+type ImageBlock = Extract<
+  NonNullable<NonNullable<PostQueryResult>['body']>[number],
+  {_type: 'articleImage'}
+>
+
+const {node} = Astro.props as {node: ImageBlock; isInline: boolean}
+const image = node.image
+const dimensions = image?.dimensions
+
+if (!image?.asset?._ref) {
+  throw new Error('Article image is missing its Sanity asset reference')
+}
+
+const sourceWidth = dimensions?.width || 1200
+const sourceHeight = dimensions?.height || 800
+const displayWidth = Math.min(sourceWidth, 1280)
+const displayHeight = Math.round((sourceHeight / sourceWidth) * displayWidth)
+const builder = createImageUrlBuilder(sanityClient)
+const widths = [...new Set([640, 960, displayWidth])].filter((width) => width <= sourceWidth)
+const resolvedWidths = widths.length > 0 ? widths : [displayWidth]
+const srcset = resolvedWidths
+  .sort((left, right) => left - right)
+  .map((width) => `${builder.image(image).width(width).auto('format').url()} ${width}w`)
+  .join(', ')
+const src = builder.image(image).width(displayWidth).auto('format').url()
+---
+
+<figure class="portable-image">
+  <img
+    src={src}
+    srcset={srcset}
+    sizes="(min-width: 768px) 72ch, calc(100vw - 32px)"
+    width={displayWidth}
+    height={displayHeight}
+    loading="lazy"
+    decoding="async"
+    alt={node.alt}
+  />
+  {(node.caption || node.credit) && (
+    <figcaption>
+      {node.caption && <span>{node.caption}</span>}
+      {node.credit && (
+        <span class="portable-image-credit">
+          {node.creditUrl ? <a href={node.creditUrl} rel="noreferrer">{node.credit}</a> : node.credit}
+        </span>
+      )}
+    </figcaption>
+  )}
+</figure>

@@ -167,6 +167,20 @@ export const portfolio = {
           link: 'https://www.nupzi.com',
           linkLabel: 'Visitar nupzi.com',
         },
+        {
+          label: 'Proyecto personal',
+          name: 'Home Server',
+          role: 'Infraestructura doméstica',
+          description:
+            'Conversión de un portátil Mac de 2014 en un home server con Ubuntu Server y Docker para servicios de red, monitorización y administración doméstica.',
+          bullets: [
+            'Servicios: Pi-hole · Portainer · Uptime Kuma · Netdata',
+            'Red local con DNS filtrante, alertas y métricas del sistema',
+            'Objetivo: estabilizar, documentar y recuperar la infraestructura con seguridad',
+          ],
+          link: '/es/blog/home-server/',
+          linkLabel: 'Leer artículo',
+        },
       ],
     },
     contact: {
@@ -288,6 +302,20 @@ export const portfolio = {
           status: 'Beta',
           link: 'https://www.nupzi.com',
           linkLabel: 'Visit nupzi.com',
+        },
+        {
+          label: 'Personal project',
+          name: 'Home Server',
+          role: 'Home infrastructure',
+          description:
+            'Turning a 2014 Mac laptop into a home server with Ubuntu Server and Docker for networking, monitoring and home administration services.',
+          bullets: [
+            'Services: Pi-hole · Portainer · Uptime Kuma · Netdata',
+            'Local network with filtered DNS, alerts and system metrics',
+            'Goal: stabilize, document and securely recover the infrastructure',
+          ],
+          link: '/en/blog/home-server/',
+          linkLabel: 'Read article',
         },
       ],
     },

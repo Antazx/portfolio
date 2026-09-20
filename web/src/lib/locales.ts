@@ -16,6 +16,11 @@ type SiteCopy = {
     toLight: string
     toDark: string
   }
+  social: {
+    label: string
+    linkedin: string
+    github: string
+  }
   footerRole: string
 }
 
@@ -34,6 +39,11 @@ export const siteCopy: Record<Locale, SiteCopy> = {
       toLight: 'Cambiar a tema claro',
       toDark: 'Cambiar a tema oscuro',
     },
+    social: {
+      label: 'Redes sociales',
+      linkedin: 'LinkedIn',
+      github: 'GitHub',
+    },
     footerRole: 'Senior Backend Engineer / Tech Lead',
   },
   en: {
@@ -49,6 +59,11 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     theme: {
       toLight: 'Switch to light theme',
       toDark: 'Switch to dark theme',
+    },
+    social: {
+      label: 'Social links',
+      linkedin: 'LinkedIn',
+      github: 'GitHub',
     },
     footerRole: 'Senior Backend Engineer / Tech Lead',
   },

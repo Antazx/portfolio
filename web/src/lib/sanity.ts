@@ -53,7 +53,16 @@ export const postQuery = defineQuery(
     "slug": slug.current,
     "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),
     "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),
-    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body),
+    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body)[]{
+      ...,
+      _type == "articleImage" => {
+        ...,
+        image {
+          ...,
+          "dimensions": asset->metadata.dimensions
+        }
+      }
+    },
     publishedAt,
     "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,
     "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0

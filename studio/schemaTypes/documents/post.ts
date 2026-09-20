@@ -1,5 +1,58 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+const articleImage = defineArrayMember({
+  name: 'articleImage',
+  title: 'Article image',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {hotspot: true},
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'alt',
+      title: 'Alternative text',
+      type: 'string',
+      validation: (rule) => rule.required().max(180),
+    }),
+    defineField({
+      name: 'caption',
+      title: 'Caption',
+      type: 'string',
+      validation: (rule) => rule.max(240),
+    }),
+    defineField({
+      name: 'credit',
+      title: 'Credit',
+      type: 'string',
+      validation: (rule) => rule.max(160),
+    }),
+    defineField({
+      name: 'creditUrl',
+      title: 'Credit URL',
+      type: 'url',
+      validation: (rule) => rule.uri({scheme: ['http', 'https']}),
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'caption',
+      subtitle: 'credit',
+      media: 'image',
+    },
+    prepare({title, subtitle, media}) {
+      return {
+        title: title || 'Article image',
+        subtitle: subtitle || 'Alternative text required',
+        media,
+      }
+    },
+  },
+})
+
 const localizedFields = (language: string) => [
   defineField({
     name: 'title',
@@ -39,6 +92,7 @@ const localizedFields = (language: string) => [
           ],
         },
       }),
+      articleImage,
     ],
     validation: (rule) => rule.required().min(1),
   }),
