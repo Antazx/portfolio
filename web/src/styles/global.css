@@ -170,12 +170,34 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .experience-date { color: var(--accent); font-size: .875rem; font-weight: 700; }
 .experience-item h3 { margin-bottom: var(--space-1); font-size: clamp(1.35rem, 3vw, 2rem); line-height: 1.15; }
 .experience-company { color: var(--muted); font-size: .9em; font-weight: 400; }
+.project-status {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-1);
+  padding: 3px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: .6em;
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  vertical-align: middle;
+  white-space: nowrap;
+}
 .experience-item ul, .project-item ul { margin: 0; padding-left: 1.2rem; }
 .experience-item li + li, .project-item li + li { margin-top: var(--space-1); }
 .experience-item li::marker, .project-item li::marker { color: var(--accent); }
 .project-item .project-copy, .contact-copy { max-width: 60ch; color: var(--muted); }
+.project-item .project-copy { margin-bottom: var(--space-3); }
 .project-item .button { margin-top: var(--space-2); }
+.project-link { gap: var(--space-1); }
+.project-link-icon { width: 20px; height: 20px; flex: none; object-fit: contain; }
 .contact-layout { display: grid; gap: var(--space-4); }
+.contact-copy-block { display: grid; gap: var(--space-2); align-content: start; }
+.contact-copy-block > * { margin-bottom: 0; }
 .contact-links { display: grid; align-content: end; gap: var(--space-2); }
 .contact-email { width: fit-content; font-size: clamp(1.1rem, 2vw, 1.4rem); text-decoration-color: var(--accent); text-underline-offset: 5px; }
 .blog-hero { display: grid; gap: var(--space-6); align-items: end; padding-block: var(--space-7); }

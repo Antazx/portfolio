@@ -55,6 +55,24 @@ test('navigation and content remain available with JavaScript disabled', async (
   await context.close()
 })
 
+test('localized project and contact details keep the public rhythm', async ({page}) => {
+  for (const route of ['/es/', '/en/']) {
+    await page.goto(route)
+
+    const project = page.locator('#proyecto .project-item')
+    const projectLink = project.locator('a.project-link')
+
+    await expect(project.locator('.project-status')).toHaveText('Beta')
+    await expect(project.locator('img.project-link-icon')).toHaveAttribute('src', '/favicon-ring.png')
+    await expect(project.locator('img.project-link-icon')).toHaveAttribute('alt', '')
+    await expect(projectLink).toHaveText(route === '/es/' ? 'Visitar nupzi.com' : 'Visit nupzi.com')
+    await expect(projectLink).toHaveAttribute('target', '_blank')
+    await expect(projectLink).toHaveAttribute('rel', 'noreferrer')
+    await expect(project.locator('.project-copy')).toHaveCSS('margin-bottom', '24px')
+    await expect(page.locator('#contacto .contact-copy-block')).toHaveCSS('gap', '16px')
+  }
+})
+
 test('discovery endpoints expose the public contract', async ({request}) => {
   const [robots, llms, sitemap] = await Promise.all([
     request.get('/robots.txt'),

@@ -13,6 +13,7 @@ type Project = {
   role: string
   description: string
   bullets: string[]
+  status?: string
   link: string
   linkLabel: string
 }
@@ -162,6 +163,7 @@ export const portfolio = {
             'Invitación digital y formulario de confirmación',
             'Recordatorios y galerías de imágenes',
           ],
+          status: 'Beta',
           link: 'https://www.nupzi.com',
           linkLabel: 'Visitar nupzi.com',
         },
@@ -283,6 +285,7 @@ export const portfolio = {
             'Digital invitation and RSVP form',
             'Reminders and image galleries',
           ],
+          status: 'Beta',
           link: 'https://www.nupzi.com',
           linkLabel: 'Visit nupzi.com',
         },

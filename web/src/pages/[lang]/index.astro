@@ -85,12 +85,18 @@ const content = portfolio[locale]
           <article class="experience-item project-item">
             <div class="experience-date">{project.label}</div>
             <div>
-              <h3>{project.name} <span class="experience-company">— {project.role}</span></h3>
+              <h3>
+                {project.name} <span class="experience-company">— {project.role}</span>
+                {project.status && <span class="project-status">{project.status}</span>}
+              </h3>
               <p class="project-copy">{project.description}</p>
               <ul>
                 {project.bullets.map((bullet) => <li>{bullet}</li>)}
               </ul>
-              <a class="button secondary" href={project.link} target="_blank" rel="noreferrer">{project.linkLabel}</a>
+              <a class="button secondary project-link" href={project.link} target="_blank" rel="noreferrer">
+                <img class="project-link-icon" src="/favicon-ring.png" alt="" aria-hidden="true" width="20" height="20" />
+                {project.linkLabel}
+              </a>
             </div>
           </article>
         ))}
@@ -100,7 +106,7 @@ const content = portfolio[locale]
 
   <section class="section" id="contacto" aria-labelledby="contact-title">
     <div class="shell contact-layout">
-      <div>
+      <div class="contact-copy-block">
         <h2 class="contact-title" id="contact-title">{content.contact.title}</h2>
         <p class="experience-date">{content.contact.label}</p>
         <p class="contact-copy">{content.contact.intro}</p>
