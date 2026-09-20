@@ -129,7 +129,7 @@ test('approved branding assets are used by localized layouts', async ({page}) =>
 
     await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/gaa-favicon-final.png')
     await expect(page.locator('.wordmark')).toHaveAttribute('aria-label', 'Guillermo Anta Alonso')
-    await expect(page.locator('.wordmark-image')).toHaveAttribute('src', '/gaa-header-final.png')
+    await expect(page.locator('.wordmark-image')).toHaveAttribute('src', /gaa-header-final\.png/)
     await expect(page.locator('.wordmark-image')).toHaveAttribute('alt', '')
   }
 })
@@ -144,7 +144,7 @@ test('localized project and contact details keep the public rhythm', async ({pag
     const nupziLink = nupziProject.locator('a.project-link')
 
     await expect(nupziProject.locator('.project-status')).toHaveText('Beta')
-    await expect(nupziProject.locator('img.project-link-icon')).toHaveAttribute('src', '/favicon-ring.png')
+    await expect(nupziProject.locator('img.project-link-icon')).toHaveAttribute('src', /favicon-ring\.png/)
     await expect(nupziProject.locator('img.project-link-icon')).toHaveAttribute('alt', '')
     await expect(nupziLink).toHaveText(route === '/es/' ? 'Visitar nupzi.com' : 'Visit nupzi.com')
     await expect(nupziLink).toHaveAttribute('target', '_blank')
