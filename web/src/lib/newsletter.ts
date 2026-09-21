@@ -9,6 +9,7 @@ export type NewsletterSignupConfig = {
 
 const mode = (import.meta.env.PORTFOLIO_NEWSLETTER_MODE ?? 'off').trim() as NewsletterMode
 const signupEnabled = import.meta.env.PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED === 'true'
+const productionContext = (import.meta.env.CONTEXT ?? '').trim() === 'production'
 const testEvidenceConfirmed = import.meta.env.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED === 'true'
 const productionApproved = import.meta.env.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED === 'true'
 const productionListId = (import.meta.env.PORTFOLIO_BREVO_NEWSLETTER_LIST_ID ?? '').trim()
@@ -38,6 +39,7 @@ const listId = mode === 'production' ? productionListId : testListId
 const hasResources =
   (mode === 'test' || mode === 'production') &&
   signupEnabled &&
+  (mode !== 'production' || productionContext) &&
   Boolean(listId) &&
   (mode !== 'production' || (testEvidenceConfirmed && productionApproved)) &&
   Object.values(formUrls).every(isBrevoFormUrl)
