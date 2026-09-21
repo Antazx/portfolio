@@ -9,8 +9,8 @@ entorno de Functions de Netlify, nunca en Git.
 
 ## Contrato seguro local
 
-`web/.env.example` documenta los nombres de configuración. El estado inicial
-es seguro:
+Los nombres de configuración y el estado inicial seguro quedan definidos en
+este documento. No se añaden todavía al ejemplo de entorno:
 
 | Flujo | Modo | Captación | Efecto permitido |
 | --- | --- | --- | --- |
