@@ -39,6 +39,7 @@ No guardes tokens ni secretos en Git.
 pnpm typegen       # regenera web/sanity.types.ts desde el schema de Studio
 pnpm build         # build de Astro; salida en web/dist
 pnpm build:studio  # build de Sanity Studio
+pnpm test:contact  # pruebas de la Function de contacto con Brevo simulado
 pnpm preview       # sirve el build de Astro
 pnpm audit:a11y    # build + auditoría Playwright/axe-core
 ```

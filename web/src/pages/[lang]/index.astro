@@ -1,6 +1,7 @@
 ---
 import {Image} from 'astro:assets'
 import BaseLayout from '../../components/BaseLayout.astro'
+import ContactForm from '../../components/ContactForm.astro'
 import {cvAsset} from '../../lib/cv'
 import {locales, type Locale} from '../../lib/locales'
 import {portfolio} from '../../lib/portfolio'
@@ -124,6 +125,7 @@ const cv = cvAsset(locale)
         <a class="contact-email" href={`mailto:${content.contact.emailLabel}`}>{content.contact.emailLabel}</a>
         <a class="contact-email" href="https://www.linkedin.com/in/guillermoanta/" target="_blank" rel="noreferrer" aria-label={content.contact.linkedinAriaLabel}>{content.contact.linkedinLabel}</a>
       </div>
+      <ContactForm locale={locale} copy={content.contact} />
     </div>
   </section>
 </BaseLayout>

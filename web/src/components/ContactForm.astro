@@ -1,0 +1,149 @@
+---
+import type {Locale} from '../lib/locales'
+import type {PortfolioCopy} from '../lib/portfolio'
+
+interface Props {
+  locale: Locale
+  copy: PortfolioCopy['contact']
+}
+
+const {locale, copy} = Astro.props
+const prefix = `contact-${locale}`
+---
+
+<div class="contact-form-block">
+  <h3 id={`${prefix}-title`}>{copy.formTitle}</h3>
+  <form
+    class="contact-form"
+    action="/.netlify/functions/contact"
+    method="post"
+    data-contact-form
+    aria-labelledby={`${prefix}-title`}
+  >
+    <input type="hidden" name="locale" value={locale} />
+
+    <div class="contact-field">
+      <label for={`${prefix}-name`}>{copy.nameLabel}</label>
+      <input
+        id={`${prefix}-name`}
+        name="name"
+        type="text"
+        autocomplete="name"
+        maxlength="100"
+        required
+        aria-describedby={`${prefix}-name-error`}
+      />
+      <p class="contact-field-error" id={`${prefix}-name-error`} data-field-error="name" role="alert" hidden></p>
+    </div>
+
+    <div class="contact-field">
+      <label for={`${prefix}-email`}>{copy.emailFieldLabel}</label>
+      <input
+        id={`${prefix}-email`}
+        name="email"
+        type="email"
+        autocomplete="email"
+        maxlength="254"
+        required
+        aria-describedby={`${prefix}-email-error`}
+      />
+      <p class="contact-field-error" id={`${prefix}-email-error`} data-field-error="email" role="alert" hidden></p>
+    </div>
+
+    <div class="contact-field">
+      <label for={`${prefix}-message`}>{copy.messageLabel}</label>
+      <textarea
+        id={`${prefix}-message`}
+        name="message"
+        rows="7"
+        minlength="10"
+        maxlength="5000"
+        required
+        aria-describedby={`${prefix}-message-error`}
+      ></textarea>
+      <p class="contact-field-error" id={`${prefix}-message-error`} data-field-error="message" role="alert" hidden></p>
+    </div>
+
+    <div class="contact-field contact-privacy-field">
+      <label class="contact-checkbox" for={`${prefix}-privacy`}>
+        <input id={`${prefix}-privacy`} name="privacy" type="checkbox" value="on" required aria-describedby={`${prefix}-privacy-error`} />
+        <span>{copy.privacyLabel}</span>
+      </label>
+      <p class="contact-field-error" id={`${prefix}-privacy-error`} data-field-error="privacy" role="alert" hidden></p>
+    </div>
+
+    <label class="contact-honeypot" aria-hidden="true">
+      Company
+      <input name="website" type="text" tabindex="-1" autocomplete="off" />
+    </label>
+
+    <button class="button contact-submit" type="submit" data-contact-submit>{copy.submitLabel}</button>
+    <p class="contact-form-status" data-contact-status data-network-error={copy.networkError} role="status" aria-live="polite" tabindex="-1"></p>
+  </form>
+</div>
+
+<script is:inline>
+  const form = document.currentScript?.parentElement?.querySelector('[data-contact-form]') ?? document.querySelector('[data-contact-form]')
+
+  if (form instanceof HTMLFormElement) {
+    const submit = form.querySelector('[data-contact-submit]')
+    const status = form.querySelector('[data-contact-status]')
+    const fields = [...form.querySelectorAll('[data-field-error]')]
+
+    const clearErrors = () => {
+      for (const error of fields) {
+        error.hidden = true
+        error.textContent = ''
+      }
+      for (const input of form.querySelectorAll('[aria-invalid="true"]')) input.removeAttribute('aria-invalid')
+    }
+
+    form.noValidate = true
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      if (!(submit instanceof HTMLButtonElement) || !(status instanceof HTMLElement)) return
+
+      clearErrors()
+      status.textContent = ''
+      submit.disabled = true
+      form.setAttribute('aria-busy', 'true')
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(new FormData(form)),
+        })
+        const result = await response.json().catch(() => ({}))
+
+        if (!response.ok) {
+          const errors = result.fields ?? {}
+          for (const error of fields) {
+            const message = errors[error.dataset.field ?? '']
+            if (typeof message !== 'string') continue
+            error.hidden = false
+            error.textContent = message
+            const input = form.querySelector(`[name="${error.dataset.field}"]`)
+            input?.setAttribute('aria-invalid', 'true')
+          }
+          status.textContent = typeof result.message === 'string' ? result.message : 'Unable to send the message.'
+          status.focus()
+          return
+        }
+
+        form.reset()
+        status.textContent = typeof result.message === 'string' ? result.message : 'Message sent.'
+        status.focus()
+      } catch {
+        status.textContent = status.dataset.networkError ?? 'Unable to confirm delivery.'
+        status.focus()
+      } finally {
+        submit.disabled = false
+        form.removeAttribute('aria-busy')
+      }
+    })
+  }
+</script>
