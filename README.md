@@ -62,3 +62,5 @@ CI ejecuta typegen, builds de web y Studio, instalación de Chromium y auditorí
 Configura las variables de Sanity y `PUBLIC_SITE_URL` en el entorno de Netlify. No hay dominio público por defecto.
 
 Documentación adicional: [criterios del repositorio](./AGENTS.md), [accesibilidad](./docs/accessibility.md), [verificación de producción](./docs/production-verification.md) y [contexto de dominio](./CONTEXT.md).
+
+La integración Brevo del portfolio está documentada en [`docs/operations/portfolio-brevo-resources.md`](./docs/operations/portfolio-brevo-resources.md) y permanece desactivada hasta completar sus gates independientes.
