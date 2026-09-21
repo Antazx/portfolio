@@ -42,6 +42,7 @@ export function getNewsletterConfig(env: Record<string, string | undefined> = pr
     PUBLIC_SANITY_PROJECT_ID: nonEmpty(env.PUBLIC_SANITY_PROJECT_ID),
     PUBLIC_SANITY_DATASET: nonEmpty(env.PUBLIC_SANITY_DATASET),
   }
+  if (environment === 'production') required.CONTEXT = env.CONTEXT === 'production' ? 'production' : undefined
   const missing = Object.entries(required).filter(([, value]) => !value).map(([key]) => key)
   return {
     enabled: missing.length === 0,

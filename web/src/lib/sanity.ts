@@ -69,27 +69,4 @@ export const postQuery = defineQuery(
   }`
 )
 
-export const newsletterPostQuery = defineQuery(
-  `*[
-    _type == "post" &&
-    !(_id in path("drafts.**")) &&
-    _id == $postId &&
-    defined(publishedAt) &&
-    publishedAt <= now() &&
-    defined(slug.current) &&
-    sendNewsletter == true &&
-    defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0 &&
-    defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0
-  ][0]{
-    _id,
-    "slug": slug.current,
-    publishedAt,
-    "sendNewsletter": coalesce(sendNewsletter, false),
-    "spanishTitle": spanish.title,
-    "spanishExcerpt": spanish.excerpt,
-    "englishTitle": english.title,
-    "englishExcerpt": english.excerpt
-  }`,
-)
-
 export {sanityClient}

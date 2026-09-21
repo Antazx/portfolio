@@ -1,6 +1,7 @@
 import type {NewsletterConfig} from './config.ts'
 import type {LocalizedPost} from './core.ts'
 
+// Netlify Functions are outside the web typegen pipeline, so this runtime query stays a string.
 export const newsletterPostQuery = `*[
   _type == "post" &&
   !(_id in path("drafts.**")) &&

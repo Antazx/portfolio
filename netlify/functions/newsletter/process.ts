@@ -33,6 +33,7 @@ async function claimJob(store: NewsletterStore, environment: NewsletterEnvironme
   for (let attempt = 0; attempt < 3; attempt += 1) {
     const current = await readJob(store, key)
     if (current && terminalStatuses.has(current.data.status)) return {key, current, claimed: false as const}
+    if (current?.data.nextAttemptAt && Date.parse(current.data.nextAttemptAt) > now.getTime()) return {key, current, claimed: false as const}
     if (current?.data.status === 'processing' && current.data.leaseUntil && Date.parse(current.data.leaseUntil) > now.getTime()) {
       return {key, current, claimed: false as const}
     }

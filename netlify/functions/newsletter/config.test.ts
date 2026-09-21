@@ -28,5 +28,23 @@ test('test and production modes select independent segments', () => {
     PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
   }
   assert.equal(getNewsletterConfig({...base, PORTFOLIO_NEWSLETTER_MODE: 'test'}).segmentId, '11')
-  assert.equal(getNewsletterConfig({...base, PORTFOLIO_NEWSLETTER_MODE: 'production'}).segmentId, '22')
+  assert.equal(getNewsletterConfig({...base, PORTFOLIO_NEWSLETTER_MODE: 'production', CONTEXT: 'production'}).segmentId, '22')
+})
+
+test('production stays disabled outside its deploy context', () => {
+  const config = getNewsletterConfig({
+    PORTFOLIO_NEWSLETTER_MODE: 'production',
+    PORTFOLIO_BREVO_NEWSLETTER_API_KEY: 'key',
+    PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
+    PORTFOLIO_BREVO_NEWSLETTER_SENDER_EMAIL: 'sender@example.com',
+    PORTFOLIO_BREVO_NEWSLETTER_SENDER_NAME: 'Portfolio',
+    PORTFOLIO_NEWSLETTER_REPLY_TO: 'reply@example.com',
+    PUBLIC_SITE_URL: 'https://portfolio.example',
+    PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES: 'https://portfolio.example/es/privacidad/',
+    PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN: 'https://portfolio.example/en/privacy/',
+    PUBLIC_SANITY_PROJECT_ID: 'project',
+    PUBLIC_SANITY_DATASET: 'production',
+  })
+  assert.equal(config.enabled, false)
+  assert.ok(config.missing.includes('CONTEXT'))
 })

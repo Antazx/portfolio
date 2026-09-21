@@ -123,6 +123,7 @@ test('known Brevo rate limits retry and ambiguous failures stop for review', asy
   assert.equal(rateLimited.status, 'pending')
   const secondRateLimit = await processNewsletterPost('post-3', {
     storeFactory: () => rateStore,
+    now: () => new Date('2026-09-21T00:06:00Z'),
     fetchPost: async () => ({...post, _id: 'post-3'}),
     checkPublic: async () => ({available: true as const, urls: {es: 'https://portfolio.example/es/blog/mi-publicacion/', en: 'https://portfolio.example/en/blog/mi-publicacion/'}}),
     createCampaign: async () => { throw new BrevoError('create_campaign', 429) },
@@ -131,6 +132,7 @@ test('known Brevo rate limits retry and ambiguous failures stop for review', asy
   assert.equal(secondRateLimit.status, 'pending')
   const exhaustedRateLimit = await processNewsletterPost('post-3', {
     storeFactory: () => rateStore,
+    now: () => new Date('2026-09-21T00:22:00Z'),
     fetchPost: async () => ({...post, _id: 'post-3'}),
     checkPublic: async () => ({available: true as const, urls: {es: 'https://portfolio.example/es/blog/mi-publicacion/', en: 'https://portfolio.example/en/blog/mi-publicacion/'}}),
     createCampaign: async () => { throw new BrevoError('create_campaign', 429) },
@@ -157,4 +159,27 @@ test('known Brevo rate limits retry and ambiguous failures stop for review', asy
   })
   assert.equal(stillReview.status, 'needs_review')
   assert.equal(ambiguousCreates, 1)
+})
+
+test('webhook entry respects a pending retry time before claiming work', async () => {
+  configure()
+  const store = new MemoryStore()
+  const first = await processNewsletterPost('post-webhook-retry', {
+    storeFactory: () => store,
+    now: () => new Date('2026-09-21T00:00:00Z'),
+    fetchPost: async () => ({...post, _id: 'post-webhook-retry'}),
+    checkPublic: async () => ({available: true as const, urls: {es: 'https://portfolio.example/es/blog/mi-publicacion/', en: 'https://portfolio.example/en/blog/mi-publicacion/'}}),
+    createCampaign: async () => { throw new BrevoError('create_campaign', 429) },
+    sendAlert: async () => true,
+  })
+  assert.equal(first.status, 'pending')
+
+  let fetched = false
+  const second = await processNewsletterPost('post-webhook-retry', {
+    storeFactory: () => store,
+    now: () => new Date('2026-09-21T00:01:00Z'),
+    fetchPost: async () => { fetched = true; return post },
+  })
+  assert.equal(second.status, 'pending')
+  assert.equal(fetched, false)
 })

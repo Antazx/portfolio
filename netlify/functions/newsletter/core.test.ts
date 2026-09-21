@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {createHmac} from 'node:crypto'
-import {escapeHtml, identityFor, isEligiblePost, isValidWebhookSignature, jobKey, normalizePostId, renderNewsletterHtml} from './core.ts'
+import {escapeHtml, identityFor, isEligiblePost, isValidWebhookSignature, jobKey, normalizePostId, renderNewsletterHtml, webhookOperation} from './core.ts'
 
 const post = {
   _id: 'post-1',
@@ -24,6 +24,16 @@ test('webhook signature accepts Sanity style and rejects tampering', () => {
   const digest = createHmac('sha256', 'secret').update(body).digest('base64')
   assert.equal(isValidWebhookSignature(body, `s:${digest}`, 'secret'), true)
   assert.equal(isValidWebhookSignature(`${body} `, `s:${digest}`, 'secret'), false)
+})
+
+test('webhook operation accepts Sanity headers and ignores deletes', () => {
+  assert.equal(webhookOperation({_id: 'post-1'}, 'create'), 'create')
+  assert.equal(webhookOperation({_id: 'post-1'}, 'update'), 'update')
+  assert.equal(webhookOperation({_id: 'post-1'}, 'delete'), 'delete')
+  assert.equal(webhookOperation({ids: {deleted: ['post-1']}}), 'delete')
+  assert.equal(webhookOperation({ids: {created: ['post-1']}}), 'create')
+  assert.equal(webhookOperation({ids: {updated: ['post-1']}}), 'update')
+  assert.equal(webhookOperation({ids: {deleted: []}}), undefined)
 })
 
 test('newsletter HTML escapes editorial content and keeps one locale block per preference', () => {

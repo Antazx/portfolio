@@ -81,11 +81,30 @@ export function normalizePostId(value: unknown) {
   return /^[A-Za-z0-9._-]+$/.test(id) ? id : undefined
 }
 
+export type WebhookOperation = 'create' | 'update' | 'delete'
+
+export function webhookOperation(payload: unknown, header?: string | null): WebhookOperation | undefined {
+  const value = payload && typeof payload === 'object' ? payload as Record<string, unknown> : {}
+  const candidate = header ?? value.operation ?? value.transition
+  if (typeof candidate === 'string') {
+    const operation = candidate.trim().toLowerCase()
+    if (operation === 'create' || operation === 'update' || operation === 'delete') return operation
+    if (operation === 'appear') return 'create'
+    if (operation === 'disappear') return 'delete'
+  }
+  const ids = value.ids && typeof value.ids === 'object' ? value.ids as Record<string, unknown> : undefined
+  const hasId = (candidate: unknown) => Array.isArray(candidate) ? candidate.length > 0 : Boolean(candidate)
+  if (hasId(ids?.deleted)) return 'delete'
+  if (hasId(ids?.created)) return 'create'
+  if (hasId(ids?.updated)) return 'update'
+  return undefined
+}
+
 export function postIdFromWebhook(payload: unknown) {
   if (!payload || typeof payload !== 'object') return undefined
   const value = payload as Record<string, unknown>
   const ids = value.ids && typeof value.ids === 'object' ? (value.ids as Record<string, unknown>) : undefined
-  const candidates = [value.documentId, value._id, value.id, ids?.updated, ids?.created, ids?.deleted]
+  const candidates = [value.documentId, value._id, value.id, ids?.updated, ids?.created]
   for (const candidate of candidates) {
     if (Array.isArray(candidate)) {
       const id = candidate.map(normalizePostId).find(Boolean)

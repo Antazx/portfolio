@@ -1,5 +1,5 @@
 import {getNewsletterConfig} from './newsletter/config.ts'
-import {isValidWebhookSignature, postIdFromWebhook} from './newsletter/core.ts'
+import {isValidWebhookSignature, postIdFromWebhook, webhookOperation} from './newsletter/core.ts'
 import {processNewsletterPost} from './newsletter/process.ts'
 
 export default async function handler(request: Request) {
@@ -21,6 +21,8 @@ export default async function handler(request: Request) {
     const type = value._type ?? value.documentType
     if (typeof type === 'string' && type !== 'post') return Response.json({status: 'ignored'}, {status: 202})
   }
+  const operation = webhookOperation(payload, request.headers.get('sanity-operation'))
+  if (operation !== 'create' && operation !== 'update') return Response.json({status: 'ignored'}, {status: 202})
   const postId = postIdFromWebhook(payload)
   if (!postId) return Response.json({error: 'post_id_missing'}, {status: 400})
   const result = await processNewsletterPost(postId)
