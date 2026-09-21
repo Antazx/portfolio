@@ -57,8 +57,21 @@ test('production requires explicit approval and keeps test audiences separate', 
     PORTFOLIO_NEWSLETTER_MODE: 'production',
     PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED: 'true',
     PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED: 'true',
+    CONTEXT: 'production',
   })
   assert.equal(ready.status, 'ready')
+})
+
+test('automatic sending stays independent from signup visibility', () => {
+  const result = checkNewsletterGate({
+    ...complete,
+    PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED: 'false',
+    PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED: 'true',
+    PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED: 'true',
+    PORTFOLIO_NEWSLETTER_MODE: 'production',
+    CONTEXT: 'production',
+  })
+  assert.equal(result.status, 'ready')
 })
 
 test('test and production IDs cannot be reused', () => {

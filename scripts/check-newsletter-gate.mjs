@@ -62,8 +62,6 @@ export function checkNewsletterGate(env = process.env) {
     return createResult(mode, checks, blockers)
   }
 
-  check('signup-enabled', isTrue(env, 'PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED'), 'La captación debe estar habilitada para ejecutar el gate')
-
   const required = [
     ['newsletter-api-key', 'PORTFOLIO_BREVO_NEWSLETTER_API_KEY', (candidate) => Boolean(candidate)],
     ['sender-email', 'PORTFOLIO_BREVO_NEWSLETTER_SENDER_EMAIL', isEmail],
@@ -99,6 +97,7 @@ export function checkNewsletterGate(env = process.env) {
   check('test-evidence', isTrue(env, 'PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED'), 'Falta confirmar la evidencia humana de la campaña de pruebas ES/EN')
 
   if (mode === 'production') {
+    check('production-context', value(env, 'CONTEXT') === 'production', 'El modo production solo puede ejecutarse en CONTEXT=production')
     check('production-approval', isTrue(env, 'PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED'), 'Falta la aprobación humana explícita del gate newsletter')
   }
 

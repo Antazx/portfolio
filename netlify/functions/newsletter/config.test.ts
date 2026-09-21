@@ -32,21 +32,26 @@ test('test and production modes select independent segments', () => {
 })
 
 test('production stays disabled outside its deploy context', () => {
-  const config = getNewsletterConfig({
+  const base = {
     PORTFOLIO_NEWSLETTER_MODE: 'production',
     PORTFOLIO_BREVO_NEWSLETTER_API_KEY: 'key',
-    PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
     PORTFOLIO_BREVO_NEWSLETTER_SENDER_EMAIL: 'sender@example.com',
     PORTFOLIO_BREVO_NEWSLETTER_SENDER_NAME: 'Portfolio',
     PORTFOLIO_NEWSLETTER_REPLY_TO: 'reply@example.com',
-    PUBLIC_SITE_URL: 'https://portfolio.example',
     PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES: 'https://portfolio.example/es/privacidad/',
     PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN: 'https://portfolio.example/en/privacy/',
+    PUBLIC_SITE_URL: 'https://portfolio.example',
     PUBLIC_SANITY_PROJECT_ID: 'project',
     PUBLIC_SANITY_DATASET: 'production',
-  })
-  assert.equal(config.enabled, false)
-  assert.ok(config.missing.includes('CONTEXT'))
+    PORTFOLIO_BREVO_NEWSLETTER_LIST_ID: '22',
+    PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID: '11',
+    PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
+    PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID: '11',
+    PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET: 'secret',
+  }
+  const blocked = getNewsletterConfig(base)
+  assert.equal(blocked.enabled, false)
+  assert.ok(blocked.missing.includes('CONTEXT'))
 })
 
 test('production stays disabled until the human activation flag and both audiences are configured', () => {
@@ -65,8 +70,8 @@ test('production stays disabled until the human activation flag and both audienc
     PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID: '11',
     PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
     PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID: '11',
-    PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED: 'true',
     PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET: 'secret',
+    CONTEXT: 'production',
   }
   const blocked = getNewsletterConfig(base)
   assert.equal(blocked.enabled, false)
@@ -82,4 +87,28 @@ test('production stays disabled until the human activation flag and both audienc
     PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED: 'true',
   })
   assert.equal(enabled.enabled, true)
+})
+
+test('production sending does not depend on newsletter signup visibility', () => {
+  const config = getNewsletterConfig({
+    PORTFOLIO_NEWSLETTER_MODE: 'production',
+    PORTFOLIO_BREVO_NEWSLETTER_API_KEY: 'key',
+    PORTFOLIO_BREVO_NEWSLETTER_SENDER_EMAIL: 'sender@example.com',
+    PORTFOLIO_BREVO_NEWSLETTER_SENDER_NAME: 'Portfolio',
+    PORTFOLIO_NEWSLETTER_REPLY_TO: 'reply@example.com',
+    PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES: 'https://portfolio.example/es/privacidad/',
+    PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN: 'https://portfolio.example/en/privacy/',
+    PUBLIC_SITE_URL: 'https://portfolio.example',
+    PUBLIC_SANITY_PROJECT_ID: 'project',
+    PUBLIC_SANITY_DATASET: 'production',
+    PORTFOLIO_BREVO_NEWSLETTER_LIST_ID: '22',
+    PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID: '11',
+    PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
+    PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID: '11',
+    PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET: 'secret',
+    PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED: 'true',
+    PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED: 'true',
+    CONTEXT: 'production',
+  })
+  assert.equal(config.enabled, true)
 })

@@ -45,10 +45,10 @@ export function getNewsletterConfig(env: Record<string, string | undefined> = pr
     PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET: nonEmpty(env.PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET),
   }
   if (environment === 'production') {
+    required.CONTEXT = env.CONTEXT === 'production' ? 'production' : undefined
     required.PORTFOLIO_BREVO_NEWSLETTER_LIST_ID = numericId(env.PORTFOLIO_BREVO_NEWSLETTER_LIST_ID)
     required.PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID = numericId(env.PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID)
     required.PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID = numericId(env.PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID)
-    required.PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED = enabled(env.PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED) ? 'true' : undefined
     required.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED = enabled(env.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED) ? 'true' : undefined
     required.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED = enabled(env.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED) ? 'true' : undefined
   }
