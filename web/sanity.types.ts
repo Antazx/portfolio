@@ -15,6 +15,13 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
 export type Post = {
   _id: string;
   _type: "post";
@@ -26,47 +33,99 @@ export type Post = {
   spanish?: {
     title?: string;
     excerpt?: string;
-    body?: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-      listItem?: "bullet" | "number";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }>;
+    body?: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          image?: {
+            asset?: SanityImageAssetReference;
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          credit?: string;
+          creditUrl?: string;
+          _type: "articleImage";
+          _key: string;
+        }
+    >;
   };
   english?: {
     title?: string;
     excerpt?: string;
-    body?: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-      listItem?: "bullet" | "number";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }>;
+    body?: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          image?: {
+            asset?: SanityImageAssetReference;
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          credit?: string;
+          creditUrl?: string;
+          _type: "articleImage";
+          _key: string;
+        }
+    >;
   };
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type Slug = {
@@ -111,22 +170,6 @@ export type SanityImageMetadata = {
   thumbHash?: string;
   hasAlpha?: boolean;
   isOpaque?: boolean;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
 };
 
 export type SanityFileAsset = {
@@ -189,14 +232,15 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | SanityImageAssetReference
   | Post
+  | SanityImageCrop
+  | SanityImageHotspot
   | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
@@ -224,30 +268,49 @@ export type PostsQueryResult = Array<{
 
 // Source: ../web/src/lib/sanity.ts
 // Variable: postQuery
-// Query: *[    _type == "post" &&    !(_id in path("drafts.**")) &&    defined(publishedAt) &&    publishedAt <= now() &&    slug.current == $slug &&    (      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)    )  ][0]{    _id,    "slug": slug.current,    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body),    publishedAt,    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0  }
+// Query: *[    _type == "post" &&    !(_id in path("drafts.**")) &&    defined(publishedAt) &&    publishedAt <= now() &&    slug.current == $slug &&    (      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)    )  ][0]{    _id,    "slug": slug.current,    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body)[]{      ...,      _type == "articleImage" => {        ...,        image {          ...,          "dimensions": asset->metadata.dimensions        }      }    },    publishedAt,    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0  }
 export type PostQueryResult = {
   _id: string;
   slug: string | null;
   title: string | null;
   excerpt: string | null;
-  body: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }> | null;
+  body: Array<
+    | {
+        image: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+          dimensions: SanityImageDimensions | null;
+        } | null;
+        alt?: string;
+        caption?: string;
+        credit?: string;
+        creditUrl?: string;
+        _type: "articleImage";
+        _key: string;
+      }
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+  > | null;
   publishedAt: string | null;
   hasSpanish: boolean | false | null;
   hasEnglish: boolean | false | null;
@@ -258,7 +321,7 @@ declare global {
   interface SanityQueries {
     '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ]{ "slug": slug.current }': PostSlugsQueryResult;
     '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ] | order(publishedAt desc){\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostsQueryResult;
-    '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    slug.current == $slug &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ][0]{\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body),\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostQueryResult;
+    '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    slug.current == $slug &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ][0]{\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body)[]{\n      ...,\n      _type == "articleImage" => {\n        ...,\n        image {\n          ...,\n          "dimensions": asset->metadata.dimensions\n        }\n      }\n    },\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostQueryResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

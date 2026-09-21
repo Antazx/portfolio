@@ -1,6 +1,7 @@
 ---
 import {PortableText} from 'astro-portabletext'
 import BaseLayout from '../../../components/BaseLayout.astro'
+import PortableTextImage from '../../../components/PortableTextImage.astro'
 import {locales, localizedPath, type Locale} from '../../../lib/locales'
 import {postQuery, postSlugsQuery, sanityClient} from '../../../lib/sanity'
 import {absoluteUrl, siteOrigin} from '../../../lib/seo'
@@ -92,7 +93,7 @@ const structuredData = postUrl && siteOrigin ? [
       </nav>
     </header>
     <div class="portable-text">
-      {post.body && <PortableText value={post.body} />}
+      {post.body && <PortableText value={post.body} components={{type: {articleImage: PortableTextImage}}} />}
     </div>
   </article>
 </BaseLayout>

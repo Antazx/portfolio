@@ -1,5 +1,9 @@
 # Repository Guidelines
 
+## Git y ramas
+
+Todo trabajo debe hacerse en una rama distinta de `main`, normalmente con prefijo `agent/`. Antes de editar, comprueba la rama actual y, si es `main`, crea una rama de trabajo desde ella. Haz commit y push únicamente en la rama de trabajo; `main` queda reservado para integrar cambios, porque cualquier push allí dispara el despliegue de Netlify y consume créditos.
+
 ## Stack and Structure
 
 Use `pnpm` as the package manager and Node.js `>=22.12.0` (see `web/package.json`). This monorepo contains a standalone Sanity Studio in `studio/` and an Astro frontend in `web/`, styled with Tailwind CSS 4 through `@tailwindcss/vite` and deployed with `@astrojs/netlify`.

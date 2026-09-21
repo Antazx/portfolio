@@ -26,6 +26,7 @@ export type PortfolioCopy = {
   intro: string
   primaryAction: string
   secondaryAction: string
+  downloadCvLabel: string
   summary: Array<{label: string; value: string}>
   experience: {
     title: string
@@ -65,6 +66,7 @@ export const portfolio = {
       'Ingeniero de software con más de 7 años de experiencia en backend, arquitecturas cloud y entrega de extremo a extremo. Trabajo principalmente con TypeScript, Node.js, Java y Spring.',
     primaryAction: 'Ver experiencia',
     secondaryAction: 'Hablemos',
+    downloadCvLabel: 'Descargar CV',
     summary: [
       {label: 'Especialidad', value: 'Backend · Cloud · Tech Lead'},
       {label: 'Experiencia', value: '7+ años'},
@@ -167,6 +169,20 @@ export const portfolio = {
           link: 'https://www.nupzi.com',
           linkLabel: 'Visitar nupzi.com',
         },
+        {
+          label: 'Proyecto personal',
+          name: 'Home Server',
+          role: 'Infraestructura doméstica',
+          description:
+            'Conversión de un portátil Mac de 2014 en un home server con Ubuntu Server y Docker para servicios de red, monitorización y administración doméstica.',
+          bullets: [
+            'Servicios: Pi-hole · Portainer · Uptime Kuma · Netdata',
+            'Red local con DNS filtrante, alertas y métricas del sistema',
+            'Objetivo: estabilizar, documentar y recuperar la infraestructura con seguridad',
+          ],
+          link: '/es/blog/home-server/',
+          linkLabel: 'Leer artículo',
+        },
       ],
     },
     contact: {
@@ -187,6 +203,7 @@ export const portfolio = {
       'Software engineer with more than 7 years of experience in backend systems, cloud architectures and end-to-end delivery. I work mainly with TypeScript, Node.js, Java and Spring.',
     primaryAction: 'View experience',
     secondaryAction: "Let's talk",
+    downloadCvLabel: 'Download CV',
     summary: [
       {label: 'Focus', value: 'Backend · Cloud · Tech Lead'},
       {label: 'Experience', value: '7+ years'},
@@ -288,6 +305,20 @@ export const portfolio = {
           status: 'Beta',
           link: 'https://www.nupzi.com',
           linkLabel: 'Visit nupzi.com',
+        },
+        {
+          label: 'Personal project',
+          name: 'Home Server',
+          role: 'Home infrastructure',
+          description:
+            'Turning a 2014 Mac laptop into a home server with Ubuntu Server and Docker for networking, monitoring and home administration services.',
+          bullets: [
+            'Services: Pi-hole · Portainer · Uptime Kuma · Netdata',
+            'Local network with filtered DNS, alerts and system metrics',
+            'Goal: stabilize, document and securely recover the infrastructure',
+          ],
+          link: '/en/blog/home-server/',
+          linkLabel: 'Read article',
         },
       ],
     },
