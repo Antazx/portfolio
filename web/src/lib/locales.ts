@@ -11,6 +11,7 @@ type SiteCopy = {
   educationLabel: string
   projectsLabel: string
   blogLabel: string
+  newsletterLabel: string
   contactLabel: string
   cvLabel: string
   theme: {
@@ -35,6 +36,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     educationLabel: 'Estudios',
     projectsLabel: 'Proyectos',
     blogLabel: 'Blog',
+    newsletterLabel: 'Newsletter',
     contactLabel: 'Contacto',
     cvLabel: 'CV',
     theme: {
@@ -57,6 +59,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     educationLabel: 'Education',
     projectsLabel: 'Projects',
     blogLabel: 'Blog',
+    newsletterLabel: 'Newsletter',
     contactLabel: 'Contact',
     cvLabel: 'CV',
     theme: {

@@ -1,0 +1,94 @@
+---
+import {localizedPath, type Locale} from '../lib/locales'
+import {newsletterSignupConfig} from '../lib/newsletter'
+
+interface Props {
+  locale: Locale
+}
+
+const {locale} = Astro.props
+const config = newsletterSignupConfig(locale)
+const copy = {
+  es: {
+    eyebrow: 'Newsletter',
+    heading: 'Recibe las nuevas publicaciones',
+    intro: 'Una selección de notas sobre ingeniería de software, arquitectura y trabajo con IA.',
+    emailLabel: 'Correo electrónico',
+    emailHelp: 'Usaremos este correo únicamente para la newsletter del portfolio.',
+    languageLabel: '¿En qué idioma quieres recibirla?',
+    spanish: 'Castellano',
+    english: 'Inglés',
+    consent: 'Acepto recibir la newsletter del portfolio.',
+    consentHelp: 'Después de enviar el formulario tendrás que confirmar tu dirección por correo.',
+    submit: 'Solicitar suscripción',
+    unavailable: 'La suscripción está temporalmente desactivada mientras terminamos de validar Brevo.',
+    pendingLink: 'Ya he enviado el formulario',
+    confirmationLink: 'Ir a la confirmación',
+  },
+  en: {
+    eyebrow: 'Newsletter',
+    heading: 'Get new publications',
+    intro: 'A selection of notes about software engineering, architecture and AI-assisted work.',
+    emailLabel: 'Email address',
+    emailHelp: 'We will use this address only for the portfolio newsletter.',
+    languageLabel: 'Which language would you like to receive it in?',
+    spanish: 'Spanish',
+    english: 'English',
+    consent: 'I agree to receive the portfolio newsletter.',
+    consentHelp: 'After submitting the form, you will need to confirm your address by email.',
+    submit: 'Request subscription',
+    unavailable: 'Subscription is temporarily disabled while we finish validating Brevo.',
+    pendingLink: 'I have already submitted the form',
+    confirmationLink: 'Go to confirmation',
+  },
+}[locale]
+const emailId = `newsletter-email-${locale}`
+const languageId = `newsletter-language-${locale}`
+const consentId = `newsletter-consent-${locale}`
+const formId = `newsletter-form-${locale}`
+---
+
+<section class="shell newsletter-section" id="newsletter" aria-labelledby={`newsletter-title-${locale}`}>
+  <div class="section-heading">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h2 id={`newsletter-title-${locale}`}>{copy.heading}</h2>
+    <p class="section-intro">{copy.intro}</p>
+  </div>
+
+  {config.enabled ? (
+    <form id={formId} class="newsletter-form" action={config.formUrl} method="post">
+      <div class="form-field">
+        <label for={emailId}>{copy.emailLabel}</label>
+        <input id={emailId} name="EMAIL" type="email" autocomplete="email" maxlength="254" required aria-describedby={`${emailId}-help`} />
+        <p id={`${emailId}-help`} class="form-help">{copy.emailHelp}</p>
+      </div>
+
+      <fieldset class="form-fieldset">
+        <legend id={languageId}>{copy.languageLabel}</legend>
+        <div class="newsletter-language-options" aria-describedby={`${languageId}-help`}>
+          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="es" checked={locale === 'es'} required /> {copy.spanish}</label>
+          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="en" checked={locale === 'en'} required /> {copy.english}</label>
+        </div>
+        <p id={`${languageId}-help`} class="form-help">{copy.languageLabel}</p>
+      </fieldset>
+
+      <div class="form-field newsletter-consent">
+        <label for={consentId}>
+          <input id={consentId} name="OPT_IN" type="checkbox" value="1" required aria-describedby={`${consentId}-help`} />
+          <span>{copy.consent}</span>
+        </label>
+        <p id={`${consentId}-help`} class="form-help">{copy.consentHelp}</p>
+      </div>
+
+      <button class="button" type="submit">{copy.submit}</button>
+      <p class="newsletter-status-links">
+        <a href={localizedPath(locale, 'newsletter/pendiente')}>{copy.pendingLink}</a>
+        <a href={localizedPath(locale, 'newsletter/confirmacion')}>{copy.confirmationLink}</a>
+      </p>
+    </form>
+  ) : (
+    <div class="newsletter-unavailable" role="status" aria-live="polite">
+      <p>{copy.unavailable}</p>
+    </div>
+  )}
+</section>
