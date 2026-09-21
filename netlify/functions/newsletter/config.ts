@@ -52,7 +52,7 @@ export function getNewsletterConfig(env: Record<string, string | undefined> = pr
     required.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED = enabled(env.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED) ? 'true' : undefined
     required.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED = enabled(env.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED) ? 'true' : undefined
   }
-  if (environment === 'production') required.CONTEXT = env.CONTEXT === 'production' ? 'production' : undefined
+  if (environment === 'production') required.CONTEXT = required.CONTEXT ?? (env.CONTEXT === 'production' ? 'production' : undefined)
   const missing = Object.entries(required).filter(([, value]) => !value).map(([key]) => key)
   return {
     enabled: missing.length === 0,
