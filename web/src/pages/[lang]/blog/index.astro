@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../components/BaseLayout.astro'
+import NewsletterSignup from '../../../components/NewsletterSignup.astro'
 import {locales, type Locale} from '../../../lib/locales'
 import {postsQuery, sanityClient} from '../../../lib/sanity'
 import {absoluteUrl} from '../../../lib/seo'
@@ -77,6 +78,8 @@ const structuredData = blogUrl ? [
     </div>
     <p class="hero-copy">{copy.intro}</p>
   </section>
+
+  <NewsletterSignup locale={locale} />
 
   <section class="shell blog-content" aria-labelledby="archive-title">
     {posts.length > 0 ? (

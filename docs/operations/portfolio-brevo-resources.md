@@ -113,6 +113,22 @@ No copiar datos, IDs, contactos, claves, dominios ni destinatarios de
 Ecooperación. Hasta completar estos puntos, `off` es el único estado seguro para
 los dos flujos.
 
+## PB-02: estado de la suscripción newsletter
+
+La rama de implementación prepara el formulario bilingüe, la preferencia
+explícita `PORTFOLIO_LANGUAGE`, el consentimiento `OPT_IN`, el aviso de
+double opt-in, los estados localizados de pendiente y confirmación y el enlace
+desde el blog y el footer. La interfaz solo se activa en `test` cuando la
+captación está habilitada, existe la lista de pruebas y las dos URLs de
+formulario HTTPS pertenecen a Brevo; `production` permanece desactivado.
+
+La validación externa sigue bloqueada hasta disponer de
+`PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID` y de
+`PORTFOLIO_NEWSLETTER_FORM_URL_ES`/`PORTFOLIO_NEWSLETTER_FORM_URL_EN`, revisar
+que ambos formularios aplican double opt-in y redirigen a los estados propios,
+y probar baja, cambio de idioma y exclusión de contactos no confirmados. No se
+han inventado URLs, IDs ni valores de proveedor.
+
 ## Registro de evidencia
 
 Cuando el acceso humano esté disponible, completar el registro en la issue PB-01
