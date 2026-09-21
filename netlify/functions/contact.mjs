@@ -6,6 +6,7 @@ const MIN_MESSAGE_LENGTH = 10
 const MAX_MESSAGE_LENGTH = 5000
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const RATE_LIMIT_MAX_REQUESTS = 5
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u
 
 const localeCopy = {
   es: {
@@ -14,6 +15,8 @@ const localeCopy = {
     successMessage: 'Gracias por escribir. La consulta se ha aceptado para entrega.',
     errorTitle: 'No se ha podido enviar',
     errorMessage: 'Revisa los datos y vuelve a intentarlo.',
+    unknownMessage: 'No se pudo confirmar la entrega. Puedes continuar por email.',
+    emailFallbackLabel: 'Escribirme por email',
     unavailableMessage: 'El formulario no está disponible ahora. Puedes escribirme por email.',
     rateLimitMessage: 'Has alcanzado el límite temporal. Espera unos minutos e inténtalo de nuevo.',
     backLink: 'Volver al contacto',
@@ -29,6 +32,8 @@ const localeCopy = {
     successMessage: 'Thanks for writing. Your message has been accepted for delivery.',
     errorTitle: 'Message not sent',
     errorMessage: 'Check the details and try again.',
+    unknownMessage: 'Delivery could not be confirmed. You can continue by email.',
+    emailFallbackLabel: 'Email me instead',
     unavailableMessage: 'The form is unavailable right now. You can email me instead.',
     rateLimitMessage: 'The temporary limit has been reached. Wait a few minutes and try again.',
     backLink: 'Back to contact',
@@ -77,6 +82,16 @@ function escapeHtml(value) {
 
 function normalizeValue(value) {
   return typeof value === 'string' ? value.trim() : ''
+}
+
+function isEmail(value) {
+  const email = normalizeValue(value)
+  return email.length <= MAX_EMAIL_LENGTH && EMAIL_PATTERN.test(email)
+}
+
+function mailto(value) {
+  const email = normalizeValue(value)
+  return isEmail(email) ? `mailto:${email}` : ''
 }
 
 function getContentType(event) {
@@ -130,12 +145,7 @@ function validateFields(fields) {
   const errors = {}
 
   if (!name || name.length > MAX_NAME_LENGTH || /[\r\n]/u.test(name)) errors.name = 'invalid_name'
-  if (
-    !email ||
-    email.length > MAX_EMAIL_LENGTH ||
-    /[\r\n]/u.test(email) ||
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/u.test(email)
-  ) {
+  if (!email || email.length > MAX_EMAIL_LENGTH || /[\r\n]/u.test(email) || !isEmail(email)) {
     errors.email = 'invalid_email'
   }
   if (message.length < MIN_MESSAGE_LENGTH || message.length > MAX_MESSAGE_LENGTH) errors.message = 'invalid_message'
@@ -196,7 +206,7 @@ function createMemoryRateLimiter({now = () => Date.now(), max = RATE_LIMIT_MAX_R
   }
 }
 
-function configuration(env, mode) {
+function configuration(env, mode, rateLimiterType) {
   if (mode === 'off') return {ok: false, status: 503, code: 'contact_disabled'}
   if (!['test', 'production'].includes(mode)) return {ok: false, status: 503, code: 'invalid_mode'}
 
@@ -210,15 +220,29 @@ function configuration(env, mode) {
     senderName: env.PORTFOLIO_BREVO_CONTACT_SENDER_NAME,
     to: mode === 'production' ? env.PORTFOLIO_CONTACT_TO : env.PORTFOLIO_CONTACT_TEST_TO,
   }
-  if (Object.values(required).some((value) => !normalizeValue(value))) {
+  if (
+    !normalizeValue(required.apiKey) ||
+    !isEmail(required.senderEmail) ||
+    !normalizeValue(required.senderName) ||
+    !isEmail(required.to)
+  ) {
     return {ok: false, status: 503, code: 'contact_not_configured'}
   }
 
-  if (mode === 'production' && env.PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED !== 'true') {
+  if (
+    mode === 'production' &&
+    (env.PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED !== 'true' ||
+      env.PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER !== 'external' ||
+      rateLimiterType !== 'distributed')
+  ) {
     return {ok: false, status: 503, code: 'contact_rate_limit_not_configured'}
   }
 
-  return {ok: true, ...Object.fromEntries(Object.entries(required).map(([key, value]) => [key, normalizeValue(value)]))}
+  return {
+    ok: true,
+    ...Object.fromEntries(Object.entries(required).map(([key, value]) => [key, normalizeValue(value)])),
+    fallbackUrl: mailto(required.to),
+  }
 }
 
 function fieldMessage(locale, field) {
@@ -267,12 +291,13 @@ function htmlForm(locale, values, errors) {
   </form>`
 }
 
-function renderResult(locale, status, success, message, values = {}, errors = {}) {
+function renderResult(locale, status, success, message, values = {}, errors = {}, fallbackUrl = '', fallbackLabel = '') {
   const copy = localeCopy[locale] ?? localeCopy.en
   const heading = success ? copy.successTitle : copy.errorTitle
   const body = success ? message : message || copy.errorMessage
   const form = success ? '' : htmlForm(locale, values, errors)
-  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${copy.pageTitle}</title><style>body{font:16px/1.6 system-ui,sans-serif;max-width:48rem;margin:4rem auto;padding:0 1rem}label{display:block;margin-top:1rem}input,textarea{display:block;width:100%;max-width:32rem;padding:.6rem;margin-top:.25rem}textarea{min-height:10rem}button{margin-top:1rem;padding:.7rem 1rem}p[role=alert]{color:#a00}</style></head><body><main><h1>${heading}</h1><p>${escapeHtml(body)}</p>${form}<p><a href="/${locale}/#contacto">${copy.backLink}</a></p></main></body></html>`
+  const fallback = !success && fallbackUrl && fallbackLabel ? `<p><a href="${escapeHtml(fallbackUrl)}">${escapeHtml(fallbackLabel)}</a></p>` : ''
+  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${copy.pageTitle}</title><style>body{font:16px/1.6 system-ui,sans-serif;max-width:48rem;margin:4rem auto;padding:0 1rem}label{display:block;margin-top:1rem}input,textarea{display:block;width:100%;max-width:32rem;padding:.6rem;margin-top:.25rem}textarea{min-height:10rem}button{margin-top:1rem;padding:.7rem 1rem}p[role=alert]{color:#a00}</style></head><body><main><h1>${heading}</h1><p>${escapeHtml(body)}</p>${fallback}${form}<p><a href="/${locale}/#contacto">${copy.backLink}</a></p></main></body></html>`
 }
 
 function wantsHtml(event) {
@@ -283,7 +308,7 @@ function wantsHtml(event) {
 function clientResponse(event, locale, status, body, values = {}, errors = {}) {
   if (wantsHtml(event)) {
     const success = status >= 200 && status < 300
-    return htmlResponse(status, renderResult(locale, status, success, body.message, values, errors))
+    return htmlResponse(status, renderResult(locale, status, success, body.message, values, errors, body.fallbackUrl, body.fallbackLabel))
   }
   return jsonResponse(status, body)
 }
@@ -317,10 +342,13 @@ async function sendBrevoEmail({fetchImpl, config, values, mode, signal}) {
   } catch {
     responseBody = {}
   }
-  return {ok: true, messageId: typeof responseBody.messageId === 'string' ? responseBody.messageId : ''}
+  const messageId = typeof responseBody.messageId === 'string' ? responseBody.messageId : ''
+  return messageId ? {ok: true, messageId} : {ok: false, ambiguous: true, status: response.status}
 }
 
-function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter = createMemoryRateLimiter(), timeoutMs = 10_000} = {}) {
+function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter, rateLimiterType = 'memory', timeoutMs = 10_000} = {}) {
+  const selectedRateLimiter = rateLimiter ?? createMemoryRateLimiter()
+
   return async (event = {}, context = {}) => {
     if (event.httpMethod !== 'POST') {
       return clientResponse(event, 'en', 405, {code: 'method_not_allowed', message: 'Method not allowed.'})
@@ -340,7 +368,7 @@ function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter
     const requestedLocale = normalizeValue(parsed.fields.locale)
     const locale = Object.hasOwn(localeCopy, requestedLocale) ? requestedLocale : 'en'
     const mode = normalizeValue(env.PORTFOLIO_CONTACT_MODE || 'off')
-    const config = configuration(env, mode)
+    const config = configuration(env, mode, rateLimiterType)
     if (!config.ok) {
       return clientResponse(event, locale, config.status, {code: config.code, message: localeCopy[locale].unavailableMessage}, parsed.fields)
     }
@@ -358,7 +386,7 @@ function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter
       )
     }
 
-    const limit = await rateLimiter(clientIp(event, context))
+    const limit = await selectedRateLimiter(clientIp(event, context))
     if (!limit?.allowed) {
       const retryAfter = String(limit?.retryAfterSeconds ?? 60)
       const response = clientResponse(event, locale, 429, {code: 'rate_limited', message: localeCopy[locale].rateLimitMessage})
@@ -374,9 +402,36 @@ function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter
     } catch {
       clearTimeout(timeout)
       console.warn(JSON.stringify({event: 'contact_email_unknown_result', mode}))
-      return clientResponse(event, locale, 502, {code: 'provider_unknown', message: localeCopy[locale].errorMessage}, formValues)
+      return clientResponse(
+        event,
+        locale,
+        502,
+        {
+          code: 'provider_unknown',
+          message: localeCopy[locale].unknownMessage,
+          fallbackUrl: config.fallbackUrl,
+          fallbackLabel: localeCopy[locale].emailFallbackLabel,
+        },
+        formValues,
+      )
     }
     clearTimeout(timeout)
+
+    if (result.ambiguous) {
+      console.warn(JSON.stringify({event: 'contact_email_unknown_result', mode}))
+      return clientResponse(
+        event,
+        locale,
+        502,
+        {
+          code: 'provider_unknown',
+          message: localeCopy[locale].unknownMessage,
+          fallbackUrl: config.fallbackUrl,
+          fallbackLabel: localeCopy[locale].emailFallbackLabel,
+        },
+        formValues,
+      )
+    }
 
     if (!result.ok) {
       console.warn(JSON.stringify({event: 'contact_email_rejected', mode, providerStatus: result.status}))

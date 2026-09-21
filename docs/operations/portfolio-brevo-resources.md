@@ -66,10 +66,11 @@ del visitante.
 
 `PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED=false` es un gate de seguridad, no una
 implementación de rate limit. La producción devuelve configuración no disponible
-hasta que se configure y verifique un control real de Netlify o de la plataforma
-para cinco solicitudes por diez minutos e IP, y solo se admite con el contexto
-Netlify `production`. No se debe cambiar a `true` como atajo ni usar el contador
-en memoria de los tests como protección productiva.
+hasta que se configure y verifique un control externo/distribuido real de Netlify
+o de la plataforma para cinco solicitudes por diez minutos e IP, se declare
+`PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER=external` y se inyecte un adaptador
+`distributed` en la Function. No se debe cambiar a `true` como atajo ni usar el
+contador en memoria de los tests como protección productiva.
 
 Las pruebas locales usan un proveedor Brevo simulado y no necesitan credenciales
 ni buzones. Ejecutar `pnpm test:contact`. La recepción real, `replyTo`, sender,

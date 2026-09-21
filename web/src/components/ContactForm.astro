@@ -78,7 +78,16 @@ const prefix = `contact-${locale}`
     </label>
 
     <button class="button contact-submit" type="submit" data-contact-submit>{copy.submitLabel}</button>
-    <p class="contact-form-status" data-contact-status data-network-error={copy.networkError} role="status" aria-live="polite" tabindex="-1"></p>
+    <p
+      class="contact-form-status"
+      data-contact-status
+      data-network-error={copy.networkError}
+      data-fallback-url={`mailto:${copy.emailLabel}`}
+      data-fallback-label={copy.emailFallbackLabel}
+      role="status"
+      aria-live="polite"
+      tabindex="-1"
+    ></p>
   </form>
 </div>
 
@@ -129,7 +138,17 @@ const prefix = `contact-${locale}`
             const input = form.querySelector(`[name="${error.dataset.field}"]`)
             input?.setAttribute('aria-invalid', 'true')
           }
-          status.textContent = typeof result.message === 'string' ? result.message : 'Unable to send the message.'
+          const message = typeof result.message === 'string' ? result.message : 'Unable to send the message.'
+          const fallbackUrl = typeof result.fallbackUrl === 'string' ? result.fallbackUrl : ''
+          const fallbackLabel = typeof result.fallbackLabel === 'string' ? result.fallbackLabel : ''
+          status.textContent = message
+          if (fallbackUrl && fallbackLabel) {
+            status.append(document.createTextNode(' '))
+            const fallback = document.createElement('a')
+            fallback.href = fallbackUrl
+            fallback.textContent = fallbackLabel
+            status.append(fallback)
+          }
           status.focus()
           return
         }
@@ -139,6 +158,15 @@ const prefix = `contact-${locale}`
         status.focus()
       } catch {
         status.textContent = status.dataset.networkError ?? 'Unable to confirm delivery.'
+        const fallbackUrl = status.dataset.fallbackUrl
+        const fallbackLabel = status.dataset.fallbackLabel
+        if (fallbackUrl && fallbackLabel) {
+          status.append(document.createTextNode(' '))
+          const fallback = document.createElement('a')
+          fallback.href = fallbackUrl
+          fallback.textContent = fallbackLabel
+          status.append(fallback)
+        }
         status.focus()
       } finally {
         submit.disabled = false

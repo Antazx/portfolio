@@ -43,6 +43,10 @@ function successfulBrevoFetch(calls) {
   }
 }
 
+function distributedRateLimiter() {
+  return {allowed: true}
+}
+
 test('accepts only POST form submissions', async () => {
   let calls = 0
   const handler = createContactHandler({
@@ -163,6 +167,27 @@ test('keeps production disabled until the real rate-limit control is verified', 
   assert.equal(responseBody(response).code, 'contact_rate_limit_not_configured')
 })
 
+test('does not activate production with only the legacy rate-limit flag', async () => {
+  const handler = createContactHandler({
+    env: {
+      ...baseEnv,
+      CONTEXT: 'production',
+      PORTFOLIO_CONTACT_MODE: 'production',
+      PORTFOLIO_CONTACT_TO: 'owner@example.com',
+      PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED: 'true',
+      PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER: 'external',
+    },
+    fetchImpl: async () => {
+      throw new Error('must not be called')
+    },
+  })
+
+  const response = await handler(event())
+
+  assert.equal(response.statusCode, 503)
+  assert.equal(responseBody(response).code, 'contact_rate_limit_not_configured')
+})
+
 test('does not retry or report success when Brevo result is ambiguous', async () => {
   let calls = 0
   const handler = createContactHandler({
@@ -179,7 +204,25 @@ test('does not retry or report success when Brevo result is ambiguous', async ()
 
   assert.equal(response.statusCode, 502)
   assert.equal(body.code, 'provider_unknown')
+  assert.equal(body.message, 'Delivery could not be confirmed. You can continue by email.')
+  assert.equal(body.fallbackUrl, 'mailto:test-recipient@example.com')
+  assert.equal(body.fallbackLabel, 'Email me instead')
   assert.equal(calls, 1)
+})
+
+test('returns a localized mailto fallback in native HTML when Brevo result is ambiguous', async () => {
+  const handler = createContactHandler({
+    env: baseEnv,
+    fetchImpl: async () => new Response('{}', {status: 201}),
+    rateLimiter: distributedRateLimiter,
+  })
+
+  const response = await handler(event({locale: 'es'}, {accept: 'text/html'}))
+
+  assert.equal(response.statusCode, 502)
+  assert.match(response.body, /No se pudo confirmar la entrega\./)
+  assert.match(response.body, /href="mailto:test-recipient@example\.com"/)
+  assert.match(response.body, />Escribirme por email</)
 })
 
 test('supports a localized native form response without putting the message in the URL', async () => {
