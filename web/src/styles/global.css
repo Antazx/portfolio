@@ -232,6 +232,23 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .contact-submit { width: fit-content; cursor: pointer; }
 .contact-submit:disabled { cursor: wait; opacity: .7; }
 .contact-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.newsletter-section { border-top: 1px solid var(--border); padding-block: var(--space-6); }
+.newsletter-form { display: grid; gap: var(--space-3); max-width: 52rem; }
+.form-field, .form-fieldset { display: grid; gap: var(--space-1); }
+.form-field label, .form-fieldset legend { font-weight: 700; }
+.form-field input[type='email'] { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); }
+.form-field input[type='email']:focus-visible, .newsletter-form input[type='radio']:focus-visible, .newsletter-form input[type='checkbox']:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.form-fieldset { min-inline-size: 0; margin: 0; padding: 0; border: 0; }
+.newsletter-language-options { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.newsletter-language-options label, .newsletter-consent label { display: inline-flex; align-items: flex-start; gap: var(--space-1); font-weight: 400; }
+.newsletter-language-options input, .newsletter-consent input { flex: none; margin-top: .35em; accent-color: var(--accent); }
+.form-help { margin: 0; color: var(--muted); font-size: .875rem; }
+.newsletter-status-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; color: var(--muted); font-size: .875rem; }
+.newsletter-status-links a { text-decoration-color: var(--accent); text-underline-offset: 4px; }
+.newsletter-unavailable { max-width: 52rem; border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-3); color: var(--muted); }
+.newsletter-unavailable p { margin: 0; }
+.newsletter-status-page { display: grid; align-content: start; gap: var(--space-3); min-height: calc(100svh - 64px); padding-block: var(--space-7); }
+.newsletter-status-page h1, .newsletter-status-page .section-intro { max-width: 36ch; margin-bottom: 0; }
 .blog-hero { display: grid; gap: var(--space-6); align-items: end; padding-block: var(--space-7); }
 .blog-content { border-top: 1px solid var(--border); padding-block: var(--space-6) var(--space-7); }
 .post-grid { display: grid; gap: var(--space-3); }
@@ -269,6 +286,8 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .footer-social-link { display: inline-flex; align-items: center; gap: var(--space-1); color: var(--muted); font-weight: 600; text-decoration: none; transition: color 150ms var(--ease); }
 .footer-social-link:hover { color: var(--accent); }
 .footer-social-icon { width: 18px; height: 18px; fill: currentColor; }
+.footer-newsletter-link { color: var(--muted); text-underline-offset: 4px; }
+.footer-newsletter-link:hover { color: var(--accent); }
 
 @media (min-width: 768px) {
   .shell { width: min(100% - 64px, var(--max-width)); }
