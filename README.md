@@ -41,6 +41,7 @@ pnpm build         # build de Astro; salida en web/dist
 pnpm build:studio  # build de Sanity Studio
 pnpm preview       # sirve el build de Astro
 pnpm audit:a11y    # build + auditoría Playwright/axe-core
+pnpm test:newsletter # pruebas aisladas de webhook, elegibilidad y campañas
 ```
 
 Tras desplegar, verifica el origen real:

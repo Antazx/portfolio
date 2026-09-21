@@ -1,0 +1,32 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import {getNewsletterConfig} from './config.ts'
+
+test('newsletter automation stays disabled without an explicit complete environment', () => {
+  const off = getNewsletterConfig({PORTFOLIO_NEWSLETTER_MODE: 'off'})
+  assert.equal(off.enabled, false)
+  assert.deepEqual(off.missing, [])
+
+  const incomplete = getNewsletterConfig({PORTFOLIO_NEWSLETTER_MODE: 'test', PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID: 'not-an-id'})
+  assert.equal(incomplete.enabled, false)
+  assert.ok(incomplete.missing.includes('PORTFOLIO_BREVO_NEWSLETTER_API_KEY'))
+  assert.ok(incomplete.missing.includes('PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID'))
+})
+
+test('test and production modes select independent segments', () => {
+  const base = {
+    PORTFOLIO_BREVO_NEWSLETTER_API_KEY: 'key',
+    PORTFOLIO_BREVO_NEWSLETTER_SENDER_EMAIL: 'sender@example.com',
+    PORTFOLIO_BREVO_NEWSLETTER_SENDER_NAME: 'Portfolio',
+    PORTFOLIO_NEWSLETTER_REPLY_TO: 'reply@example.com',
+    PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES: 'https://portfolio.example/es/privacidad/',
+    PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN: 'https://portfolio.example/en/privacy/',
+    PUBLIC_SITE_URL: 'https://portfolio.example',
+    PUBLIC_SANITY_PROJECT_ID: 'project',
+    PUBLIC_SANITY_DATASET: 'production',
+    PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID: '11',
+    PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID: '22',
+  }
+  assert.equal(getNewsletterConfig({...base, PORTFOLIO_NEWSLETTER_MODE: 'test'}).segmentId, '11')
+  assert.equal(getNewsletterConfig({...base, PORTFOLIO_NEWSLETTER_MODE: 'production'}).segmentId, '22')
+})

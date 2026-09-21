@@ -30,6 +30,7 @@ pnpm build         # production build; current validation gate
 pnpm build:studio  # Studio production build
 pnpm typegen       # regenerate web/sanity.types.ts from Studio schema and queries
 pnpm preview       # serve the production build locally
+pnpm test:newsletter # pruebas node:test de la automatización newsletter
 git diff --check   # whitespace check before review
 ```
 

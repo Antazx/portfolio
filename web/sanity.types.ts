@@ -30,6 +30,7 @@ export type Post = {
   _rev: string;
   slug?: Slug;
   publishedAt?: string;
+  sendNewsletter?: boolean;
   spanish?: {
     title?: string;
     excerpt?: string;
@@ -316,12 +317,27 @@ export type PostQueryResult = {
   hasEnglish: boolean | false | null;
 } | null;
 
+// Source: ../web/src/lib/sanity.ts
+// Variable: newsletterPostQuery
+// Query: *[    _type == "post" &&    !(_id in path("drafts.**")) &&    _id == $postId &&    defined(publishedAt) &&    publishedAt <= now() &&    defined(slug.current) &&    sendNewsletter == true &&    defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0 &&    defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0  ][0]{    _id,    "slug": slug.current,    publishedAt,    "sendNewsletter": coalesce(sendNewsletter, false),    "spanishTitle": spanish.title,    "spanishExcerpt": spanish.excerpt,    "englishTitle": english.title,    "englishExcerpt": english.excerpt  }
+export type NewsletterPostQueryResult = {
+  _id: string;
+  slug: string | null;
+  publishedAt: string | null;
+  sendNewsletter: boolean | false;
+  spanishTitle: string | null;
+  spanishExcerpt: string | null;
+  englishTitle: string | null;
+  englishExcerpt: string | null;
+} | null;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ]{ "slug": slug.current }': PostSlugsQueryResult;
     '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ] | order(publishedAt desc){\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostsQueryResult;
     '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    slug.current == $slug &&\n    (\n      ($locale == "es" && defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0) ||\n      ($locale == "en" && defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0)\n    )\n  ][0]{\n    _id,\n    "slug": slug.current,\n    "title": select($locale == "es" => spanish.title, $locale == "en" => english.title),\n    "excerpt": select($locale == "es" => spanish.excerpt, $locale == "en" => english.excerpt),\n    "body": select($locale == "es" => spanish.body, $locale == "en" => english.body)[]{\n      ...,\n      _type == "articleImage" => {\n        ...,\n        image {\n          ...,\n          "dimensions": asset->metadata.dimensions\n        }\n      }\n    },\n    publishedAt,\n    "hasSpanish": defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0,\n    "hasEnglish": defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  }': PostQueryResult;
+    '*[\n    _type == "post" &&\n    !(_id in path("drafts.**")) &&\n    _id == $postId &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    defined(slug.current) &&\n    sendNewsletter == true &&\n    defined(spanish.title) && defined(spanish.excerpt) && defined(spanish.body) && count(spanish.body) > 0 &&\n    defined(english.title) && defined(english.excerpt) && defined(english.body) && count(english.body) > 0\n  ][0]{\n    _id,\n    "slug": slug.current,\n    publishedAt,\n    "sendNewsletter": coalesce(sendNewsletter, false),\n    "spanishTitle": spanish.title,\n    "spanishExcerpt": spanish.excerpt,\n    "englishTitle": english.title,\n    "englishExcerpt": english.excerpt\n  }': NewsletterPostQueryResult;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
