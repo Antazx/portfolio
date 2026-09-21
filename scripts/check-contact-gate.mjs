@@ -66,8 +66,8 @@ export function checkContactGate(env = process.env) {
     check('production-context', value(env, 'CONTEXT') === 'production', 'El contacto de producción requiere CONTEXT=production')
     check(
       'rate-limit',
-      isTrue(env, 'PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED'),
-      'Falta verificar el control de abuso real para producción',
+      isTrue(env, 'PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED') && value(env, 'PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER') === 'external',
+      'Falta configurar y verificar un control de abuso externo/distribuido para producción',
     )
     check(
       'privacy-approval',

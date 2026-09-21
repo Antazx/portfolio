@@ -58,6 +58,7 @@ test('production requires context, abuse control, privacy and explicit approval'
     ...base,
     CONTEXT: 'production',
     PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED: 'true',
+    PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER: 'external',
     PORTFOLIO_CONTACT_PRIVACY_APPROVED: 'true',
     PORTFOLIO_CONTACT_PRODUCTION_APPROVED: 'true',
   })
@@ -72,6 +73,7 @@ test('production and test destinations are selected independently', () => {
     PORTFOLIO_CONTACT_TO: 'owner@example.com',
     CONTEXT: 'production',
     PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED: 'true',
+    PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER: 'external',
     PORTFOLIO_CONTACT_PRIVACY_APPROVED: 'true',
     PORTFOLIO_CONTACT_PRODUCTION_APPROVED: 'true',
   })

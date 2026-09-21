@@ -88,7 +88,8 @@ activado producción desde este checkout.
 `PORTFOLIO_CONTACT_PRIVACY_APPROVED` y
 `PORTFOLIO_CONTACT_PRODUCTION_APPROVED` son barreras explícitas; sus valores
 seguros son `false`. Producción también exige
-`PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED=true` y `CONTEXT=production`. El
+`PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED=true`,
+`PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER=external` y `CONTEXT=production`. El
 runtime conserva el destinatario fijo del entorno, el `replyTo` validado y la
 separación de marketing.
 

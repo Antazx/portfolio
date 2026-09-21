@@ -255,6 +255,26 @@ test('returns a localized mailto fallback in native HTML when Brevo result is am
   assert.match(response.body, />Escribirme por email</)
 })
 
+test('logs outcome metadata without visitor email or message content', async () => {
+  const logs = []
+  const handler = createContactHandler({
+    env: baseEnv,
+    fetchImpl: async () => new Response(JSON.stringify({messageId: '<test-message-id>'}), {status: 201}),
+    rateLimiter: async () => ({allowed: true}),
+    logger: {
+      info: (message) => logs.push(message),
+      warn: (message) => logs.push(message),
+    },
+  })
+
+  await handler(event({email: 'visitor-secret@example.com', message: 'Private message that must not be logged.'}))
+
+  const output = logs.join('\n')
+  assert.match(output, /contact_email_accepted/)
+  assert.doesNotMatch(output, /visitor-secret@example\.com/)
+  assert.doesNotMatch(output, /Private message/)
+})
+
 test('supports a localized native form response without putting the message in the URL', async () => {
   const handler = createContactHandler({env: baseEnv, fetchImpl: async () => new Response('{}', {status: 201})})
   const response = await handler(event({locale: 'es', name: '<script>alert(1)</script>', email: 'invalid'}, {accept: 'text/html'}))
