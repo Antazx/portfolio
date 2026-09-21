@@ -166,6 +166,10 @@ Todos los valores reales están pendientes. Los nombres siguientes son exclusivo
 | `PORTFOLIO_NEWSLETTER_MODE` | `off` por defecto, `test` o `production` |
 | `PORTFOLIO_NEWSLETTER_SIGNUP_ENABLED` | `false` por defecto; visibilidad de captación, independiente del envío |
 | `PORTFOLIO_CONTACT_MODE` | `off` por defecto, `test` o `production` |
+| `PORTFOLIO_CONTACT_TEST_EVIDENCE_CONFIRMED` | Evidencia humana de prueba, recepción, `replyTo` y separación de marketing |
+| `PORTFOLIO_CONTACT_PRIVACY_APPROVED` | Aprobación de los textos de privacidad del contacto |
+| `PORTFOLIO_CONTACT_PRODUCTION_APPROVED` | Aprobación humana explícita del gate contacto |
+| `PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED` | Control real de abuso verificado para producción |
 | `PORTFOLIO_BREVO_NEWSLETTER_LIST_ID` | Lista de producción, validada en la cuenta del portfolio |
 | `PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID` | Lista de pruebas, distinta de producción |
 | `PORTFOLIO_BREVO_NEWSLETTER_SEGMENT_ID` | Segmento enviable de producción definido en §4.1 |

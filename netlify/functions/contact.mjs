@@ -238,6 +238,18 @@ function configuration(env, mode, rateLimiterType) {
     return {ok: false, status: 503, code: 'contact_rate_limit_not_configured'}
   }
 
+  if (mode === 'production' && env.PORTFOLIO_CONTACT_TEST_EVIDENCE_CONFIRMED !== 'true') {
+    return {ok: false, status: 503, code: 'contact_test_evidence_required'}
+  }
+
+  if (mode === 'production' && env.PORTFOLIO_CONTACT_PRIVACY_APPROVED !== 'true') {
+    return {ok: false, status: 503, code: 'contact_privacy_not_approved'}
+  }
+
+  if (mode === 'production' && env.PORTFOLIO_CONTACT_PRODUCTION_APPROVED !== 'true') {
+    return {ok: false, status: 503, code: 'contact_production_not_approved'}
+  }
+
   return {
     ok: true,
     ...Object.fromEntries(Object.entries(required).map(([key, value]) => [key, normalizeValue(value)])),
@@ -346,7 +358,7 @@ async function sendBrevoEmail({fetchImpl, config, values, mode, signal}) {
   return messageId ? {ok: true, messageId} : {ok: false, ambiguous: true, status: response.status}
 }
 
-function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter, rateLimiterType = 'memory', timeoutMs = 10_000} = {}) {
+function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter, rateLimiterType = 'memory', timeoutMs = 10_000, logger = console} = {}) {
   const selectedRateLimiter = rateLimiter ?? createMemoryRateLimiter()
 
   return async (event = {}, context = {}) => {
@@ -401,7 +413,7 @@ function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter
       result = await sendBrevoEmail({fetchImpl, config, values: validation.values, mode, signal: controller.signal})
     } catch {
       clearTimeout(timeout)
-      console.warn(JSON.stringify({event: 'contact_email_unknown_result', mode}))
+      logger.warn(JSON.stringify({event: 'contact_email_unknown_result', mode}))
       return clientResponse(
         event,
         locale,
@@ -418,7 +430,7 @@ function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter
     clearTimeout(timeout)
 
     if (result.ambiguous) {
-      console.warn(JSON.stringify({event: 'contact_email_unknown_result', mode}))
+      logger.warn(JSON.stringify({event: 'contact_email_unknown_result', mode}))
       return clientResponse(
         event,
         locale,
@@ -434,11 +446,11 @@ function createContactHandler({env = process.env, fetchImpl = fetch, rateLimiter
     }
 
     if (!result.ok) {
-      console.warn(JSON.stringify({event: 'contact_email_rejected', mode, providerStatus: result.status}))
+      logger.warn(JSON.stringify({event: 'contact_email_rejected', mode, providerStatus: result.status}))
       return clientResponse(event, locale, 502, {code: 'provider_error', message: localeCopy[locale].errorMessage}, formValues)
     }
 
-    console.info(JSON.stringify({event: 'contact_email_accepted', mode, messageId: result.messageId || undefined}))
+    logger.info(JSON.stringify({event: 'contact_email_accepted', mode, messageId: result.messageId || undefined}))
     return clientResponse(event, locale, 200, {code: 'sent', message: localeCopy[locale].successMessage, messageId: result.messageId || undefined})
   }
 }

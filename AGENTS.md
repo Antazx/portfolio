@@ -29,6 +29,9 @@ pnpm dev:studio    # local Sanity Studio at http://localhost:3333
 pnpm build         # production build; current validation gate
 pnpm build:studio  # Studio production build
 pnpm test:contact  # contact Function tests with a simulated Brevo provider
+pnpm test:contact-gate # pruebas aisladas del gate y contrato público de contacto
+pnpm check:contact-gate # validación local sin llamadas Brevo
+pnpm verify:contact:public # comprueba el formulario en las rutas públicas desplegadas
 pnpm typegen       # regenerate web/sanity.types.ts from Studio schema and queries
 pnpm preview       # serve the production build locally
 git diff --check   # whitespace check before review
