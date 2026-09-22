@@ -167,6 +167,8 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .meta-row span { color: var(--muted); }
 .meta-row strong, .meta-row a { text-align: right; }
 .meta-row a { text-decoration-color: var(--accent); text-underline-offset: 4px; }
+.meta-links { display: inline-flex; align-items: baseline; gap: var(--space-1); }
+.meta-links a { color: var(--text); }
 .section { border-top: 1px solid var(--border); padding-block: var(--space-7); }
 .section-heading { display: grid; gap: var(--space-2); margin-bottom: var(--space-5); }
 .section-heading h2, .contact-title { max-width: 12ch; margin-bottom: 0; font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1; }

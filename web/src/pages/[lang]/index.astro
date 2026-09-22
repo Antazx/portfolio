@@ -33,14 +33,20 @@ const cv = cvAsset(locale)
         <div class="meta-row">
           <span>{item.label}</span>
           {index === content.summary.length - 1 ? (
-            <a
-              href="https://www.linkedin.com/in/guillermoanta/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label={content.contact.linkedinAriaLabel}
-            >
-              {item.value}
-            </a>
+            <span class="meta-links">
+              <a
+                href="https://www.linkedin.com/in/guillermoanta/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={content.contact.linkedinAriaLabel}
+              >
+                {item.value}
+              </a>
+              <span aria-hidden="true">·</span>
+              <a href="#contacto" aria-label={locale === 'es' ? 'Formulario de contacto' : 'Contact form'}>
+                {content.contact.emailFieldLabel}
+              </a>
+            </span>
           ) : <strong>{item.value}</strong>}
         </div>
       ))}
