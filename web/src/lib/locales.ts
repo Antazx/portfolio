@@ -7,9 +7,7 @@ type SiteCopy = {
   languageLabel: string
   skipToContent: string
   homeLabel: string
-  experienceLabel: string
   educationLabel: string
-  projectsLabel: string
   blogLabel: string
   newsletterLabel: string
   contactLabel: string
@@ -31,9 +29,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     languageLabel: 'Idioma',
     skipToContent: 'Saltar al contenido',
     homeLabel: 'Inicio',
-    experienceLabel: 'Experiencia',
     educationLabel: 'Estudios',
-    projectsLabel: 'Proyectos',
     blogLabel: 'Blog',
     newsletterLabel: 'Newsletter',
     contactLabel: 'Contacto',
@@ -53,9 +49,7 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     languageLabel: 'Language',
     skipToContent: 'Skip to content',
     homeLabel: 'Home',
-    experienceLabel: 'Experience',
     educationLabel: 'Education',
-    projectsLabel: 'Projects',
     blogLabel: 'Blog',
     newsletterLabel: 'Newsletter',
     contactLabel: 'Contact',

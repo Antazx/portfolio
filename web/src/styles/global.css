@@ -38,6 +38,9 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg);
   color: var(--text);
   font-family: Avenir, 'Avenir Next', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -129,7 +132,7 @@ a:focus-visible, button:focus-visible {
 .utility-group .theme-icon { width: 14px; height: 14px; }
 :root[data-theme='dark'] .theme-icon-sun, :root[data-theme='light'] .theme-icon-moon { display: block; }
 
-main { overflow: clip; }
+main { flex: 1; overflow: clip; }
 section { scroll-margin-top: 96px; }
 .hero {
   display: grid;
@@ -286,8 +289,6 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .footer-social-link { display: inline-flex; align-items: center; gap: var(--space-1); color: var(--muted); font-weight: 600; text-decoration: none; transition: color 150ms var(--ease); }
 .footer-social-link:hover { color: var(--accent); }
 .footer-social-icon { width: 18px; height: 18px; fill: currentColor; }
-.footer-newsletter-link { color: var(--muted); text-underline-offset: 4px; }
-.footer-newsletter-link:hover { color: var(--accent); }
 
 @media (min-width: 768px) {
   .shell { width: min(100% - 64px, var(--max-width)); }
