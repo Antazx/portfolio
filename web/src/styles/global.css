@@ -182,7 +182,7 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .project-status {
   display: inline-flex;
   align-items: center;
-  margin-left: 4px;
+  margin-left: var(--space-1);
   padding: 1px 5px;
   border: 1px solid var(--accent);
   border-radius: 999px;
