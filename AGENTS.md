@@ -28,6 +28,7 @@ pnpm dev           # local server at http://localhost:4321
 pnpm dev:studio    # local Sanity Studio at http://localhost:3333
 pnpm build         # production build; current validation gate
 pnpm build:studio  # Studio production build
+pnpm test:contact  # contact Function tests with a simulated Brevo provider
 pnpm typegen       # regenerate web/sanity.types.ts from Studio schema and queries
 pnpm preview       # serve the production build locally
 git diff --check   # whitespace check before review

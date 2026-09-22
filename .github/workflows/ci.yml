@@ -26,6 +26,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typegen
       - run: git diff --exit-code -- web/sanity.types.ts
+      - run: pnpm test:contact
       - run: pnpm build
       - run: pnpm build:studio
       - run: pnpm --filter portfolio-web exec playwright install --with-deps chromium

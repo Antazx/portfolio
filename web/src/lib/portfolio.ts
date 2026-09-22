@@ -53,6 +53,14 @@ export type PortfolioCopy = {
     emailLabel: string
     linkedinLabel: string
     linkedinAriaLabel: string
+    formTitle: string
+    nameLabel: string
+    emailFieldLabel: string
+    messageLabel: string
+    privacyLabel: string
+    submitLabel: string
+    networkError: string
+    emailFallbackLabel: string
   }
 }
 
@@ -192,6 +200,14 @@ export const portfolio = {
       emailLabel: 'guillermoantataz@gmail.com',
       linkedinLabel: 'LinkedIn',
       linkedinAriaLabel: 'LinkedIn de Guillermo Anta Alonso',
+      formTitle: 'Escríbeme directamente',
+      nameLabel: 'Nombre',
+      emailFieldLabel: 'Email',
+      messageLabel: 'Mensaje',
+      privacyLabel: 'He leído el aviso de privacidad y acepto el tratamiento de esta consulta.',
+      submitLabel: 'Enviar mensaje',
+      networkError: 'No se ha podido confirmar la entrega. Inténtalo de nuevo o usa el enlace de email.',
+      emailFallbackLabel: 'Escribirme por email',
     },
   },
   en: {
@@ -329,6 +345,14 @@ export const portfolio = {
       emailLabel: 'guillermoantataz@gmail.com',
       linkedinLabel: 'LinkedIn',
       linkedinAriaLabel: 'LinkedIn profile of Guillermo Anta Alonso',
+      formTitle: 'Write to me directly',
+      nameLabel: 'Name',
+      emailFieldLabel: 'Email',
+      messageLabel: 'Message',
+      privacyLabel: 'I have read the privacy notice and accept the processing of this enquiry.',
+      submitLabel: 'Send message',
+      networkError: 'Unable to confirm delivery. Please try again or use the email link.',
+      emailFallbackLabel: 'Email me instead',
     },
   },
 } satisfies Record<Locale, PortfolioCopy>

@@ -54,6 +54,29 @@ activa captación ni envío productivo desde este ticket.
 El contacto no crea ni modifica contactos de marketing y permanece apagado hasta
 que el sender, destino de prueba y privacidad estén aprobados.
 
+## Implementación PB-04
+
+El formulario bilingüe publica un `POST` server-side a la Function de contacto.
+La Function acepta únicamente `application/x-www-form-urlencoded`, comprueba
+origen, tamaño máximo de 16 KiB, longitudes, idioma, consentimiento, honeypot y
+cabeceras, y usa el destino y sender del entorno. Los valores `to`, `cc`, `bcc`,
+`sender` y listas que lleguen desde el navegador se ignoran. El mensaje se envía
+como texto plano por Transactional Email API y el `replyTo` es el email validado
+del visitante.
+
+`PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED=false` es un gate de seguridad, no una
+implementación de rate limit. La producción devuelve configuración no disponible
+hasta que se configure y verifique un control externo/distribuido real de Netlify
+o de la plataforma para cinco solicitudes por diez minutos e IP, se declare
+`PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER=external` y se inyecte un adaptador
+`distributed` en la Function. No se debe cambiar a `true` como atajo ni usar el
+contador en memoria de los tests como protección productiva.
+
+Las pruebas locales usan un proveedor Brevo simulado y no necesitan credenciales
+ni buzones. Ejecutar `pnpm test:contact`. La recepción real, `replyTo`, sender,
+destinatario de test, privacidad y el rate limit siguen siendo bloqueos externos
+del gate PB-04; los modos `off` son el valor seguro por defecto.
+
 ## Bloqueos humanos concretos
 
 PB-01 no puede cerrarse como validación de recursos con evidencia únicamente
