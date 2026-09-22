@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../../components/BaseLayout.astro'
+import {locales, localizedPath, type Locale} from '../../../lib/locales'
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({params: {lang: locale}, props: {locale}}))
+}
+
+const locale = Astro.props.locale as Locale
+const copy = {
+  es: {
+    title: 'Confirma tu suscripción — Guillermo Anta Alonso',
+    description: 'Confirma tu suscripción a la newsletter del portfolio.',
+    eyebrow: 'Newsletter',
+    heading: 'Revisa tu correo',
+    text: 'Te hemos enviado un enlace para confirmar la suscripción. La dirección no se añadirá a la audiencia enviable hasta que completes esa confirmación.',
+    back: 'Volver al blog',
+    confirmation: 'Ya he confirmado mi dirección',
+  },
+  en: {
+    title: 'Confirm your subscription — Guillermo Anta Alonso',
+    description: 'Confirm your subscription to the portfolio newsletter.',
+    eyebrow: 'Newsletter',
+    heading: 'Check your email',
+    text: 'We have sent you a confirmation link. Your address will not join the sendable audience until you complete that confirmation.',
+    back: 'Back to the blog',
+    confirmation: 'I have confirmed my address',
+  },
+}[locale]
+const path = localizedPath(locale, 'newsletter/pendiente')
+---
+
+<BaseLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  languageLinks={{es: localizedPath('es', 'newsletter/pendiente'), en: localizedPath('en', 'newsletter/pendiente')}}
+  alternatePaths={{es: localizedPath('es', 'newsletter/pendiente'), en: localizedPath('en', 'newsletter/pendiente')}}
+  canonicalPath={path}
+>
+  <section class="shell newsletter-status-page" aria-labelledby="newsletter-status-title">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h1 id="newsletter-status-title">{copy.heading}</h1>
+    <p class="section-intro">{copy.text}</p>
+    <div class="hero-actions">
+      <a class="button" href={localizedPath(locale, 'newsletter/confirmacion')}>{copy.confirmation}</a>
+      <a class="button secondary" href={`${localizedPath(locale, 'blog')}#newsletter`}>{copy.back}</a>
+    </div>
+  </section>
+</BaseLayout>

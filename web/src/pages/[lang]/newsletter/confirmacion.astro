@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../../components/BaseLayout.astro'
+import {locales, localizedPath, type Locale} from '../../../lib/locales'
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({params: {lang: locale}, props: {locale}}))
+}
+
+const locale = Astro.props.locale as Locale
+const copy = {
+  es: {
+    title: 'Suscripción confirmada — Guillermo Anta Alonso',
+    description: 'Estado de la suscripción a la newsletter del portfolio.',
+    eyebrow: 'Newsletter',
+    heading: 'Suscripción confirmada',
+    text: 'Tu dirección ya puede recibir las nuevas publicaciones en el idioma que elegiste. Puedes darte de baja o cambiar tu preferencia desde cualquier newsletter.',
+    back: 'Volver al blog',
+  },
+  en: {
+    title: 'Subscription confirmed — Guillermo Anta Alonso',
+    description: 'Portfolio newsletter subscription status.',
+    eyebrow: 'Newsletter',
+    heading: 'Subscription confirmed',
+    text: 'Your address can now receive new publications in the language you chose. You can unsubscribe or change your preference from any newsletter.',
+    back: 'Back to the blog',
+  },
+}[locale]
+const path = localizedPath(locale, 'newsletter/confirmacion')
+---
+
+<BaseLayout
+  locale={locale}
+  title={copy.title}
+  description={copy.description}
+  languageLinks={{es: localizedPath('es', 'newsletter/confirmacion'), en: localizedPath('en', 'newsletter/confirmacion')}}
+  alternatePaths={{es: localizedPath('es', 'newsletter/confirmacion'), en: localizedPath('en', 'newsletter/confirmacion')}}
+  canonicalPath={path}
+>
+  <section class="shell newsletter-status-page" aria-labelledby="newsletter-status-title">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h1 id="newsletter-status-title">{copy.heading}</h1>
+    <p class="section-intro">{copy.text}</p>
+    <a class="button secondary" href={`${localizedPath(locale, 'blog')}#newsletter`}>{copy.back}</a>
+  </section>
+</BaseLayout>
