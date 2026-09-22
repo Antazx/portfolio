@@ -207,8 +207,6 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .contact-layout { display: grid; gap: var(--space-4); }
 .contact-copy-block { display: grid; gap: var(--space-2); align-content: start; }
 .contact-copy-block > * { margin-bottom: 0; }
-.contact-links { display: grid; align-content: end; gap: var(--space-2); }
-.contact-email { width: fit-content; font-size: clamp(1.1rem, 2vw, 1.4rem); text-decoration-color: var(--accent); text-underline-offset: 5px; }
 .contact-form-block { display: grid; gap: var(--space-2); max-width: 48rem; margin-top: var(--space-4); }
 .contact-form-block h3 { margin: 0; font-size: clamp(1.35rem, 3vw, 2rem); }
 .contact-form { display: grid; gap: var(--space-2); }
