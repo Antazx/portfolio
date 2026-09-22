@@ -199,7 +199,7 @@ test('newsletter stays disabled until test resources are configured', async ({pa
     await expect(page.locator('#newsletter')).toBeVisible()
     await expect(page.locator('#newsletter form')).toHaveCount(0)
     await expect(page.locator('.newsletter-unavailable')).toHaveAttribute('role', 'status')
-    await expect(page.locator(`.footer-newsletter-link[href="${route}#newsletter"]`)).toBeVisible()
+    await expect(page.locator(`.nav-links a[href="${route}#newsletter"]`)).toBeVisible()
   }
 
   for (const route of ['/es/newsletter/pendiente/', '/en/newsletter/pendiente/', '/es/newsletter/confirmacion/', '/en/newsletter/confirmacion/']) {
