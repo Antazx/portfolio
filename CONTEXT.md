@@ -14,6 +14,10 @@ _Avoid_: contenido monolingüe, castellano como fallback, inglés como fallback
 Conjunto público que presenta perfil, experiencia, formación, proyectos, contacto y publicaciones de Guillermo Anta Alonso.
 _Avoid_: CV como sinónimo del sitio completo
 
+**Estado de interacción de navegación**:
+Señal visual temporal de un enlace del menú al recibir interacción o foco. No afirma que la sección esté activa en el viewport.
+_Avoid_: selección persistente cuando solo existe una interacción puntual
+
 **Publicación**:
 Pieza editorial del blog sobre ingeniería de software, arquitectura o trabajo con IA.
 _Avoid_: entrada, post cuando se hable del concepto público

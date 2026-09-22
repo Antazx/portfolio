@@ -260,12 +260,21 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
     grid-template-areas:
       'brand utility'
       'nav nav';
-    gap: 0;
+    gap: var(--space-1) 0;
     padding-block: var(--space-2);
   }
   .wordmark { grid-area: brand; }
   .nav-links { grid-area: nav; width: 100%; justify-content: center; }
   .nav-links a { padding-inline: 6px; }
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    border-color: transparent;
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
+  }
+  .nav-links a:focus-visible { outline: none; }
   .utility-group { grid-area: utility; }
 }
 @media (max-width: 375px) {
