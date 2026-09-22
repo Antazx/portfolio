@@ -24,7 +24,6 @@ const cv = cvAsset(locale)
       <p class="hero-copy">{content.intro}</p>
       <div class="hero-actions">
         <a class="button" href="#experiencia">{content.primaryAction}</a>
-        <a class="button secondary" href="#contacto">{content.secondaryAction}</a>
         <a class="button secondary" href={cv.href} download={cv.filename}>{content.downloadCvLabel}</a>
       </div>
     </div>
@@ -32,7 +31,22 @@ const cv = cvAsset(locale)
       {content.summary.map((item, index) => (
         <div class="meta-row">
           <span>{item.label}</span>
-          {index === content.summary.length - 1 ? <a href="mailto:guillermoantataz@gmail.com">{item.value}</a> : <strong>{item.value}</strong>}
+          {index === content.summary.length - 1 ? (
+            <span class="meta-links">
+              <a
+                href="https://www.linkedin.com/in/guillermoanta/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label={content.contact.linkedinAriaLabel}
+              >
+                {item.value}
+              </a>
+              <span aria-hidden="true">·</span>
+              <a href="#contacto" aria-label={locale === 'es' ? 'Formulario de contacto' : 'Contact form'}>
+                {content.contact.emailFieldLabel}
+              </a>
+            </span>
+          ) : <strong>{item.value}</strong>}
         </div>
       ))}
     </aside>
@@ -120,10 +134,6 @@ const cv = cvAsset(locale)
         <h2 class="contact-title" id="contact-title">{content.contact.title}</h2>
         <p class="experience-date">{content.contact.label}</p>
         <p class="contact-copy">{content.contact.intro}</p>
-      </div>
-      <div class="contact-links" aria-label={content.contact.label}>
-        <a class="contact-email" href={`mailto:${content.contact.emailLabel}`}>{content.contact.emailLabel}</a>
-        <a class="contact-email" href="https://www.linkedin.com/in/guillermoanta/" target="_blank" rel="noreferrer" aria-label={content.contact.linkedinAriaLabel}>{content.contact.linkedinLabel}</a>
       </div>
       <ContactForm locale={locale} copy={content.contact} />
     </div>

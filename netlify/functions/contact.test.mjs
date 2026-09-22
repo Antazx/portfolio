@@ -188,6 +188,36 @@ test('does not activate production with only the legacy rate-limit flag', async 
   assert.equal(responseBody(response).code, 'contact_rate_limit_not_configured')
 })
 
+test('keeps production disabled until contact evidence and approvals are explicit', async () => {
+  const env = {
+    ...baseEnv,
+    CONTEXT: 'production',
+    PORTFOLIO_CONTACT_MODE: 'production',
+    PORTFOLIO_CONTACT_TO: 'owner@example.com',
+    PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED: 'true',
+    PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER: 'external',
+  }
+  const handler = createContactHandler({
+    env,
+    fetchImpl: async () => {
+      throw new Error('must not be called')
+    },
+    rateLimiter: distributedRateLimiter,
+    rateLimiterType: 'distributed',
+  })
+
+  const missingEvidence = await handler(event())
+  assert.equal(responseBody(missingEvidence).code, 'contact_test_evidence_required')
+
+  env.PORTFOLIO_CONTACT_TEST_EVIDENCE_CONFIRMED = 'true'
+  const missingPrivacy = await handler(event())
+  assert.equal(responseBody(missingPrivacy).code, 'contact_privacy_not_approved')
+
+  env.PORTFOLIO_CONTACT_PRIVACY_APPROVED = 'true'
+  const missingApproval = await handler(event())
+  assert.equal(responseBody(missingApproval).code, 'contact_production_not_approved')
+})
+
 test('does not retry or report success when Brevo result is ambiguous', async () => {
   let calls = 0
   const handler = createContactHandler({
@@ -223,6 +253,26 @@ test('returns a localized mailto fallback in native HTML when Brevo result is am
   assert.match(response.body, /No se pudo confirmar la entrega\./)
   assert.match(response.body, /href="mailto:test-recipient@example\.com"/)
   assert.match(response.body, />Escribirme por email</)
+})
+
+test('logs outcome metadata without visitor email or message content', async () => {
+  const logs = []
+  const handler = createContactHandler({
+    env: baseEnv,
+    fetchImpl: async () => new Response(JSON.stringify({messageId: '<test-message-id>'}), {status: 201}),
+    rateLimiter: async () => ({allowed: true}),
+    logger: {
+      info: (message) => logs.push(message),
+      warn: (message) => logs.push(message),
+    },
+  })
+
+  await handler(event({email: 'visitor-secret@example.com', message: 'Private message that must not be logged.'}))
+
+  const output = logs.join('\n')
+  assert.match(output, /contact_email_accepted/)
+  assert.doesNotMatch(output, /visitor-secret@example\.com/)
+  assert.doesNotMatch(output, /Private message/)
 })
 
 test('supports a localized native form response without putting the message in the URL', async () => {

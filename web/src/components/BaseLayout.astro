@@ -1,7 +1,6 @@
 ---
 import {Image} from 'astro:assets'
 import '../styles/global.css'
-import {cvAsset} from '../lib/cv'
 import {localizedPath, siteCopy, type Locale} from '../lib/locales'
 import {absoluteUrl, localeTag, serializeJsonLd, siteOrigin} from '../lib/seo'
 
@@ -18,7 +17,6 @@ interface Props {
 
 const {locale, title, description, languageLinks = {}, alternatePaths, canonicalPath, ogType = 'website', structuredData = []} = Astro.props
 const copy = siteCopy[locale]
-const cv = cvAsset(locale)
 const homeHref = localizedPath(locale)
 const spanishHref = languageLinks.es ?? localizedPath('es')
 const englishHref = languageLinks.en ?? localizedPath('en')
@@ -88,16 +86,14 @@ const schemas = [...siteSchemas, ...structuredData]
     <header class="topbar">
       <div class="shell topbar-inner">
         <a class="wordmark" href={homeHref} aria-label="Guillermo Anta Alonso">
-          <Image class="wordmark-image" src="/gaa-header-final.png" alt="" aria-hidden="true" width={1160} height={420} />
+          <Image class="wordmark-image" src="/gaa-header-final.png" alt="" aria-hidden="true" width={1160} height={420} loading="eager" />
         </a>
         <div class="header-controls">
           <nav class="nav-links" aria-label={copy.navigationLabel}>
             <a href={`${homeHref}#inicio`}>{copy.homeLabel}</a>
-            <a href={`${homeHref}#experiencia`}>{copy.experienceLabel}</a>
-            <a href={`${homeHref}#proyecto`}>{copy.projectsLabel}</a>
             <a href={localizedPath(locale, 'blog')}>{copy.blogLabel}</a>
+            <a href={`${localizedPath(locale, 'blog')}#newsletter`}>{copy.newsletterLabel}</a>
             <a href={`${homeHref}#contacto`}>{copy.contactLabel}</a>
-            <a href={cv.href} download={cv.filename}>{copy.cvLabel}</a>
           </nav>
           <div class="utility-group">
             <nav class="language-switch" aria-label={copy.languageLabel}>
@@ -147,7 +143,6 @@ const schemas = [...siteSchemas, ...structuredData]
             <span>{copy.social.github}</span>
           </a>
         </nav>
-        <a class="footer-newsletter-link" href={`${localizedPath(locale, 'blog')}#newsletter`}>{copy.newsletterLabel}</a>
         <span>{copy.footerRole}</span>
       </div>
     </footer>

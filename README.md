@@ -40,6 +40,9 @@ pnpm typegen       # regenera web/sanity.types.ts desde el schema de Studio
 pnpm build         # build de Astro; salida en web/dist
 pnpm build:studio  # build de Sanity Studio
 pnpm test:contact  # pruebas de la Function de contacto con Brevo simulado
+pnpm test:contact-gate # pruebas del gate y contrato público de contacto
+pnpm check:contact-gate # comprueba flags y recursos sin llamadas externas
+pnpm verify:contact:public # comprueba el formulario en las dos rutas públicas
 pnpm preview       # sirve el build de Astro
 pnpm audit:a11y    # build + auditoría Playwright/axe-core
 pnpm test:newsletter # pruebas aisladas de webhook, elegibilidad y campañas
@@ -69,4 +72,5 @@ Configura las variables de Sanity y `PUBLIC_SITE_URL` en el entorno de Netlify. 
 Documentación adicional: [criterios del repositorio](./AGENTS.md), [accesibilidad](./docs/accessibility.md), [verificación de producción](./docs/production-verification.md) y [contexto de dominio](./CONTEXT.md).
 
 La integración Brevo del portfolio está documentada en [`docs/operations/portfolio-brevo-resources.md`](./docs/operations/portfolio-brevo-resources.md) y permanece desactivada hasta completar sus gates independientes.
+El gate operativo de contacto y sus bloqueos humanos están en [`docs/operations/portfolio-contact-gate.md`](./docs/operations/portfolio-contact-gate.md).
 El gate operativo de newsletter y sus bloqueos humanos están en [`docs/operations/portfolio-newsletter-gate.md`](./docs/operations/portfolio-newsletter-gate.md).

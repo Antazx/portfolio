@@ -77,7 +77,28 @@ contador en memoria de los tests como protección productiva.
 Las pruebas locales usan un proveedor Brevo simulado y no necesitan credenciales
 ni buzones. Ejecutar `pnpm test:contact`. La recepción real, `replyTo`, sender,
 destinatario de test, privacidad y el rate limit siguen siendo bloqueos externos
-del gate PB-04; los modos `off` son el valor seguro por defecto.
+del gate PB-06; los modos `off` son el valor seguro por defecto.
+
+## PB-06: estado del gate contacto
+
+La comprobación local y el runbook están en
+[`portfolio-contact-gate.md`](./portfolio-contact-gate.md). El estado sigue
+**bloqueado por validación humana externa**: no se han enviado correos ni se ha
+activado producción desde este checkout.
+
+`PORTFOLIO_CONTACT_TEST_EVIDENCE_CONFIRMED`,
+`PORTFOLIO_CONTACT_PRIVACY_APPROVED` y
+`PORTFOLIO_CONTACT_PRODUCTION_APPROVED` son barreras explícitas; sus valores
+seguros son `false`. Producción también exige
+`PORTFOLIO_CONTACT_RATE_LIMIT_CONFIGURED=true`,
+`PORTFOLIO_CONTACT_RATE_LIMIT_PROVIDER=external` y `CONTEXT=production`. El
+runtime conserva el destinatario fijo del entorno, el `replyTo` validado y la
+separación de marketing.
+
+La evidencia pendiente incluye sender y buzón autorizados, recepción y
+respuesta, privacidad, accesibilidad, control de abuso y comparación de estado
+de marketing con un email nuevo y otro ya suscrito. Las pruebas locales solo
+usan proveedores simulados.
 
 ## Bloqueos humanos concretos
 

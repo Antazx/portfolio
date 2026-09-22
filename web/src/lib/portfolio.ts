@@ -25,7 +25,6 @@ export type PortfolioCopy = {
   role: string
   intro: string
   primaryAction: string
-  secondaryAction: string
   downloadCvLabel: string
   summary: Array<{label: string; value: string}>
   experience: {
@@ -73,13 +72,12 @@ export const portfolio = {
     intro:
       'Ingeniero de software con más de 7 años de experiencia en backend, arquitecturas cloud y entrega de extremo a extremo. Trabajo principalmente con TypeScript, Node.js, Java y Spring.',
     primaryAction: 'Ver experiencia',
-    secondaryAction: 'Hablemos',
     downloadCvLabel: 'Descargar CV',
     summary: [
       {label: 'Especialidad', value: 'Backend · Cloud · Tech Lead'},
       {label: 'Experiencia', value: '7+ años'},
       {label: 'Idiomas', value: 'Español · Inglés B2/C1'},
-      {label: 'Contacto', value: 'Email'},
+      {label: 'Contacto', value: 'LinkedIn'},
     ],
     experience: {
       title: 'Experiencia laboral',
@@ -218,13 +216,12 @@ export const portfolio = {
     intro:
       'Software engineer with more than 7 years of experience in backend systems, cloud architectures and end-to-end delivery. I work mainly with TypeScript, Node.js, Java and Spring.',
     primaryAction: 'View experience',
-    secondaryAction: "Let's talk",
     downloadCvLabel: 'Download CV',
     summary: [
       {label: 'Focus', value: 'Backend · Cloud · Tech Lead'},
       {label: 'Experience', value: '7+ years'},
       {label: 'Languages', value: 'Spanish · English B2/C1'},
-      {label: 'Contact', value: 'Email'},
+      {label: 'Contact', value: 'LinkedIn'},
     ],
     experience: {
       title: 'Work experience',

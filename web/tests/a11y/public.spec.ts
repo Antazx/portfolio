@@ -121,6 +121,34 @@ test('navigation and content remain available with JavaScript disabled', async (
   await context.close()
 })
 
+test('localized contact forms remain usable by keyboard, mobile, and without JavaScript', async ({page, browser}) => {
+  await page.setViewportSize({width: 375, height: 800})
+
+  for (const route of ['/es/', '/en/']) {
+    await page.goto(route)
+    const form = page.locator('[data-contact-form]')
+
+    await expect(form).toBeVisible()
+    await expect(form).toHaveAttribute('action', '/.netlify/functions/contact')
+    await expect(form).toHaveAttribute('method', 'post')
+    await expect(form.locator('.contact-field > label')).toHaveCount(4)
+    await expect(form.locator('.contact-checkbox')).toHaveCount(1)
+    await form.locator('input[name="name"]').focus()
+    await expect(form.locator('input[name="name"]')).toBeFocused()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
+  }
+
+  const context = await browser.newContext({javaScriptEnabled: false})
+  const noScriptPage = await context.newPage()
+  for (const route of ['/es/', '/en/']) {
+    await noScriptPage.goto(route)
+    const form = noScriptPage.locator('[data-contact-form]')
+    await expect(form).toBeVisible()
+    await expect(form.locator('input[name="privacy"]')).toHaveAttribute('required', '')
+  }
+  await context.close()
+})
+
 test('approved branding assets are used by localized layouts', async ({page}) => {
   await page.setViewportSize({width: 375, height: 800})
 
@@ -171,7 +199,7 @@ test('newsletter stays disabled until test resources are configured', async ({pa
     await expect(page.locator('#newsletter')).toBeVisible()
     await expect(page.locator('#newsletter form')).toHaveCount(0)
     await expect(page.locator('.newsletter-unavailable')).toHaveAttribute('role', 'status')
-    await expect(page.locator(`.footer-newsletter-link[href="${route}#newsletter"]`)).toBeVisible()
+    await expect(page.locator(`.nav-links a[href="${route}#newsletter"]`)).toBeVisible()
   }
 
   for (const route of ['/es/newsletter/pendiente/', '/en/newsletter/pendiente/', '/es/newsletter/confirmacion/', '/en/newsletter/confirmacion/']) {
