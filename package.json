@@ -2,6 +2,7 @@
   "name": "portfolio",
   "private": true,
   "version": "0.0.1",
+  "type": "module",
   "packageManager": "pnpm@11.10.0",
   "scripts": {
     "dev": "pnpm --filter portfolio-web dev",
@@ -12,6 +13,13 @@
     "test:contact": "node --test netlify/functions/contact.test.mjs",
     "verify:production": "pnpm --filter portfolio-web verify:production",
     "preview": "pnpm --filter portfolio-web preview",
-    "typegen": "pnpm --filter portfolio-studio typegen"
+    "typegen": "pnpm --filter portfolio-studio typegen",
+    "test:newsletter": "node --experimental-strip-types --test netlify/functions/newsletter/*.test.ts"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.7.13"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.1"
   }
 }

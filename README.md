@@ -42,6 +42,7 @@ pnpm build:studio  # build de Sanity Studio
 pnpm test:contact  # pruebas de la Function de contacto con Brevo simulado
 pnpm preview       # sirve el build de Astro
 pnpm audit:a11y    # build + auditoría Playwright/axe-core
+pnpm test:newsletter # pruebas aisladas de webhook, elegibilidad y campañas
 ```
 
 Tras desplegar, verifica el origen real:

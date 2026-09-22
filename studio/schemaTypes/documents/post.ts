@@ -121,6 +121,12 @@ export const post = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'sendNewsletter',
+      title: 'Send in newsletter',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    defineField({
       name: 'spanish',
       title: 'Castellano',
       type: 'object',

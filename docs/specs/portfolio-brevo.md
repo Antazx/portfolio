@@ -174,6 +174,7 @@ Todos los valores reales están pendientes. Los nombres siguientes son exclusivo
 | `PORTFOLIO_BREVO_NEWSLETTER_SENDER_NAME` | Identidad pública del portfolio |
 | `PORTFOLIO_NEWSLETTER_REPLY_TO` | Correo personal confirmado para respuestas |
 | `PORTFOLIO_NEWSLETTER_ALERT_TO` | Destinatario operativo confirmado |
+| `PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES` / `PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN` | URLs HTTPS de las páginas de privacidad aprobadas, una por idioma |
 | `PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET` | Secreto propio para validar firma Sanity |
 | `PORTFOLIO_BREVO_CONTACT_SENDER_EMAIL` | Remitente verificado de contacto/alertas |
 | `PORTFOLIO_BREVO_CONTACT_SENDER_NAME` | Identidad del formulario del portfolio |

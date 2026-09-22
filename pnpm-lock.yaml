@@ -6,7 +6,15 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    dependencies:
+      '@netlify/blobs':
+        specifier: ^10.7.13
+        version: 10.7.13
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.1
+        version: 26.6.1
 
   studio:
     dependencies:

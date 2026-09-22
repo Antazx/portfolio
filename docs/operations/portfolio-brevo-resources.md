@@ -34,6 +34,8 @@ llevan prefijo `PUBLIC_` y no se exponen al navegador.
 | Atributo | `PORTFOLIO_LANGUAGE`, únicamente `es` o `en` | Pendiente de crear/verificar | Tipo, valores y cambio comprobados |
 | Remitente/dominio | Identidad del portfolio verificada | Pendiente | Dominio y sender verificados |
 | Formulario ES/EN | URLs `PORTFOLIO_NEWSLETTER_FORM_URL_ES/EN` | Pendiente | Formulario, DOI y páginas de resultado revisados |
+| Privacidad ES/EN | URLs `PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES/EN` | Pendiente | Páginas aprobadas y accesibles |
+| Webhook | `PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET` | Pendiente | Firma comprobada sobre el cuerpo original |
 | Cuota/acceso | Permiso de campañas y cuota suficiente para test | Pendiente | Captura o registro operativo sin secretos |
 
 La validación real debe cubrir double opt-in, baja, cambio de idioma,
@@ -107,6 +109,23 @@ La validación externa sigue bloqueada hasta disponer de
 que ambos formularios aplican double opt-in y redirigen a los estados propios,
 y probar baja, cambio de idioma y exclusión de contactos no confirmados. No se
 han inventado URLs, IDs ni valores de proveedor.
+
+## PB-03: estado de automatización por publicación
+
+La automatización permanece apagada con `PORTFOLIO_NEWSLETTER_MODE=off`. El
+campo editorial `sendNewsletter` tiene `false` como valor inicial y la consulta
+server-side usa perspectiva publicada, fecha válida y ambas traducciones. El
+webhook de Sanity verifica HMAC antes de leer el payload; después recupera el
+documento actual y comprueba las dos páginas públicas antes de crear una campaña.
+
+El estado de cada publicación y entorno vive en un store fuerte de Netlify Blobs
+con identidad determinista, reclamación mediante ETag, lease, campaña guardada
+antes de `sendNow`, reconciliación ante reintentos y scheduler cada cinco
+minutos. Los errores ambiguos quedan en `needs_review`; no se reenvía a ciegas.
+La campaña usa solo el segmento configurado del entorno y HTML localizado por
+`PORTFOLIO_LANGUAGE`, con enlaces de privacidad y gestión de preferencias
+configurados explícitamente. Sin Blobs, recursos Brevo, origen público o URLs
+de privacidad completos no se realiza ninguna llamada de campaña.
 
 ## Registro de evidencia
 
