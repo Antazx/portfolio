@@ -79,7 +79,7 @@ export const portfolio = {
       {label: 'Especialidad', value: 'Backend · Cloud · Tech Lead'},
       {label: 'Experiencia', value: '7+ años'},
       {label: 'Idiomas', value: 'Español · Inglés B2/C1'},
-      {label: 'Contacto', value: 'Email'},
+      {label: 'Contacto', value: 'LinkedIn'},
     ],
     experience: {
       title: 'Experiencia laboral',
@@ -224,7 +224,7 @@ export const portfolio = {
       {label: 'Focus', value: 'Backend · Cloud · Tech Lead'},
       {label: 'Experience', value: '7+ years'},
       {label: 'Languages', value: 'Spanish · English B2/C1'},
-      {label: 'Contact', value: 'Email'},
+      {label: 'Contact', value: 'LinkedIn'},
     ],
     experience: {
       title: 'Work experience',
