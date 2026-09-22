@@ -34,6 +34,10 @@ pnpm check:contact-gate # validación local sin llamadas Brevo
 pnpm verify:contact:public # comprueba el formulario en las rutas públicas desplegadas
 pnpm typegen       # regenerate web/sanity.types.ts from Studio schema and queries
 pnpm preview       # serve the production build locally
+pnpm test:newsletter # pruebas node:test de la automatización newsletter
+pnpm test:newsletter-gate # pruebas node:test del gate y rutas públicas
+pnpm check:newsletter-gate # validación local sin llamadas Brevo
+pnpm verify:newsletter:public # validación pública de ambas rutas de una publicación
 git diff --check   # whitespace check before review
 ```
 

@@ -7,6 +7,9 @@
   PUBLIC_SANITY_PROJECT_ID = "zj8qwjc2"
   PUBLIC_SANITY_DATASET = "production"
 
+[functions]
+  directory = "netlify/functions"
+
 [[redirects]]
   from = "/"
   to = "/es/"

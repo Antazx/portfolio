@@ -30,6 +30,7 @@ export type Post = {
   _rev: string;
   slug?: Slug;
   publishedAt?: string;
+  sendNewsletter?: boolean;
   spanish?: {
     title?: string;
     excerpt?: string;
