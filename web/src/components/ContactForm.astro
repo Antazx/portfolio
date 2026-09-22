@@ -78,7 +78,7 @@ const prefix = `contact-${locale}`
     </label>
 
     <button class="button contact-submit" type="submit" data-contact-submit>{copy.submitLabel}</button>
-    <p
+    <div
       class="contact-form-status"
       data-contact-status
       data-network-error={copy.networkError}
@@ -87,7 +87,7 @@ const prefix = `contact-${locale}`
       role="status"
       aria-live="polite"
       tabindex="-1"
-    ></p>
+    ></div>
   </form>
 </div>
 
