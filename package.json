@@ -14,7 +14,10 @@
     "verify:production": "pnpm --filter portfolio-web verify:production",
     "preview": "pnpm --filter portfolio-web preview",
     "typegen": "pnpm --filter portfolio-studio typegen",
-    "test:newsletter": "node --experimental-strip-types --test netlify/functions/newsletter/*.test.ts"
+    "test:newsletter": "node --experimental-strip-types --test netlify/functions/newsletter/*.test.ts",
+    "test:newsletter-gate": "node --test scripts/check-newsletter-gate.test.mjs scripts/verify-newsletter-public.test.mjs",
+    "check:newsletter-gate": "node scripts/check-newsletter-gate.mjs",
+    "verify:newsletter:public": "node scripts/verify-newsletter-public.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.13"

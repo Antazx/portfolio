@@ -48,6 +48,7 @@ function configure() {
     PUBLIC_SITE_URL: 'https://portfolio.example',
     PUBLIC_SANITY_PROJECT_ID: 'project',
     PUBLIC_SANITY_DATASET: 'production',
+    PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET: 'secret',
   })
 }
 

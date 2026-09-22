@@ -127,6 +127,19 @@ La campaña usa solo el segmento configurado del entorno y HTML localizado por
 configurados explícitamente. Sin Blobs, recursos Brevo, origen público o URLs
 de privacidad completos no se realiza ninguna llamada de campaña.
 
+## PB-05: estado del gate newsletter
+
+La implementación local del gate y la comprobación de rutas públicas están en
+[`portfolio-newsletter-gate.md`](./portfolio-newsletter-gate.md). El estado es
+**bloqueado por validación humana externa**: no hay cuenta Brevo, campaña de
+prueba, recepción, baja ni aprobación productiva verificadas en este checkout.
+
+`PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED` y
+`PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED` son barreras adicionales de runtime;
+sus valores seguros son `false`. La ausencia de recursos o aprobación mantiene
+el webhook y el scheduler desactivados. No se crean campañas ni se envían
+correos como parte de las comprobaciones locales.
+
 ## Registro de evidencia
 
 Cuando el acceso humano esté disponible, completar el registro en la issue PB-01

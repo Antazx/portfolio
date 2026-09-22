@@ -43,6 +43,9 @@ pnpm test:contact  # pruebas de la Function de contacto con Brevo simulado
 pnpm preview       # sirve el build de Astro
 pnpm audit:a11y    # build + auditoría Playwright/axe-core
 pnpm test:newsletter # pruebas aisladas de webhook, elegibilidad y campañas
+pnpm test:newsletter-gate # pruebas aisladas del gate y rutas públicas
+pnpm check:newsletter-gate # comprueba flags y recursos sin llamadas externas
+pnpm verify:newsletter:public # comprueba las dos rutas públicas de una publicación
 ```
 
 Tras desplegar, verifica el origen real:
@@ -66,3 +69,4 @@ Configura las variables de Sanity y `PUBLIC_SITE_URL` en el entorno de Netlify. 
 Documentación adicional: [criterios del repositorio](./AGENTS.md), [accesibilidad](./docs/accessibility.md), [verificación de producción](./docs/production-verification.md) y [contexto de dominio](./CONTEXT.md).
 
 La integración Brevo del portfolio está documentada en [`docs/operations/portfolio-brevo-resources.md`](./docs/operations/portfolio-brevo-resources.md) y permanece desactivada hasta completar sus gates independientes.
+El gate operativo de newsletter y sus bloqueos humanos están en [`docs/operations/portfolio-newsletter-gate.md`](./docs/operations/portfolio-newsletter-gate.md).

@@ -23,6 +23,7 @@ export type NewsletterConfig = {
 
 const nonEmpty = (value: string | undefined) => value?.trim() || undefined
 const numericId = (value: string | undefined) => value && /^\d+$/.test(value.trim()) && Number(value) > 0 ? value.trim() : undefined
+const enabled = (value: string | undefined) => nonEmpty(value) === 'true'
 
 export function getNewsletterConfig(env: Record<string, string | undefined> = process.env): NewsletterConfig {
   const mode = nonEmpty(env.PORTFOLIO_NEWSLETTER_MODE)
@@ -41,8 +42,16 @@ export function getNewsletterConfig(env: Record<string, string | undefined> = pr
     PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN: safeHttpsUrl(nonEmpty(env.PORTFOLIO_NEWSLETTER_PRIVACY_URL_EN) ?? ''),
     PUBLIC_SANITY_PROJECT_ID: nonEmpty(env.PUBLIC_SANITY_PROJECT_ID),
     PUBLIC_SANITY_DATASET: nonEmpty(env.PUBLIC_SANITY_DATASET),
+    PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET: nonEmpty(env.PORTFOLIO_SANITY_NEWSLETTER_WEBHOOK_SECRET),
   }
-  if (environment === 'production') required.CONTEXT = env.CONTEXT === 'production' ? 'production' : undefined
+  if (environment === 'production') {
+    required.CONTEXT = env.CONTEXT === 'production' ? 'production' : undefined
+    required.PORTFOLIO_BREVO_NEWSLETTER_LIST_ID = numericId(env.PORTFOLIO_BREVO_NEWSLETTER_LIST_ID)
+    required.PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID = numericId(env.PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID)
+    required.PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID = numericId(env.PORTFOLIO_BREVO_NEWSLETTER_TEST_SEGMENT_ID)
+    required.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED = enabled(env.PORTFOLIO_NEWSLETTER_TEST_EVIDENCE_CONFIRMED) ? 'true' : undefined
+    required.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED = enabled(env.PORTFOLIO_NEWSLETTER_PRODUCTION_APPROVED) ? 'true' : undefined
+  }
   const missing = Object.entries(required).filter(([, value]) => !value).map(([key]) => key)
   return {
     enabled: missing.length === 0,
