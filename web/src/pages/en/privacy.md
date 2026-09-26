@@ -6,8 +6,6 @@ locale: en
 legalDocument: privacy
 ---
 
-# Privacy policy
-
 Last updated: **[PENDING: approval and effective date]**.
 
 This policy explains how personal data relating to Guillermo Anta’s portfolio would be processed. The contact and newsletter processing described below will take place only when those services are operational.

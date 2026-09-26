@@ -6,8 +6,6 @@ locale: es
 legalDocument: privacy
 ---
 
-# Política de privacidad
-
 Última actualización: **[PENDIENTE: fecha de aprobación y entrada en vigor]**.
 
 Esta política explica cómo se tratarían los datos personales relacionados con el portfolio de Guillermo Anta. Los tratamientos de contacto y newsletter descritos a continuación solo se llevarán a cabo cuando sus respectivos servicios estén operativos.

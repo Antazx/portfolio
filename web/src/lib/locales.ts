@@ -12,6 +12,8 @@ type SiteCopy = {
   newsletterLabel: string
   contactLabel: string
   legalNavigationLabel: string
+  legalInformationLabel: string
+  draftLabel: string
   privacyLabel: string
   legalNoticeLabel: string
   theme: {
@@ -36,7 +38,9 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     blogLabel: 'Blog',
     newsletterLabel: 'Newsletter',
     contactLabel: 'Contacto',
-    legalNavigationLabel: 'Información legal',
+    legalNavigationLabel: 'Enlaces legales',
+    legalInformationLabel: 'Información legal',
+    draftLabel: 'Borrador · contenido provisional',
     privacyLabel: 'Privacidad',
     legalNoticeLabel: 'Aviso legal',
     theme: {
@@ -59,7 +63,9 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     blogLabel: 'Blog',
     newsletterLabel: 'Newsletter',
     contactLabel: 'Contact',
-    legalNavigationLabel: 'Legal information',
+    legalNavigationLabel: 'Legal links',
+    legalInformationLabel: 'Legal information',
+    draftLabel: 'Draft · temporary placeholder',
     privacyLabel: 'Privacy policy',
     legalNoticeLabel: 'Legal notice',
     theme: {

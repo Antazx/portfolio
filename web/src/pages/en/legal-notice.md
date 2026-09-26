@@ -6,8 +6,6 @@ locale: en
 legalDocument: legalNotice
 ---
 
-# Legal notice
-
 ## 1. Website owner
 
 Owner: **[PENDING: full legal identity]**, publicly known as Guillermo Anta.

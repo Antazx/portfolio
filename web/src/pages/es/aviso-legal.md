@@ -6,8 +6,6 @@ locale: es
 legalDocument: legalNotice
 ---
 
-# Aviso legal
-
 ## 1. Titular
 
 Titular: **[PENDIENTE: identidad legal completa]**, conocido públicamente como Guillermo Anta.
