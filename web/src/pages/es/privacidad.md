@@ -8,7 +8,7 @@ legalDocument: privacy
 
 Última actualización: **[PENDIENTE: fecha de aprobación y entrada en vigor]**.
 
-Esta política explica cómo se tratarían los datos personales relacionados con el portfolio de Guillermo Anta. Los tratamientos de contacto y newsletter descritos a continuación solo se llevarán a cabo cuando sus respectivos servicios estén operativos.
+Esta política informa sobre los datos personales tratados en relación con el portfolio de Guillermo Anta. El sitio muestra una dirección de correo de contacto. La dirección definitiva para consultas y solicitudes de derechos debe confirmarse antes de publicar esta política. El formulario del sitio y la newsletter están desactivados; los tratamientos previstos para ellos solo se realizarán si esos servicios se activan.
 
 ## 1. Responsable
 
@@ -16,21 +16,21 @@ Responsable: **[PENDIENTE: identidad legal completa]**, conocido públicamente c
 
 Domicilio: **[PENDIENTE: domicilio que indique la abogada]**. NIF: **[PENDIENTE: confirmar si debe publicarse aquí]**.
 
-Correo de contacto: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev).
+Correo de contacto: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev). **[PENDIENTE: confirmar que este alias funciona con el correo que muestra el portfolio y puede recibir solicitudes de derechos; identificar el proveedor del buzón.]**
 
 Delegado de protección de datos: **[PENDIENTE: confirmar si corresponde; no se ha identificado uno para este borrador]**.
 
-## 2. Datos y finalidades
+## 2. Datos, origen y finalidades
 
-**Consultas de contacto.** Cuando el formulario esté operativo, se podrán tratar nombre, correo electrónico, mensaje e idioma elegido para leer y responder a la consulta. La función también puede recibir datos técnicos, incluida la IP, para controles contra abuso. La consulta no se añadirá a una lista de marketing.
+**Consultas de contacto.** Si se activa el formulario, se tratarán el nombre, correo electrónico, mensaje e idioma elegido para leer y responder a la consulta. En ese caso, la función usará la IP para limitar abusos y se prevé usar Brevo para enviar la consulta. Si escribes a la dirección de contacto que se confirme, el contenido del mensaje y los datos que incluyas se tratarán para responderte; el proveedor del buzón gestionará su entrega.
 
-El formulario no funciona actualmente en producción. Mientras tanto, puedes escribir a la dirección de contacto indicada arriba; si lo haces, el contenido de tu mensaje y los datos incluidos en él se tratarán para responderte.
+Los datos de una consulta proceden del mensaje que envíes. Si se activa el formulario, también procederán de los campos que completes y de los datos técnicos que utilice la función para controles contra abuso. Las consultas no se incorporarán a una lista de marketing.
 
-**Newsletter.** La newsletter está desactivada. Si se habilita, se tratarán el correo electrónico, el idioma elegido, la solicitud de alta, la confirmación de suscripción y los datos necesarios para registrar una baja y respetarla. Se usarían para enviar novedades del portfolio en el idioma elegido. No se enviarán campañas mientras el servicio siga desactivado.
+**Newsletter.** Si se habilita, se tratarán el correo electrónico, el idioma elegido, la solicitud y confirmación de alta y los datos necesarios para registrar una baja y respetarla. Se usarían para enviar novedades del portfolio en el idioma elegido mediante la integración prevista con Brevo. No se enviarán campañas mientras el servicio siga desactivado.
 
-**Funcionamiento y seguridad.** El alojamiento puede generar datos técnicos necesarios para entregar y proteger el sitio, como fecha, ruta solicitada, resultado de la petición o IP. El detalle de los registros depende de la configuración efectiva del proveedor y está pendiente de verificar.
+**Funcionamiento y seguridad.** La visita al sitio y los sistemas del proveedor pueden generar datos técnicos necesarios para entregar y proteger la página, como fecha, ruta solicitada, resultado de la petición o IP. El detalle de los registros depende de la configuración efectiva y está pendiente de verificar.
 
-**Preferencia de tema.** El sitio guarda en el almacenamiento local del navegador la preferencia entre tema claro y oscuro. El código no usa esa preferencia para identificarte ni crear perfiles. La abogada confirmará si requiere información o medidas adicionales.
+**Preferencia de tema.** Al cambiar el tema, el sitio guarda en el almacenamiento local del navegador la preferencia entre tema claro y oscuro. El código no la usa para identificarte ni crear perfiles. El valor permanece en ese navegador hasta que se cambie o se borre. La abogada confirmará qué información o medidas requiere este almacenamiento.
 
 No se ha activado analítica ni seguimiento publicitario, según la información facilitada por el titular.
 
@@ -38,26 +38,31 @@ No se ha activado analítica ni seguimiento publicitario, según la información
 
 La base jurídica y, cuando proceda, el interés legítimo aplicable a cada tratamiento deben confirmarse antes de publicar esta política:
 
-- Consultas de contacto: **[PENDIENTE: base jurídica y ponderación, si corresponde]**.
-- Newsletter: **[PENDIENTE: confirmar consentimiento y cómo se registra y acredita]**.
+- Consultas recibidas directamente por correo electrónico: **[PENDIENTE: base jurídica y ponderación, si corresponde]**.
+- Formulario de contacto previsto: **[PENDIENTE: confirmar base jurídica y texto informativo antes de activarlo]**.
+- Newsletter: **[PENDIENTE: confirmar consentimiento y cómo se registra y acredita antes de activarla]**.
 - Seguridad y registros técnicos: **[PENDIENTE: base jurídica y necesidad de cada registro]**.
+- Preferencia de tema en almacenamiento local: **[PENDIENTE: confirmar si aplica el artículo 22.2 LSSI y, si se tratan datos personales, la base jurídica correspondiente]**.
+- Obligaciones legales: **[PENDIENTE: confirmar si generan tratamientos aplicables y qué datos/plazos implican]**.
 
-La entrega de los datos requeridos para una consulta o suscripción será voluntaria, pero sin ellos no se podrá responder o gestionar la suscripción correspondiente.
+Facilitar datos para contactar o solicitar una futura suscripción es voluntario, pero sin los datos mínimos de contacto no podremos responder y sin los datos de alta no podremos gestionar la suscripción. Si existieran tratamientos necesarios para cumplir obligaciones legales, se identificarán por separado.
 
 ## 4. Conservación
 
 Los plazos o criterios de conservación están pendientes de definir con la abogada y de contrastar con las cuentas y contratos reales:
 
 - consultas y mensajes recibidos por correo: **[PENDIENTE]**;
+- datos del formulario, si se activa: **[PENDIENTE]**;
 - datos de suscripción y evidencia de consentimiento: **[PENDIENTE]**;
 - bajas o bloqueos necesarios para respetar la oposición a futuros envíos: **[PENDIENTE]**;
-- logs técnicos y controles contra abuso: **[PENDIENTE]**.
+- logs técnicos y controles contra abuso: **[PENDIENTE]**;
+- preferencia de tema guardada en el navegador: permanece hasta que se cambie o se borre en ese navegador.
 
 ## 5. Proveedores y destinatarios
 
-La arquitectura del sitio está preparada para usar Netlify para alojamiento y funciones, Sanity para contenido editorial y Brevo para correo transaccional y la newsletter prevista. La configuración productiva, las entidades jurídicas contratadas y el papel de cada proveedor deben comprobarse antes de publicar.
+La configuración del proyecto integra Netlify para alojar el sitio y sus funciones; Sanity gestiona el contenido editorial. El formulario de contacto y la newsletter tienen prevista una integración con Brevo, pero ambos servicios están desactivados. El correo directo también pasa por el proveedor que aloja el buzón, que debe identificarse.
 
-Proveedores, subencargados, destinatarios, ubicaciones de datos y posibles transferencias internacionales: **[PENDIENTE: completar a partir de cuentas, contratos y documentación vigentes]**.
+Entidades contratadas, papel de cada proveedor, datos a los que accede por canal, subencargados, ubicaciones y posibles transferencias internacionales —incluidas las garantías y cómo obtener información sobre ellas—: **[PENDIENTE: verificar con las cuentas, contratos y documentación vigentes]**. También debe confirmarse si Sanity recibe datos personales de visitantes o solo contenido editorial.
 
 Las consultas de contacto no se incorporarán a la audiencia de marketing. La newsletter, si se activa, tendrá un flujo independiente.
 
@@ -65,13 +70,13 @@ Las consultas de contacto no se incorporarán a la audiencia de marketing. La ne
 
 Puedes solicitar acceso, rectificación, supresión, limitación u oposición al tratamiento y, cuando corresponda, portabilidad. Si un tratamiento se basa en consentimiento, puedes retirarlo en cualquier momento; la retirada no afecta a lo realizado previamente.
 
-Para ejercer tus derechos, escribe a [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev). Podemos pedir información adicional únicamente cuando sea necesaria para verificar tu identidad.
+Para ejercer tus derechos, utiliza el correo indicado en el apartado 1 una vez confirmado y publicado. Podemos pedir información adicional únicamente cuando sea necesaria para verificar tu identidad. También puedes reclamar ante la autoridad de control competente.
 
-Autoridad de control y procedimiento de reclamación: **[PENDIENTE: confirmar autoridad competente y redacción con la abogada]**.
+Autoridad de control y datos para presentar una reclamación: **[PENDIENTE: confirmar con la abogada si corresponde la AEPD y qué información de contacto incluir]**.
 
 ## 7. Newsletter y bajas
 
-La newsletter está desactivada. Si se habilita, la suscripción requerirá una acción afirmativa y el mecanismo de confirmación definido para el servicio. Cada comunicación incluirá un medio para darse de baja. La baja impedirá nuevos envíos de newsletter; no cambia el tratamiento independiente de una consulta de contacto.
+Si se habilita, la suscripción requerirá una acción afirmativa y el mecanismo de confirmación definido para el servicio. Cada comunicación incluirá un medio para darse de baja. La baja impedirá nuevos envíos de newsletter; no cambia el tratamiento independiente de una consulta de contacto.
 
 ## 8. Seguridad y cambios
 
