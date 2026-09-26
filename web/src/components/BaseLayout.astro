@@ -1,6 +1,7 @@
 ---
 import {Image} from 'astro:assets'
 import '../styles/global.css'
+import {legalPaths} from '../lib/legal'
 import {localizedPath, siteCopy, type Locale} from '../lib/locales'
 import {absoluteUrl, localeTag, serializeJsonLd, siteOrigin} from '../lib/seo'
 
@@ -142,6 +143,10 @@ const schemas = [...siteSchemas, ...structuredData]
             </svg>
             <span>{copy.social.github}</span>
           </a>
+        </nav>
+        <nav class="footer-legal" aria-label={copy.legalNavigationLabel}>
+          <a href={legalPaths[locale].privacy}>{copy.privacyLabel}</a>
+          <a href={legalPaths[locale].legalNotice}>{copy.legalNoticeLabel}</a>
         </nav>
         <span>{copy.footerRole}</span>
       </div>

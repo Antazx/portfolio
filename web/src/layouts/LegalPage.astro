@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../components/BaseLayout.astro'
+import {legalPaths, type LegalDocument} from '../lib/legal'
+import type {Locale} from '../lib/locales'
+
+interface Props {
+  frontmatter: {
+    description: string
+    legalDocument: LegalDocument
+    locale: Locale
+    title: string
+  }
+}
+
+const {frontmatter} = Astro.props
+const {description, legalDocument, locale, title} = frontmatter
+const languageLinks = {
+  es: legalPaths.es[legalDocument],
+  en: legalPaths.en[legalDocument],
+}
+---
+
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={description}
+  canonicalPath={legalPaths[locale][legalDocument]}
+  languageLinks={languageLinks}
+  alternatePaths={languageLinks}
+>
+  <article class="shell legal-page">
+    <slot />
+  </article>
+</BaseLayout>

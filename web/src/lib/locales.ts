@@ -11,6 +11,9 @@ type SiteCopy = {
   blogLabel: string
   newsletterLabel: string
   contactLabel: string
+  legalNavigationLabel: string
+  privacyLabel: string
+  legalNoticeLabel: string
   theme: {
     toLight: string
     toDark: string
@@ -33,6 +36,9 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     blogLabel: 'Blog',
     newsletterLabel: 'Newsletter',
     contactLabel: 'Contacto',
+    legalNavigationLabel: 'Información legal',
+    privacyLabel: 'Privacidad',
+    legalNoticeLabel: 'Aviso legal',
     theme: {
       toLight: 'Cambiar a tema claro',
       toDark: 'Cambiar a tema oscuro',
@@ -53,6 +59,9 @@ export const siteCopy: Record<Locale, SiteCopy> = {
     blogLabel: 'Blog',
     newsletterLabel: 'Newsletter',
     contactLabel: 'Contact',
+    legalNavigationLabel: 'Legal information',
+    privacyLabel: 'Privacy policy',
+    legalNoticeLabel: 'Legal notice',
     theme: {
       toLight: 'Switch to light theme',
       toDark: 'Switch to dark theme',
