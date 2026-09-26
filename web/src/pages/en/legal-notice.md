@@ -6,38 +6,52 @@ locale: en
 legalDocument: legalNotice
 ---
 
-## 1. Website owner
+## 1. Registration details and general information
+
+This website, available at `guillermoanta.dev`, provides professional information about Guillermo Anta, his projects, and publications. Public content is free to access. The site does not currently offer online contracting or payments. The contact form is not working in production and the newsletter is inactive.
 
 Owner: **[PENDING: full legal identity]**, publicly known as Guillermo Anta.
-
-Domain: `guillermoanta.dev`.
 
 Address: **[PENDING: confirm with the lawyer]**. Tax ID: **[PENDING: confirm]**.
 
 Email: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev).
 
-Public register, administrative authorisation, or regulated-profession details: **[PENDING: confirm whether any apply]**.
+Public-register, administrative-authorisation, or regulated-profession details: **[PENDING: confirm whether any apply]**.
 
-## 2. Purpose
+## 2. Access and acceptable use
 
-This site presents Guillermo Anta’s professional information, projects, and publications. It does not currently offer online contracting or payments. The contact form is not currently working in production and the newsletter is inactive.
+Visitors must use the site in compliance with applicable law. They must not interfere with its availability, security, or operation, or infringe the rights of others.
 
-## 3. Terms of use
+## 3. Content and intellectual and industrial property rights
 
-Visitors must use the site lawfully and must not interfere with its availability, security, or other people’s rights. Any further terms, their scope, and liability limitations remain subject to legal review.
+Text, designs, projects, images, trademarks, and other content may belong to the owner or to third parties. Ownership, applicable licences, and attribution will be checked before the final version is published.
 
-## 4. Content and intellectual property
+Unless a licence or permission says otherwise, access to the site does not grant rights to reproduce, transform, distribute, or exploit protected content. To report a possible rights infringement, email [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev) and identify the affected content.
 
-Text, designs, projects, and images may belong to the owner or to third parties. Ownership, applicable licences, and attribution will be checked before the final version is published. Unless a licence or permission says otherwise, access to the site does not grant permission to reproduce protected material.
+## 4. Links to third-party websites
 
-## 5. External links and availability
+The site may link to external pages or services for information. The owner does not control those sites, their content, policies, or availability. A link does not imply recommendation, affiliation, or endorsement. The destination service’s terms apply when visitors follow a link.
 
-The site may link to third-party services. The owner does not control their content or policies; the destination service’s terms apply when following those links.
+## 5. Changes, availability, and liability
 
-Availability depends on external technical services. Wording on interruptions, errors, and liability remains subject to legal review.
+The owner may update, change, or remove content and alter the site’s presentation. Access may also be temporarily interrupted for maintenance, technical incidents, or reasons related to external providers.
 
-## 6. Governing law and contact
+The owner will try to keep information current and correct errors when found, but cannot guarantee uninterrupted or error-free availability. Any limits on liability apply only to the extent permitted by applicable law and do not exclude non-waivable rights.
 
-Governing law, jurisdiction, and dispute resolution: **[PENDING: determine with the lawyer based on the owner, activity, and users]**.
+## 6. Personal data
+
+Information about personal data processed through the site and visitors’ rights is set out in the [privacy policy](/en/privacy/). This page does not replace that policy.
+
+## 7. Language
+
+This notice is available in Spanish and English. **[PENDING: confirm with the lawyer which version controls if the texts differ.]**
+
+## 8. Governing law and jurisdiction
+
+Applicable law, jurisdiction, and courts: **[PENDING: determine with the lawyer based on the owner, activity, and users]**.
+
+## 9. Out-of-court dispute resolution
+
+The site does not currently offer online purchases or contracting. **[PENDING: confirm with the lawyer whether information about an out-of-court dispute-resolution entity or procedure is required and, if so, add its details.]**
 
 Website enquiries: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev).
