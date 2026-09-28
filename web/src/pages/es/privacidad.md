@@ -14,8 +14,6 @@ Esta política informa sobre los datos personales tratados en relación con el p
 
 Responsable: **[PENDIENTE: identidad legal completa]**, conocido públicamente como Guillermo Anta.
 
-Domicilio: **[PENDIENTE: domicilio que indique la abogada]**. NIF: **[PENDIENTE: confirmar si debe publicarse aquí]**.
-
 Correo de contacto: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev). **[PENDIENTE: confirmar que este alias funciona con el correo que muestra el portfolio y puede recibir solicitudes de derechos; identificar el proveedor del buzón.]**
 
 Delegado de protección de datos: **[PENDIENTE: confirmar si corresponde; no se ha identificado uno para este borrador]**.

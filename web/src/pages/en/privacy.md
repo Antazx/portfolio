@@ -14,8 +14,6 @@ This policy explains how personal data relating to Guillermo Anta’s portfolio 
 
 Controller: **[PENDING: full legal identity]**, publicly known as Guillermo Anta.
 
-Address: **[PENDING: address approved by the lawyer]**. Tax ID: **[PENDING: confirm whether it must be published here]**.
-
 Contact: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev). **[PENDING: confirm that this alias works with the email currently shown on the site and can receive rights requests; identify the mailbox provider.]**
 
 Data protection officer: **[PENDING: confirm whether one is required; none has been identified for this draft]**.

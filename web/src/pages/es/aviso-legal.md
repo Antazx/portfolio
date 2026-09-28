@@ -12,7 +12,7 @@ Este sitio web, disponible en `guillermoanta.dev`, ofrece información profesion
 
 Titular: **[PENDIENTE: identidad legal completa]**, conocido públicamente como Guillermo Anta.
 
-Domicilio: **[PENDIENTE: confirmar con la abogada]**. NIF: **[PENDIENTE: confirmar]**.
+Datos de identificación adicionales que deban publicarse conforme a la LSSI, si corresponde: **[PENDIENTE: confirmar con la abogada si este portfolio entra en su ámbito de aplicación y, solo en ese caso, qué información debe incluirse.]**
 
 Correo electrónico: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev).
 

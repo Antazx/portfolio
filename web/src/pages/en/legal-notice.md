@@ -12,7 +12,7 @@ This website, available at `guillermoanta.dev`, provides professional informatio
 
 Owner: **[PENDING: full legal identity]**, publicly known as Guillermo Anta.
 
-Address: **[PENDING: confirm with the lawyer]**. Tax ID: **[PENDING: confirm]**.
+Additional identification details required under the LSSI, if any: **[PENDING: confirm with the lawyer whether this portfolio falls within its scope and, only if so, what information must be included.]**
 
 Email: [contact@guillermoanta.dev](mailto:contact@guillermoanta.dev).
 
