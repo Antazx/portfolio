@@ -52,27 +52,11 @@ export function isEligiblePost(post: LocalizedPost | null | undefined, now = new
 
 export function isValidWebhookSignature(rawBody: string, header: string | null | undefined, secret: string) {
   if (!header || !secret) return false
-  const expected = createHmac('sha256', secret).update(rawBody).digest()
-  const candidates = header
-    .split(',')
-    .map((part) => part.trim())
-    .flatMap((part) => {
-      const value = /^(?:v1|sig|signature|sha256)(?:=|:)/i.test(part) ? part.slice(part.indexOf('=') >= 0 ? part.indexOf('=') + 1 : part.indexOf(':') + 1) : part
-      return [value.replace(/^s:/, '')]
-    })
-  return candidates.some((candidate) => {
-    const decoded = decodeSignature(candidate)
-    return decoded ? decoded.length === expected.length && timingSafeEqual(decoded, expected) : false
-  })
-}
-
-function decodeSignature(value: string) {
-  if (/^[a-f0-9]{64}$/i.test(value)) return Buffer.from(value, 'hex')
-  try {
-    return Buffer.from(value, 'base64')
-  } catch {
-    return null
-  }
+  const match = /^t=(\d+)[, ]+v1=([A-Za-z0-9_-]+)$/.exec(header)
+  if (!match || Number(match[1]) < 1609459200000 || !Number.isSafeInteger(Number(match[1]))) return false
+  const expected = createHmac('sha256', secret).update(`${match[1]}.${rawBody}`).digest()
+  const received = Buffer.from(match[2], 'base64url')
+  return received.length === expected.length && timingSafeEqual(received, expected)
 }
 
 export function normalizePostId(value: unknown) {

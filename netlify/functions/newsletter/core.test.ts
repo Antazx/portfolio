@@ -21,9 +21,11 @@ test('eligibility requires the editorial flag, valid date and both translations'
 
 test('webhook signature accepts Sanity style and rejects tampering', () => {
   const body = JSON.stringify({documentId: 'post-1'})
-  const digest = createHmac('sha256', 'secret').update(body).digest('base64')
-  assert.equal(isValidWebhookSignature(body, `s:${digest}`, 'secret'), true)
-  assert.equal(isValidWebhookSignature(`${body} `, `s:${digest}`, 'secret'), false)
+  const timestamp = String(Date.now())
+  const digest = createHmac('sha256', 'secret').update(`${timestamp}.${body}`).digest('base64url')
+  const signature = `t=${timestamp},v1=${digest}`
+  assert.equal(isValidWebhookSignature(body, signature, 'secret'), true)
+  assert.equal(isValidWebhookSignature(`${body} `, signature, 'secret'), false)
 })
 
 test('webhook operation accepts Sanity headers and ignores deletes', () => {
