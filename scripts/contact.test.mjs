@@ -1,7 +1,7 @@
 import {test} from 'node:test'
 import assert from 'node:assert/strict'
 
-import {createContactHandler} from './contact.mjs'
+import {createContactHandler} from '../netlify/functions/contact.mjs'
 
 const baseEnv = {
   PORTFOLIO_CONTACT_MODE: 'test',
