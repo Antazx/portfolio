@@ -64,9 +64,9 @@ El correo Gmail del destinatario no se convierte automáticamente en remitente. 
 ### 4.1. Suscripción e idioma
 
 - Formulario nativo de Brevo, integrado en `/es/blog/` y `/en/blog/`; enlace desde el footer global. Se evita repetir un formulario completo en cada página.
-- Campos: email, elección explícita de idioma `es`/`en` y aceptación específica de newsletter. No se pide nombre ni se infiere idioma por IP.
+- Campos: email, elección explícita de idioma enviada a Brevo como `ES`/`EN` y aceptación específica de newsletter. No se pide nombre ni se infiere idioma por IP.
 - Interfaz ES/EN. La ruta puede preseleccionar el idioma, pero el visitante puede cambiarlo.
-- Un atributo de contacto exclusivo, `PORTFOLIO_LANGUAGE`, guarda una sola preferencia. No hay fallback de un idioma al otro.
+- Un atributo de contacto exclusivo, `PORTFOLIO_LANGUAGE`, guarda una sola preferencia con los valores exactos `ES` o `EN`. No hay fallback de un idioma al otro.
 - Double opt-in de Brevo. Una solicitud pendiente no pertenece a la audiencia enviable. La prueba debe incluir también un email que ya exista en la cuenta por otro motivo.
 - Una lista `portfolio-newsletter-production` y otra `portfolio-newsletter-test`. Nombres propuestos; IDs reales pendientes.
 - Un segmento enviable por entorno: pertenencia a su lista, consentimiento confirmado, idioma válido y ausencia de baja/bloqueo. Producción excluye además miembros de la lista de pruebas.
@@ -84,7 +84,7 @@ Brevo documenta condiciones por atributos dentro del contenido. Su aplicación a
 
 El asunto inicial será neutro: `Guillermo Anta Alonso · {fecha ISO de publicación}`; no habrá preheader añadido sin localizar. El título traducido aparecerá dentro del mensaje. Esto evita depender de condiciones en el asunto no verificadas. Localizar también el asunto con el título se podrá aprobar tras validar soporte real, sin introducir otra campaña por idioma.
 
-Solo los valores `es` y `en` son enviables. Un idioma vacío o inválido bloquea la inclusión en la audiencia; no genera un correo vacío ni usa castellano por defecto. El idioma vigente al procesar el envío en Brevo determina la versión; un cambio posterior afecta a publicaciones siguientes, sin reenvío.
+Solo los valores `ES` y `EN` son enviables. Un idioma vacío o inválido bloquea la inclusión en la audiencia; no genera un correo vacío ni usa castellano por defecto. El idioma vigente al procesar el envío en Brevo determina la versión; un cambio posterior afecta a publicaciones siguientes, sin reenvío.
 
 Se usa una campaña real sobre el segmento de pruebas para comprobar personalización, exclusión, baja y recepción. Una previsualización o `sendTest` aislado no sustituye esta prueba. Si falla la personalización por API, se revisará esta decisión antes de continuar; no se activará un fallback bilingüe.
 
