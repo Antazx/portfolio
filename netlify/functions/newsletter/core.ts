@@ -106,6 +106,8 @@ export function escapeHtml(value: string) {
     .replace(/[&<>"']/g, (character) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[character] ?? character))
     .replaceAll('{{', '&#123;&#123;')
     .replaceAll('}}', '&#125;&#125;')
+    .replaceAll('{%', '&#123;%')
+    .replaceAll('%}', '%&#125;')
 }
 
 export function safeHttpsUrl(value: string) {
@@ -128,7 +130,7 @@ export function renderNewsletterHtml(post: LocalizedPost, urls: {es: string; en:
     const articleUrl = locale === 'es' ? urls.es : urls.en
     return `<section lang="${locale}"><p>${labels.date}: ${escapeHtml(date)}</p><h1>${escapeHtml(content.title)}</h1><p>${escapeHtml(content.excerpt)}</p><p><a href="${escapeHtml(articleUrl)}">${labels.read}</a></p><p><a href="${escapeHtml(privacy)}">${labels.privacy}</a> · <a href="{{ update_profile }}">${labels.manage}</a> · <a href="{{ unsubscribe }}">${labels.unsubscribe}</a></p></section>`
   }
-  return `<!doctype html><html><body>{{ if contact.PORTFOLIO_LANGUAGE == "ES" }}${block('es')}{{ endif }}{{ if contact.PORTFOLIO_LANGUAGE == "EN" }}${block('en')}{{ endif }}</body></html>`
+  return `<!doctype html><html><body>{% if contact.PORTFOLIO_LANGUAGE == "ES" %}${block('es')}{% endif %}{% if contact.PORTFOLIO_LANGUAGE == "EN" %}${block('en')}{% endif %}</body></html>`
 }
 
 export function sanitizedError(code: string, status?: number) {
