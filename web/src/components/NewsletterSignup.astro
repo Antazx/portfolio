@@ -23,6 +23,8 @@ const copy = {
     pendingLink: 'Ya he enviado el formulario',
     confirmationLink: 'Ir a la confirmación',
     privacyLink: 'Política de privacidad',
+    submitError: 'No hemos podido tramitar tu suscripción. Inténtalo de nuevo.',
+    networkError: 'No hemos podido conectar con Brevo. Inténtalo de nuevo más tarde.',
   },
   en: {
     eyebrow: 'Newsletter',
@@ -37,6 +39,8 @@ const copy = {
     pendingLink: 'I have already submitted the form',
     confirmationLink: 'Go to confirmation',
     privacyLink: 'Privacy policy',
+    submitError: 'We could not process your subscription. Please try again.',
+    networkError: 'We could not connect to Brevo. Please try again later.',
   },
 }[locale]
 const emailId = `newsletter-email-${locale}`
@@ -54,7 +58,16 @@ const brevoLanguageValue = locale === 'es' ? '1' : '2'
   </div>
 
   {config.enabled ? (
-    <form id={formId} class="newsletter-form" action={config.formUrl} method="post">
+    <form
+      id={formId}
+      class="newsletter-form"
+      action={config.formUrl}
+      method="post"
+      data-newsletter-form
+      data-pending-url={localizedPath(locale, 'newsletter/pendiente')}
+      data-submit-error={copy.submitError}
+      data-network-error={copy.networkError}
+    >
       <div class="form-field">
         <label for={emailId}>{copy.emailLabel}</label>
         <input id={emailId} name="EMAIL" type="email" autocomplete="email" maxlength="254" required aria-describedby={`${emailId}-help`} />
@@ -73,6 +86,7 @@ const brevoLanguageValue = locale === 'es' ? '1' : '2'
 
       <p class="form-help"><a href={legalPaths[locale].privacy}>{copy.privacyLink}</a></p>
       <button class="button" type="submit">{copy.submit}</button>
+      <p class="newsletter-form-error" data-newsletter-status role="alert" tabindex="-1" hidden></p>
       <p class="newsletter-status-links">
         <a href={localizedPath(locale, 'newsletter/pendiente')}>{copy.pendingLink}</a>
         <a href={localizedPath(locale, 'newsletter/confirmacion')}>{copy.confirmationLink}</a>
@@ -85,3 +99,52 @@ const brevoLanguageValue = locale === 'es' ? '1' : '2'
     </div>
   )}
 </section>
+
+<script is:inline>
+  const form = document.querySelector('[data-newsletter-form]')
+
+  if (form instanceof HTMLFormElement) {
+    const submit = form.querySelector('button[type="submit"]')
+    const status = form.querySelector('[data-newsletter-status]')
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      if (!(submit instanceof HTMLButtonElement) || !(status instanceof HTMLElement)) return
+
+      submit.disabled = true
+      form.setAttribute('aria-busy', 'true')
+      status.hidden = true
+      status.textContent = ''
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams(new FormData(form)),
+        })
+        const result = await response.json()
+
+        if (response.ok && result?.success === true) {
+          window.location.assign(form.dataset.pendingUrl)
+          return
+        }
+
+        const detail = result?.errors && typeof result.errors === 'object'
+          ? Object.values(result.errors).find((message) => typeof message === 'string')
+          : undefined
+        status.textContent = [form.dataset.submitError, detail].filter(Boolean).join(' ')
+      } catch {
+        status.textContent = form.dataset.networkError ?? ''
+      } finally {
+        submit.disabled = false
+        form.removeAttribute('aria-busy')
+      }
+
+      status.hidden = false
+      status.focus()
+    })
+  }
+</script>

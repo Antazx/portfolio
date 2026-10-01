@@ -244,6 +244,7 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .newsletter-consent label { display: inline-flex; align-items: flex-start; gap: var(--space-1); font-weight: 400; }
 .newsletter-consent input { flex: none; margin-top: .35em; accent-color: var(--accent); }
 .form-help { margin: 0; color: var(--muted); font-size: .875rem; }
+.newsletter-form-error { margin: 0; color: var(--accent); font-size: .875rem; }
 .newsletter-status-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; color: var(--muted); font-size: .875rem; }
 .newsletter-status-links a { text-decoration-color: var(--accent); text-underline-offset: 4px; }
 .newsletter-unavailable { max-width: 52rem; border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-3); color: var(--muted); }

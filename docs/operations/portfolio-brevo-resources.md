@@ -127,8 +127,11 @@ formulario HTTPS pertenecen a Brevo; `production` permanece desactivado.
 La validación externa sigue bloqueada hasta disponer de
 `PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID` y de
 `PORTFOLIO_NEWSLETTER_FORM_URL_ES`/`PORTFOLIO_NEWSLETTER_FORM_URL_EN`, revisar
-que ambos formularios aplican double opt-in y redirigen a los estados propios,
-y probar baja, cambio de idioma y exclusión de contactos no confirmados. No se
+que ambos formularios aplican double opt-in. El portfolio interpreta la respuesta
+JSON de Brevo y solo abre `/{lang}/newsletter/pendiente/` si recibe
+`success: true`; la redirección tras pulsar el enlace de confirmación se
+configura en Brevo hacia `/{lang}/newsletter/confirmacion/`. Falta probar
+la baja, el cambio de idioma y la exclusión de contactos no confirmados. No se
 han inventado URLs, IDs ni valores de proveedor.
 
 ## PB-03: estado de automatización por publicación
