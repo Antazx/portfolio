@@ -57,6 +57,7 @@ export type PortfolioCopy = {
     emailFieldLabel: string
     messageLabel: string
     privacyLabel: string
+    privacyLinkLabel: string
     submitLabel: string
     networkError: string
     emailFallbackLabel: string
@@ -203,6 +204,7 @@ export const portfolio = {
       emailFieldLabel: 'Email',
       messageLabel: 'Mensaje',
       privacyLabel: 'He leído el aviso de privacidad y acepto el tratamiento de esta consulta.',
+      privacyLinkLabel: 'Leer aviso de privacidad',
       submitLabel: 'Enviar mensaje',
       networkError: 'No se ha podido confirmar la entrega. Inténtalo de nuevo o usa el enlace de email.',
       emailFallbackLabel: 'Escribirme por email',
@@ -347,6 +349,7 @@ export const portfolio = {
       emailFieldLabel: 'Email',
       messageLabel: 'Message',
       privacyLabel: 'I have read the privacy notice and accept the processing of this enquiry.',
+      privacyLinkLabel: 'Read privacy notice',
       submitLabel: 'Send message',
       networkError: 'Unable to confirm delivery. Please try again or use the email link.',
       emailFallbackLabel: 'Email me instead',

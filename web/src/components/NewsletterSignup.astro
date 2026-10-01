@@ -1,5 +1,6 @@
 ---
 import {localizedPath, type Locale} from '../lib/locales'
+import {legalPaths} from '../lib/legal'
 import {newsletterSignupConfig} from '../lib/newsletter'
 
 interface Props {
@@ -24,6 +25,7 @@ const copy = {
     unavailable: 'La suscripción está temporalmente desactivada mientras terminamos de validar Brevo.',
     pendingLink: 'Ya he enviado el formulario',
     confirmationLink: 'Ir a la confirmación',
+    privacyLink: 'Política de privacidad',
   },
   en: {
     eyebrow: 'Newsletter',
@@ -40,6 +42,7 @@ const copy = {
     unavailable: 'Subscription is temporarily disabled while we finish validating Brevo.',
     pendingLink: 'I have already submitted the form',
     confirmationLink: 'Go to confirmation',
+    privacyLink: 'Privacy policy',
   },
 }[locale]
 const emailId = `newsletter-email-${locale}`
@@ -65,11 +68,10 @@ const formId = `newsletter-form-${locale}`
 
       <fieldset class="form-fieldset">
         <legend id={languageId}>{copy.languageLabel}</legend>
-        <div class="newsletter-language-options" aria-describedby={`${languageId}-help`}>
-          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="es" checked={locale === 'es'} required /> {copy.spanish}</label>
-          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="en" checked={locale === 'en'} required /> {copy.english}</label>
+        <div class="newsletter-language-options">
+          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="ES" checked={locale === 'es'} required /> {copy.spanish}</label>
+          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="EN" checked={locale === 'en'} required /> {copy.english}</label>
         </div>
-        <p id={`${languageId}-help`} class="form-help">{copy.languageLabel}</p>
       </fieldset>
 
       <div class="form-field newsletter-consent">
@@ -80,6 +82,7 @@ const formId = `newsletter-form-${locale}`
         <p id={`${consentId}-help`} class="form-help">{copy.consentHelp}</p>
       </div>
 
+      <p class="form-help"><a href={legalPaths[locale].privacy}>{copy.privacyLink}</a></p>
       <button class="button" type="submit">{copy.submit}</button>
       <p class="newsletter-status-links">
         <a href={localizedPath(locale, 'newsletter/pendiente')}>{copy.pendingLink}</a>
@@ -89,6 +92,7 @@ const formId = `newsletter-form-${locale}`
   ) : (
     <div class="newsletter-unavailable" role="status" aria-live="polite">
       <p>{copy.unavailable}</p>
+      <p><a href={legalPaths[locale].privacy}>{copy.privacyLink}</a></p>
     </div>
   )}
 </section>

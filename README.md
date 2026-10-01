@@ -29,7 +29,7 @@ Variables disponibles:
 
 - `PUBLIC_SANITY_PROJECT_ID`: identificador público del proyecto Sanity.
 - `PUBLIC_SANITY_DATASET`: dataset Sanity, normalmente `production`.
-- `PUBLIC_SITE_URL`: origen público, por ejemplo `https://portfolio.example.com`.
+- `PUBLIC_SITE_URL`: `https://guillermoanta.dev`.
 
 No guardes tokens ni secretos en Git.
 
@@ -67,7 +67,7 @@ CI ejecuta typegen, builds de web y Studio, instalación de Chromium y auditorí
 - Publish directory: `web/dist`
 - Node.js: `22.14.0`
 
-Configura las variables de Sanity y `PUBLIC_SITE_URL` en el entorno de Netlify. No hay dominio público por defecto.
+Dominio público canónico: `https://guillermoanta.dev`. Configura `PUBLIC_SITE_URL` y las variables de Sanity en el entorno de Netlify.
 
 Documentación adicional: [criterios del repositorio](./AGENTS.md), [accesibilidad](./docs/accessibility.md), [verificación de producción](./docs/production-verification.md) y [contexto de dominio](./CONTEXT.md).
 

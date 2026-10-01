@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../components/BaseLayout.astro'
+import {legalPaths, type LegalDocument} from '../lib/legal'
+import {siteCopy, type Locale} from '../lib/locales'
+
+interface Props {
+  frontmatter: {
+    description: string
+    legalDocument: LegalDocument
+    locale: Locale
+    title: string
+  }
+}
+
+const {frontmatter} = Astro.props
+const {description, legalDocument, locale, title} = frontmatter
+const copy = siteCopy[locale]
+const pageTitle = legalDocument === 'privacy' ? copy.privacyLabel : copy.legalNoticeLabel
+const languageLinks = {
+  es: legalPaths.es[legalDocument],
+  en: legalPaths.en[legalDocument],
+}
+---
+
+<BaseLayout
+  locale={locale}
+  title={title}
+  description={description}
+  canonicalPath={legalPaths[locale][legalDocument]}
+  languageLinks={languageLinks}
+  alternatePaths={languageLinks}
+>
+  <article class="legal-page" aria-labelledby="legal-title">
+    <p class="eyebrow">{copy.legalInformationLabel}</p>
+    <h1 id="legal-title">{pageTitle}</h1>
+    <p class="draft-label">{copy.draftLabel}</p>
+    <div class="legal-copy">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

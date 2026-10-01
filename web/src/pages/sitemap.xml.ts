@@ -1,4 +1,5 @@
 import {locales, localizedPath} from '../lib/locales'
+import {legalPaths} from '../lib/legal'
 import {postSlugsQuery, sanityClient} from '../lib/sanity'
 import {absoluteUrl} from '../lib/seo'
 
@@ -22,6 +23,7 @@ export async function GET() {
   const paths = [
     ...locales.map((locale) => localizedPath(locale)),
     ...locales.map((locale) => localizedPath(locale, 'blog')),
+    ...Object.values(legalPaths).flatMap((paths) => Object.values(paths)),
     ...postPaths.flat(),
   ]
   const urls = [...new Set(paths)].map((path) => absoluteUrl(path) ?? path)

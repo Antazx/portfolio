@@ -47,8 +47,8 @@ test('newsletter HTML escapes editorial content and keeps one locale block per p
   })
   assert.match(html, /Título &lt;seguro&gt;/)
   assert.doesNotMatch(html, /\{\{ignored\}\}/)
-  assert.match(html, /contact\.PORTFOLIO_LANGUAGE == "es"/)
-  assert.match(html, /contact\.PORTFOLIO_LANGUAGE == "en"/)
+  assert.match(html, /contact\.PORTFOLIO_LANGUAGE == "ES"/)
+  assert.match(html, /contact\.PORTFOLIO_LANGUAGE == "EN"/)
   assert.match(html, /\{\{ unsubscribe \}\}/)
 })
 

@@ -24,6 +24,7 @@ const localeCopy = {
     emailLabel: 'Email',
     messageLabel: 'Mensaje',
     privacyLabel: 'He leído el aviso de privacidad y acepto el tratamiento de esta consulta.',
+    privacyLinkLabel: 'Leer aviso de privacidad',
     submitLabel: 'Enviar mensaje',
   },
   en: {
@@ -41,6 +42,7 @@ const localeCopy = {
     emailLabel: 'Email',
     messageLabel: 'Message',
     privacyLabel: 'I have read the privacy notice and accept the processing of this enquiry.',
+    privacyLinkLabel: 'Read privacy notice',
     submitLabel: 'Send message',
   },
 }
@@ -285,6 +287,7 @@ function localizedValidation(locale, errors) {
 
 function htmlForm(locale, values, errors) {
   const copy = localeCopy[locale] ?? localeCopy.en
+  const privacyPath = locale === 'es' ? '/es/privacidad/' : '/en/privacy/'
   const field = (name, type, label, value, attributes = '') => `
     <label for="contact-${name}">${copy[label]}</label>
     <input id="contact-${name}" name="${name}" type="${type}" value="${escapeHtml(value)}" ${attributes} aria-invalid="${errors[name] ? 'true' : 'false'}" />
@@ -297,6 +300,7 @@ function htmlForm(locale, values, errors) {
     <textarea id="contact-message" name="message" maxlength="5000" minlength="10" required aria-invalid="${errors.message ? 'true' : 'false'}">${escapeHtml(values.message)}</textarea>
     ${errors.message ? `<p role="alert">${escapeHtml(errors.message)}</p>` : ''}
     <label><input type="checkbox" name="privacy" value="on" required ${values.privacy ? 'checked' : ''} /> ${copy.privacyLabel}</label>
+    <p><a href="${privacyPath}">${copy.privacyLinkLabel}</a></p>
     ${errors.privacy ? `<p role="alert">${escapeHtml(errors.privacy)}</p>` : ''}
     <label style="position:absolute;left:-10000px" aria-hidden="true">Company <input name="website" tabindex="-1" autocomplete="off" /></label>
     <button type="submit">${copy.submitLabel}</button>

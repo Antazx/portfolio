@@ -29,9 +29,9 @@ llevan prefijo `PUBLIC_` y no se exponen al navegador.
 | API key | `PORTFOLIO_BREVO_NEWSLETTER_API_KEY`, exclusiva de campañas | No verificada | Clave creada y guardada solo en Netlify |
 | Lista de producción | `portfolio-newsletter-production` | ID pendiente | Lista propia e ID registrado sin clave |
 | Lista de pruebas | `portfolio-newsletter-test` | ID pendiente | Lista distinta de producción |
-| Segmento de producción | Confirmados, idioma `es`/`en`, sin baja/bloqueo y fuera de test | ID pendiente | Criterios y pertenencia comprobados |
+| Segmento de producción | Confirmados, idioma `ES`/`EN`, sin baja/bloqueo y fuera de test | ID pendiente | Criterios y pertenencia comprobados |
 | Segmento de pruebas | Misma regla, limitado a contactos autorizados | ID pendiente | Criterios y pertenencia comprobados |
-| Atributo | `PORTFOLIO_LANGUAGE`, únicamente `es` o `en` | Pendiente de crear/verificar | Tipo, valores y cambio comprobados |
+| Atributo | `PORTFOLIO_LANGUAGE`, únicamente `ES` o `EN` | Pendiente de crear/verificar | Tipo, valores y cambio comprobados |
 | Remitente/dominio | Identidad del portfolio verificada | Pendiente | Dominio y sender verificados |
 | Formulario ES/EN | URLs `PORTFOLIO_NEWSLETTER_FORM_URL_ES/EN` | Pendiente | Formulario, DOI y páginas de resultado revisados |
 | Privacidad ES/EN | URLs `PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES/EN` | Pendiente | Páginas aprobadas y accesibles |
