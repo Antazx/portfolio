@@ -237,14 +237,12 @@ h1 { max-width: 9ch; margin-bottom: var(--space-3); font-size: clamp(3.5rem, 10v
 .contact-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .newsletter-section { border-top: 1px solid var(--border); padding-block: var(--space-6); }
 .newsletter-form { display: grid; gap: var(--space-3); max-width: 52rem; }
-.form-field, .form-fieldset { display: grid; gap: var(--space-1); }
-.form-field label, .form-fieldset legend { font-weight: 700; }
+.form-field { display: grid; gap: var(--space-1); }
+.form-field label { font-weight: 700; }
 .form-field input[type='email'] { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); }
-.form-field input[type='email']:focus-visible, .newsletter-form input[type='radio']:focus-visible, .newsletter-form input[type='checkbox']:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
-.form-fieldset { min-inline-size: 0; margin: 0; padding: 0; border: 0; }
-.newsletter-language-options { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-.newsletter-language-options label, .newsletter-consent label { display: inline-flex; align-items: flex-start; gap: var(--space-1); font-weight: 400; }
-.newsletter-language-options input, .newsletter-consent input { flex: none; margin-top: .35em; accent-color: var(--accent); }
+.form-field input[type='email']:focus-visible, .newsletter-form input[type='checkbox']:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.newsletter-consent label { display: inline-flex; align-items: flex-start; gap: var(--space-1); font-weight: 400; }
+.newsletter-consent input { flex: none; margin-top: .35em; accent-color: var(--accent); }
 .form-help { margin: 0; color: var(--muted); font-size: .875rem; }
 .newsletter-status-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; color: var(--muted); font-size: .875rem; }
 .newsletter-status-links a { text-decoration-color: var(--accent); text-underline-offset: 4px; }

@@ -64,8 +64,8 @@ El correo Gmail del destinatario no se convierte automáticamente en remitente. 
 ### 4.1. Suscripción e idioma
 
 - Formulario nativo de Brevo, integrado en `/es/blog/` y `/en/blog/`; enlace desde el footer global. Se evita repetir un formulario completo en cada página.
-- Campos: email, elección explícita de idioma enviada a Brevo como `ES`/`EN` y aceptación específica de newsletter. No se pide nombre ni se infiere idioma por IP.
-- Interfaz ES/EN. La ruta puede preseleccionar el idioma, pero el visitante puede cambiarlo.
+- Campos: email, idioma fijado por la ruta (`/es` o `/en`) y aceptación específica de newsletter. No se pide nombre ni se infiere idioma por IP.
+- La ruta usa su formulario Brevo correspondiente y envía `PORTFOLIO_LANGUAGE` como `1` para ES o `2` para EN, según los valores del HTML generado por Brevo. El contacto conserva la categoría `ES` o `EN`; el visitante no cambia idioma en el formulario.
 - Un atributo de contacto exclusivo, `PORTFOLIO_LANGUAGE`, guarda una sola preferencia con los valores exactos `ES` o `EN`. No hay fallback de un idioma al otro.
 - Double opt-in de Brevo. Una solicitud pendiente no pertenece a la audiencia enviable. La prueba debe incluir también un email que ya exista en la cuenta por otro motivo.
 - Una lista `portfolio-newsletter-production` y otra `portfolio-newsletter-test`. Nombres propuestos; IDs reales pendientes.

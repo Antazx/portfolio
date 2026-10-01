@@ -16,9 +16,6 @@ const copy = {
     intro: 'Una selección de notas sobre ingeniería de software, arquitectura y trabajo con IA.',
     emailLabel: 'Correo electrónico',
     emailHelp: 'Usaremos este correo únicamente para la newsletter del portfolio.',
-    languageLabel: '¿En qué idioma quieres recibirla?',
-    spanish: 'Castellano',
-    english: 'Inglés',
     consent: 'Acepto recibir la newsletter del portfolio.',
     consentHelp: 'Después de enviar el formulario tendrás que confirmar tu dirección por correo.',
     submit: 'Solicitar suscripción',
@@ -33,9 +30,6 @@ const copy = {
     intro: 'A selection of notes about software engineering, architecture and AI-assisted work.',
     emailLabel: 'Email address',
     emailHelp: 'We will use this address only for the portfolio newsletter.',
-    languageLabel: 'Which language would you like to receive it in?',
-    spanish: 'Spanish',
-    english: 'English',
     consent: 'I agree to receive the portfolio newsletter.',
     consentHelp: 'After submitting the form, you will need to confirm your address by email.',
     submit: 'Request subscription',
@@ -46,9 +40,10 @@ const copy = {
   },
 }[locale]
 const emailId = `newsletter-email-${locale}`
-const languageId = `newsletter-language-${locale}`
 const consentId = `newsletter-consent-${locale}`
 const formId = `newsletter-form-${locale}`
+// Brevo's generated form maps category choices ES/EN to submitted values 1/2.
+const brevoLanguageValue = locale === 'es' ? '1' : '2'
 ---
 
 <section class="shell newsletter-section" id="newsletter" aria-labelledby={`newsletter-title-${locale}`}>
@@ -66,13 +61,7 @@ const formId = `newsletter-form-${locale}`
         <p id={`${emailId}-help`} class="form-help">{copy.emailHelp}</p>
       </div>
 
-      <fieldset class="form-fieldset">
-        <legend id={languageId}>{copy.languageLabel}</legend>
-        <div class="newsletter-language-options">
-          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="ES" checked={locale === 'es'} required /> {copy.spanish}</label>
-          <label><input type="radio" name="PORTFOLIO_LANGUAGE" value="EN" checked={locale === 'en'} required /> {copy.english}</label>
-        </div>
-      </fieldset>
+      <input type="hidden" name="PORTFOLIO_LANGUAGE" value={brevoLanguageValue} />
 
       <div class="form-field newsletter-consent">
         <label for={consentId}>
