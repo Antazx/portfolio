@@ -52,27 +52,11 @@ export function isEligiblePost(post: LocalizedPost | null | undefined, now = new
 
 export function isValidWebhookSignature(rawBody: string, header: string | null | undefined, secret: string) {
   if (!header || !secret) return false
-  const expected = createHmac('sha256', secret).update(rawBody).digest()
-  const candidates = header
-    .split(',')
-    .map((part) => part.trim())
-    .flatMap((part) => {
-      const value = /^(?:v1|sig|signature|sha256)(?:=|:)/i.test(part) ? part.slice(part.indexOf('=') >= 0 ? part.indexOf('=') + 1 : part.indexOf(':') + 1) : part
-      return [value.replace(/^s:/, '')]
-    })
-  return candidates.some((candidate) => {
-    const decoded = decodeSignature(candidate)
-    return decoded ? decoded.length === expected.length && timingSafeEqual(decoded, expected) : false
-  })
-}
-
-function decodeSignature(value: string) {
-  if (/^[a-f0-9]{64}$/i.test(value)) return Buffer.from(value, 'hex')
-  try {
-    return Buffer.from(value, 'base64')
-  } catch {
-    return null
-  }
+  const match = /^t=(\d+)[, ]+v1=([A-Za-z0-9_-]+)$/.exec(header)
+  if (!match || Number(match[1]) < 1609459200000 || !Number.isSafeInteger(Number(match[1]))) return false
+  const expected = createHmac('sha256', secret).update(`${match[1]}.${rawBody}`).digest()
+  const received = Buffer.from(match[2], 'base64url')
+  return received.length === expected.length && timingSafeEqual(received, expected)
 }
 
 export function normalizePostId(value: unknown) {
@@ -122,6 +106,8 @@ export function escapeHtml(value: string) {
     .replace(/[&<>"']/g, (character) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[character] ?? character))
     .replaceAll('{{', '&#123;&#123;')
     .replaceAll('}}', '&#125;&#125;')
+    .replaceAll('{%', '&#123;%')
+    .replaceAll('%}', '%&#125;')
 }
 
 export function safeHttpsUrl(value: string) {
@@ -144,7 +130,7 @@ export function renderNewsletterHtml(post: LocalizedPost, urls: {es: string; en:
     const articleUrl = locale === 'es' ? urls.es : urls.en
     return `<section lang="${locale}"><p>${labels.date}: ${escapeHtml(date)}</p><h1>${escapeHtml(content.title)}</h1><p>${escapeHtml(content.excerpt)}</p><p><a href="${escapeHtml(articleUrl)}">${labels.read}</a></p><p><a href="${escapeHtml(privacy)}">${labels.privacy}</a> · <a href="{{ update_profile }}">${labels.manage}</a> · <a href="{{ unsubscribe }}">${labels.unsubscribe}</a></p></section>`
   }
-  return `<!doctype html><html><body>{{ if contact.PORTFOLIO_LANGUAGE == "es" }}${block('es')}{{ endif }}{{ if contact.PORTFOLIO_LANGUAGE == "en" }}${block('en')}{{ endif }}</body></html>`
+  return `<!doctype html><html><body>{% if contact.PORTFOLIO_LANGUAGE == "ES" %}${block('es')}{% endif %}{% if contact.PORTFOLIO_LANGUAGE == "EN" %}${block('en')}{% endif %}</body></html>`
 }
 
 export function sanitizedError(code: string, status?: number) {

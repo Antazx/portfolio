@@ -1,6 +1,7 @@
 ---
 import type {Locale} from '../lib/locales'
 import type {PortfolioCopy} from '../lib/portfolio'
+import {legalPaths} from '../lib/legal'
 
 interface Props {
   locale: Locale
@@ -69,6 +70,7 @@ const prefix = `contact-${locale}`
         <input id={`${prefix}-privacy`} name="privacy" type="checkbox" value="on" required aria-describedby={`${prefix}-privacy-error`} />
         <span>{copy.privacyLabel}</span>
       </label>
+      <a class="contact-privacy-link" href={legalPaths[locale].privacy}>{copy.privacyLinkLabel}</a>
       <p class="contact-field-error" id={`${prefix}-privacy-error`} data-field-error="privacy" role="alert" hidden></p>
     </div>
 

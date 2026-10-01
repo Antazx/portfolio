@@ -29,9 +29,9 @@ llevan prefijo `PUBLIC_` y no se exponen al navegador.
 | API key | `PORTFOLIO_BREVO_NEWSLETTER_API_KEY`, exclusiva de campañas | No verificada | Clave creada y guardada solo en Netlify |
 | Lista de producción | `portfolio-newsletter-production` | ID pendiente | Lista propia e ID registrado sin clave |
 | Lista de pruebas | `portfolio-newsletter-test` | ID pendiente | Lista distinta de producción |
-| Segmento de producción | Confirmados, idioma `es`/`en`, sin baja/bloqueo y fuera de test | ID pendiente | Criterios y pertenencia comprobados |
+| Segmento de producción | Confirmados, idioma `ES`/`EN`, sin baja/bloqueo y fuera de test | ID pendiente | Criterios y pertenencia comprobados |
 | Segmento de pruebas | Misma regla, limitado a contactos autorizados | ID pendiente | Criterios y pertenencia comprobados |
-| Atributo | `PORTFOLIO_LANGUAGE`, únicamente `es` o `en` | Pendiente de crear/verificar | Tipo, valores y cambio comprobados |
+| Atributo | `PORTFOLIO_LANGUAGE`, categorías `ES` y `EN`; el formulario envía sus valores Brevo `1` y `2` | Pendiente de crear/verificar | Tipo, categorías y mapeo comprobados |
 | Remitente/dominio | Identidad del portfolio verificada | Pendiente | Dominio y sender verificados |
 | Formulario ES/EN | URLs `PORTFOLIO_NEWSLETTER_FORM_URL_ES/EN` | Pendiente | Formulario, DOI y páginas de resultado revisados |
 | Privacidad ES/EN | URLs `PORTFOLIO_NEWSLETTER_PRIVACY_URL_ES/EN` | Pendiente | Páginas aprobadas y accesibles |
@@ -127,8 +127,11 @@ formulario HTTPS pertenecen a Brevo; `production` permanece desactivado.
 La validación externa sigue bloqueada hasta disponer de
 `PORTFOLIO_BREVO_NEWSLETTER_TEST_LIST_ID` y de
 `PORTFOLIO_NEWSLETTER_FORM_URL_ES`/`PORTFOLIO_NEWSLETTER_FORM_URL_EN`, revisar
-que ambos formularios aplican double opt-in y redirigen a los estados propios,
-y probar baja, cambio de idioma y exclusión de contactos no confirmados. No se
+que ambos formularios aplican double opt-in. El portfolio interpreta la respuesta
+JSON de Brevo y solo abre `/{lang}/newsletter/pendiente/` si recibe
+`success: true`; la redirección tras pulsar el enlace de confirmación se
+configura en Brevo hacia `/{lang}/newsletter/confirmacion/`. Falta probar
+la baja, el cambio de idioma y la exclusión de contactos no confirmados. No se
 han inventado URLs, IDs ni valores de proveedor.
 
 ## PB-03: estado de automatización por publicación

@@ -1,7 +1,7 @@
 import {test} from 'node:test'
 import assert from 'node:assert/strict'
 
-import {createContactHandler} from './contact.mjs'
+import {createContactHandler} from '../netlify/functions/contact.mjs'
 
 const baseEnv = {
   PORTFOLIO_CONTACT_MODE: 'test',
@@ -253,6 +253,8 @@ test('returns a localized mailto fallback in native HTML when Brevo result is am
   assert.match(response.body, /No se pudo confirmar la entrega\./)
   assert.match(response.body, /href="mailto:test-recipient@example\.com"/)
   assert.match(response.body, />Escribirme por email</)
+  assert.match(response.body, /href="\/es\/privacidad\/"/)
+  assert.match(response.body, />Leer aviso de privacidad</)
 })
 
 test('logs outcome metadata without visitor email or message content', async () => {

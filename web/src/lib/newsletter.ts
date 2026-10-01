@@ -45,7 +45,7 @@ const hasResources =
   Object.values(formUrls).every(isBrevoFormUrl)
 
 export function newsletterSignupConfig(locale: Locale): NewsletterSignupConfig {
-  if (!hasResources) return {enabled: false}
+  if (!hasResources) return {enabled: import.meta.env.DEV}
 
   return {enabled: true, formUrl: formUrls[locale]}
 }
